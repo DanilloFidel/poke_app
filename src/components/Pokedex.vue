@@ -107,7 +107,7 @@ export default {
     baseUrl: 'https://pokeapi.co/api/v2/pokemon',
     dialog: false,
     search: '',
-    nextPage: 'limit=10',
+    nextPage: 'limit=50',
     previousPage: null,
     pokemons: [],
     filteredList: [],
@@ -153,19 +153,21 @@ export default {
       const scrollH = e.target.offsetHeight + e.target.scrollTop
       if (
         content &&
-        content.offsetHeight - scrollH <= 100 &&
+        content.offsetHeight - scrollH <= 30 &&
         !this.loading &&
         this.nextPage
       ) {
-        e.target.scrollTo({
-          top: 10,
+        this.getPokemons().then(() => {
+          e.target.scrollTo({
+            top: 3,
+          })
         })
-        this.getPokemons()
       } else if (e.target.scrollTop == 0 && this.previousPage) {
-        e.target.scrollTo({
-          top: 100,
+        this.getPokemons(this.previousPage).then(() => {
+          e.target.scrollTo({
+            top: 100,
+          })
         })
-        this.getPokemons(this.previousPage)
       }
     }, 300),
 
@@ -184,14 +186,13 @@ export default {
           const splitedPreviously = firstPokes.previous.split('?')
           this.previousPage = splitedPreviously[1]
         } else this.previousPage = null
-        this.getFullInfo(firstPokes.results).then((pokemons) => {
-          debugger
-          console.log(pokemons)
-          this.pokemons = pokemons
-          console.log('pok: ', this.pokemons)
-          this.filteredList = [...this.pokemons]
-          console.log('filtred: ', this.filteredList)
-        })
+        const pokemons = await this.getFullInfo(firstPokes.results)
+        debugger
+        console.log(pokemons)
+        this.pokemons = pokemons
+        console.log('pok: ', this.pokemons)
+        this.filteredList = [...this.pokemons]
+        console.log('filtred: ', this.filteredList)
       } catch (error) {
         console.log(error)
       }
@@ -226,6 +227,7 @@ export default {
 .pokedex-box {
   height: calc(100vh - 50px);
   overflow: auto;
+  padding: 20px 10px;
 }
 
 ::v-deep .v-input__icon--append > .v-icon {
