@@ -8,7 +8,7 @@
         <v-text-field
           v-model="search"
           color="red"
-          label="Buscar com nome"
+          label="Buscar"
           append-icon="mdi-close"
           @click:append="search = ''"
           @input="filterPokemon"
@@ -62,7 +62,7 @@
                 @click="openDetail(pokemon)"
                 icon
                 absolute
-                style="bottom: 0; right: 0"
+                style="top: 0; right: 0"
               >
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
@@ -92,7 +92,7 @@
     <v-container fill-height fluid v-else style="height: 430px">
       <v-row dense justify="center" class="px-4">
         <v-col class="d-flex justify-center">
-          <img src="../assets/loading.gif" />
+          <img class="loading-logo" src="../assets/loading.gif" />
         </v-col>
       </v-row>
     </v-container>
@@ -109,20 +109,20 @@
 </template>
 
 <script>
-import Http from '../plugins/http'
-import debounce from 'lodash/debounce'
-import Vue from 'vue'
-import PokemonDetail from './PokemonDetail'
-import throttle from 'lodash/throttle'
+import Http from "../plugins/http";
+import debounce from "lodash/debounce";
+import Vue from "vue";
+import PokemonDetail from "./PokemonDetail";
+import throttle from "lodash/throttle";
 
 export default {
-  name: 'Pokedex',
+  name: "Pokedex",
   data: () => ({
-    baseUrl: 'https://pokeapi.co/api/v2/pokemon',
+    baseUrl: "https://pokeapi.co/api/v2/pokemon",
     dialog: false,
-    search: '',
+    search: "",
     listInit: false,
-    nextPage: 'limit=20',
+    nextPage: "limit=20",
     previousPage: null,
     pokemons: [],
     filteredList: [],
@@ -135,7 +135,7 @@ export default {
 
   watch: {
     search(val) {
-      !val.length && (this.filteredList = [...this.pokemons])
+      !val.length && (this.filteredList = [...this.pokemons]);
     },
   },
 
@@ -143,34 +143,34 @@ export default {
     PokemonDetail,
   },
 
-  props: ['colors'],
+  props: ["colors"],
 
   created() {
-    this.listInit = true
-    this.getPokemons()
+    this.listInit = true;
+    this.getPokemons();
   },
 
   methods: {
     openDetail(pokemon) {
-      this.dialog = !this.dialog
-      this.selectedPokemon = pokemon
+      this.dialog = !this.dialog;
+      this.selectedPokemon = pokemon;
     },
     closeDetail() {
-      this.dialog = false
-      this.selectedPokemon = {}
+      this.dialog = false;
+      this.selectedPokemon = {};
     },
     pkHeight(height = 0) {
-      let h = height / 10
-      const n = (h + '').split('.')
-      return `${n[0] > 0 ? n[0] + 'm' : ''} ${n[1] ? n[1] + '0cm' : ''}`
+      let h = height / 10;
+      const n = (h + "").split(".");
+      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "0cm" : ""}`;
     },
     toggleShiny(poke, index) {
-      poke.showShiny = !poke.showShiny
-      Vue.set(this.filteredList, index, { ...poke })
+      poke.showShiny = !poke.showShiny;
+      Vue.set(this.filteredList, index, { ...poke });
     },
     onScroll: throttle(function (e) {
-      const content = document.getElementById('content')
-      const scrollH = e.target.offsetHeight + e.target.scrollTop
+      const content = document.getElementById("content");
+      const scrollH = e.target.offsetHeight + e.target.scrollTop;
       if (
         content &&
         content.offsetHeight - scrollH <= 30 &&
@@ -180,78 +180,82 @@ export default {
         this.getPokemons().then(() => {
           e.target.scrollTo({
             top: 3,
-          })
-        })
+          });
+        });
       } else if (e.target.scrollTop == 0 && this.previousPage) {
         this.getPokemons(this.previousPage).then(() => {
           e.target.scrollTo({
             top: 100,
-          })
-        })
+          });
+        });
       }
     }, 300),
 
     async getPokemons(params = this.nextPage) {
       try {
-        this.loading = true
-        debugger
+        this.loading = true;
+        debugger;
         const firstPokes = await Http.get(`pokemon?${params}`).then(
           (resp) => resp.data
-        )
+        );
         if (firstPokes.next) {
-          const splited = firstPokes.next.split('?')
-          this.nextPage = splited[1]
-        } else this.nextPage = null
+          const splited = firstPokes.next.split("?");
+          this.nextPage = splited[1];
+        } else this.nextPage = null;
         if (firstPokes.previous) {
-          const splitedPreviously = firstPokes.previous.split('?')
-          this.previousPage = splitedPreviously[1]
-        } else this.previousPage = null
-        const pokemons = await this.getFullInfo(firstPokes.results)
-        debugger
-        console.log(pokemons)
-        this.pokemons = pokemons
-        console.log('pok: ', this.pokemons)
-        this.filteredList = [...this.pokemons]
-        console.log('filtred: ', this.filteredList)
+          const splitedPreviously = firstPokes.previous.split("?");
+          this.previousPage = splitedPreviously[1];
+        } else this.previousPage = null;
+        const pokemons = await this.getFullInfo(firstPokes.results);
+        debugger;
+        console.log(pokemons);
+        this.pokemons = pokemons;
+        console.log("pok: ", this.pokemons);
+        this.filteredList = [...this.pokemons];
+        console.log("filtred: ", this.filteredList);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      this.loading = false
-      this.listInit = false
+      this.loading = false;
+      this.listInit = false;
     },
     async getFullInfo(list = []) {
-      const apiCalls = []
+      const apiCalls = [];
       list.forEach((item) => {
-        apiCalls.push(Http.get(`pokemon/${item.name}`))
-      })
+        apiCalls.push(Http.get(`pokemon/${item.name}`));
+      });
       const resps = await Promise.all(apiCalls).then((resp) =>
         resp.map((r) => r.data)
-      )
-      return resps
+      );
+      return resps;
     },
 
     filterPokemon: debounce(function () {
       this.filteredList = this.search.length
         ? this.pokemons.filter((p) => p.name.includes(this.search))
-        : this.pokemons
+        : this.pokemons;
       if (!this.filteredList.length) {
         Http.get(`${this.baseUrl}/${this.search}`).then((resp) =>
           this.filteredList.push(resp.data)
-        )
+        );
       }
     }, 500),
   },
-}
+};
 </script>
 
 <style scoped>
 .pokedex-box {
   height: calc(100vh - 50px);
   overflow: auto;
-  padding: 20px 10px;
+  padding: 20px 5px;
 }
 
 ::v-deep .v-input__icon--append > .v-icon {
   font-size: 15px;
+}
+
+.loading-logo {
+  width: 100vw;
 }
 </style>

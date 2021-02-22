@@ -26,7 +26,7 @@
       <span class="text-left"
         ><b>Geração: </b>
         <span class="text-uppercase ml-3">{{
-          fullPokemon.generation.name.split('-')[1]
+          fullPokemon.generation.name.split("-")[1]
         }}</span></span
       ><br />
       <span class="text-left"
@@ -34,7 +34,7 @@
         <span class="text-capitalize ml-3">{{
           fullPokemon.evolves_from_species
             ? fullPokemon.evolves_from_species.name
-            : '-.-'
+            : "-.-"
         }}</span></span
       ><br />
       <span class="text-left"
@@ -53,13 +53,6 @@
           <span v-if="!p.is_default">{{ p.pokemon.name }}</span>
         </a>
         <br />
-      </div>
-      <div v-if="specialPokemon.name" class="art-box mt-3">
-        <img
-          height="150px"
-          width="150px"
-          :src="specialPokemonImg(specialPokemon.sprites)"
-        />
       </div>
     </v-card-text>
     <v-card-text>
@@ -108,79 +101,71 @@
 </template>
 
 <script>
-import Http from '../plugins/http'
+import Http from "../plugins/http";
 
 export default {
-  name: 'PokemonDetailComponent',
+  name: "PokemonDetailComponent",
   data: () => ({
     fullPokemon: {},
-    carrouselModel: 1,
-    specialPokemon: {},
+    carrouselModel: 0,
+    pkVersions: [],
   }),
-  props: ['dialog', 'pokemon'],
+  props: ["dialog", "pokemon"],
   watch: {
     pokemon: {
       handler: function (val) {
-        val.name && this.findPokemon(val)
+        val.name && this.findPokemon(val);
       },
       immediate: true,
     },
   },
-  computed: {
-    pkVersions() {
-      let imgs = []
-      this.pokemon.sprites &&
-        Object.values(this.pokemon.sprites).forEach((item) => {
-          if (!item) return
-          if (item['official-artwork']) {
-            item['official-artwork'].front_default &&
-              imgs.push(item['official-artwork'].front_default)
-          }
-          if (item && item.length) imgs.push(item)
-          if (item.dream_world) {
-            item.dream_world.front_default &&
-              imgs.push(item.dream_world.front_default)
-            item.dream_world.front_female &&
-              imgs.push(item.dream_world.front_female)
-          }
-        })
-      console.log(imgs)
-      return imgs.reverse()
-    },
-  },
   methods: {
     closeModal() {
-      this.specialPokemon = {}
-      this.carrouselModel = 1
-      this.$emit('close')
+      this.carrouselModel = 0;
+      this.$emit("close");
     },
     async findPokemon(obj) {
+      this.pkVersions = [this.pokemon.sprites.front_default];
+      let subInfos = {};
       try {
-        const subInfos = await fetch(
+        subInfos = await Http.get(
           `https://pokeapi.co/api/v2/pokemon-species/${obj.name}`
-        ).then((resp) => resp.json())
-        this.fullPokemon = { ...this.pokemon, ...subInfos }
-        console.log(this.fullPokemon)
+        ).then((resp) => resp.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
+      debugger;
+      Object.assign(this.fullPokemon, { ...this.pokemon, ...subInfos });
+      this.pkVersions = [
+        this.fullPokemon.sprites.other["official-artwork"].front_default,
+      ];
+      this.setImgs();
+      console.log(this.fullPokemon);
+    },
+    setImgs() {
+      this.pokemon.sprites &&
+        Object.values(this.pokemon.sprites).forEach((item) => {
+          if (!item) return;
+          if (item && item.length) this.pkVersions.push(item);
+          if (item.dream_world) {
+            item.dream_world.front_default &&
+              this.pkVersions.push(item.dream_world.front_default);
+            item.dream_world.front_female &&
+              this.pkVersions.push(item.dream_world.front_female);
+          }
+        });
+      console.log(this.pkVersions);
     },
     getPokemon(url) {
       Http.get(url).then((resp) => {
         this.$nextTick(() => {
-          this.carrouselModel = 0
-        })
-        this.$emit('update-pokemon', resp.data)
-      })
-    },
-    specialPokemonImg(sprites) {
-      if (sprites.front_default) return sprites.front_default
-      if (sprites.other['official-artwork'].front_default)
-        return sprites.other['official-artwork'].front_default
-      else return require('../assets/Pokémon-Pikachu.jpg')
+          this.carrouselModel = 0;
+        });
+        this.$emit("update-pokemon", resp.data);
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
