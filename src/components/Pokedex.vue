@@ -99,6 +99,7 @@ import Http from '../plugins/http'
 import debounce from 'lodash/debounce'
 import Vue from 'vue'
 import PokemonDetail from './PokemonDetail'
+import throttle from 'lodash/throttle'
 
 export default {
   name: 'Pokedex',
@@ -107,6 +108,7 @@ export default {
     dialog: false,
     search: '',
     nextPage: 'limit=10',
+    previousPage: null,
     pokemons: [],
     filteredList: [],
     loading: false,
@@ -146,25 +148,46 @@ export default {
       poke.showShiny = !poke.showShiny
       Vue.set(this.filteredList, index, { ...poke })
     },
-    onScroll(e) {
+    onScroll: throttle(function (e) {
       const content = document.getElementById('content')
       const scrollH = e.target.offsetHeight + e.target.scrollTop
-      if (content && content.offsetHeight - scrollH <= 100 && !this.loading)
+      if (
+        content &&
+        content.offsetHeight - scrollH <= 100 &&
+        !this.loading &&
+        this.nextPage
+      ) {
+        e.target.scrollTo({
+          top: 10,
+        })
         this.getPokemons()
-    },
-    async getPokemons() {
+      } else if (e.target.scrollTop == 0 && this.previousPage) {
+        e.target.scrollTo({
+          top: 100,
+        })
+        this.getPokemons(this.previousPage)
+      }
+    }, 300),
+
+    async getPokemons(params = this.nextPage) {
       try {
         this.loading = true
         debugger
-        const firstPokes = await Http.get(`pokemon?${this.nextPage}`).then(
+        const firstPokes = await Http.get(`pokemon?${params}`).then(
           (resp) => resp.data
         )
-        const splited = firstPokes.next.split('?')
-        this.nextPage = splited[1]
+        if (firstPokes.next) {
+          const splited = firstPokes.next.split('?')
+          this.nextPage = splited[1]
+        } else this.nextPage = null
+        if (firstPokes.previous) {
+          const splitedPreviously = firstPokes.previous.split('?')
+          this.previousPage = splitedPreviously[1]
+        } else this.previousPage = null
         this.getFullInfo(firstPokes.results).then((pokemons) => {
           debugger
           console.log(pokemons)
-          this.pokemons.push(...pokemons)
+          this.pokemons = pokemons
           console.log('pok: ', this.pokemons)
           this.filteredList = [...this.pokemons]
           console.log('filtred: ', this.filteredList)
