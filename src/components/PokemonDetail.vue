@@ -3,7 +3,21 @@
     <v-card-title class="overline">
       {{ fullPokemon.name }}
     </v-card-title>
+    <v-btn icon absolute top right @click="closeModal"
+      ><v-icon>mdi-close</v-icon></v-btn
+    >
     <v-card-text>
+      <v-carousel
+        height="300px"
+        hide-delimiters
+        class="mb-3"
+      >
+        <v-carousel-item
+          v-for="(item, i) in pkVersions"
+          :key="`img-${i}`"
+          :src="item"
+        ></v-carousel-item>
+      </v-carousel>
       <span class="text-left"
         ><b>Chance de captura:</b> {{ fullPokemon.capture_rate }}%</span
       ><br />
@@ -63,7 +77,10 @@
       <v-simple-table>
         <template v-slot:default>
           <tbody>
-            <tr v-for="(item, i) in fullPokemon.stats" :key="item.base_stat + i">
+            <tr
+              v-for="(item, i) in fullPokemon.stats"
+              :key="item.base_stat + i"
+            >
               <td>{{ item.stat.name }}: {{ item.base_stat }}</td>
             </tr>
           </tbody>
@@ -75,7 +92,10 @@
       <v-simple-table>
         <template v-slot:default>
           <tbody>
-            <tr v-for="(item, i) in fullPokemon.game_indices" :key="item.game_index + i">
+            <tr
+              v-for="(item, i) in fullPokemon.game_indices"
+              :key="item.game_index + i"
+            >
               <td>{{ item.version.name }}</td>
             </tr>
           </tbody>
@@ -98,17 +118,38 @@ export default {
   watch: {
     pokemon: {
       handler: function (val) {
-        val && this.findPokemon(val)
+        val.name && this.findPokemon(val)
       },
       immediate: true,
     },
-    dialog(val) {
-      if (!val) {
-        this.specialPokemon = {}
-      }
+  },
+  computed: {
+    pkVersions() {
+      let imgs = []
+      this.pokemon.sprites &&
+        Object.values(this.pokemon.sprites).forEach((item) => {
+          if (!item) return
+          if (item && item.length) imgs.push(item)
+          if (item.dream_world) {
+            item.dream_world.front_default &&
+              imgs.push(item.dream_world.front_default)
+            item.dream_world.front_female &&
+              imgs.push(item.dream_world.front_female)
+          }
+          if (item['official-artwork']) {
+            item['official-artwork'].front_default &&
+              imgs.push(item['official-artwork'].front_default)
+          }
+        })
+      console.log(imgs)
+      return imgs.reverse()
     },
   },
   methods: {
+    closeModal() {
+      this.specialPokemon = {}
+      this.$emit('close')
+    },
     async findPokemon(obj) {
       try {
         const subInfos = await fetch(
@@ -136,11 +177,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .art-box {
   display: flex;
   justify-content: center;
   align-items: center;
   border: 2px solid #8e2c2c;
+}
+
+::v-deep .v-btn--icon.v-size--default .v-icon {
+  font-size: 15px !important;
 }
 </style>

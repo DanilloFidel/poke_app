@@ -17,7 +17,7 @@
       </v-col>
     </v-row>
 
-    <v-container fluid class="pokedex-box" @scroll="onScroll">
+    <v-container fluid class="pokedex-box" @scroll="onScroll" v-if="!listInit">
       <div v-if="filteredList.length" id="content">
         <v-card
           elevation="3"
@@ -88,8 +88,21 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <v-container fill-height fluid v-else style="height: 430px">
+      <v-row dense justify="center" class="px-4">
+        <v-col class="d-flex justify-center">
+          <img src="../assets/loading.gif" />
+        </v-col>
+      </v-row>
+    </v-container>
+
     <v-dialog v-model="dialog">
-      <PokemonDetail :pokemon="selectedPokemon" :dialog="dialog" />
+      <PokemonDetail
+        :pokemon="selectedPokemon"
+        :dialog="dialog"
+        @close="closeDetail"
+      />
     </v-dialog>
   </div>
 </template>
@@ -107,6 +120,7 @@ export default {
     baseUrl: 'https://pokeapi.co/api/v2/pokemon',
     dialog: false,
     search: '',
+    listInit: false,
     nextPage: 'limit=50',
     previousPage: null,
     pokemons: [],
@@ -131,6 +145,7 @@ export default {
   props: ['colors'],
 
   created() {
+    this.listInit = true
     this.getPokemons()
   },
 
@@ -138,6 +153,10 @@ export default {
     openDetail(pokemon) {
       this.dialog = !this.dialog
       this.selectedPokemon = pokemon
+    },
+    closeDetail() {
+      this.dialog = false
+      this.selectedPokemon = {}
     },
     pkHeight(height = 0) {
       let h = height / 10
@@ -197,6 +216,7 @@ export default {
         console.log(error)
       }
       this.loading = false
+      this.listInit = false
     },
     async getFullInfo(list = []) {
       const apiCalls = []
