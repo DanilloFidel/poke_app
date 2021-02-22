@@ -10,7 +10,7 @@
       <EventCards />
     </v-container>
 
-    <v-speed-dial v-model="fab" bottom right absolute direction="top">
+    <v-speed-dial v-model="fab" style="bottom: 26px" right absolute direction="top">
       <template v-slot:activator>
         <v-btn v-model="fab" color="blue darken-2" dark fab>
           <img width="60px" height="60px" src="./assets/pokeball.svg" />

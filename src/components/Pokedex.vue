@@ -9,7 +9,8 @@
           v-model="search"
           color="red"
           label="Buscar com nome"
-          append-icon="mdi-magnify"
+          append-icon="mdi-close"
+          @click:append="search = ''"
           @input="filterPokemon"
           @keyup.enter="filterPokemon"
         ></v-text-field>
@@ -24,7 +25,7 @@
           :key="`poke-${i}`"
           class="my-2"
         >
-          <v-row dense justify="space-between">
+          <v-row dense justify="space-around">
             <v-col cols="4">
               <img
                 @click="toggleShiny(pokemon, i)"
@@ -57,6 +58,14 @@
                 :color="colors[item.type.name]"
                 >{{ item.type.name }}</v-chip
               >
+              <v-btn
+                @click="openDetail(pokemon)"
+                icon
+                absolute
+                style="bottom: 0; right: 0"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -79,19 +88,25 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-dialog v-model="dialog">
+      <PokemonDetail :pokemon="selectedPokemon" :dialog="dialog" />
+    </v-dialog>
   </div>
 </template>
 
 <script>
-import Http from "../plugins/http";
-import debounce from "lodash/debounce";
-import Vue from "vue";
+import Http from '../plugins/http'
+import debounce from 'lodash/debounce'
+import Vue from 'vue'
+import PokemonDetail from './PokemonDetail'
+
 export default {
-  name: "Pokedex",
+  name: 'Pokedex',
   data: () => ({
-    baseUrl: "https://pokeapi.co/api/v2/pokemon",
-    search: "",
-    nextPage: "limit=10",
+    baseUrl: 'https://pokeapi.co/api/v2/pokemon',
+    dialog: false,
+    search: '',
+    nextPage: 'limit=10',
     pokemons: [],
     filteredList: [],
     loading: false,
@@ -103,94 +118,94 @@ export default {
 
   watch: {
     search(val) {
-      !val.length && (this.filteredList = [...this.pokemons]);
+      !val.length && (this.filteredList = [...this.pokemons])
     },
   },
 
-  props: ["colors"],
+  components: {
+    PokemonDetail,
+  },
+
+  props: ['colors'],
 
   created() {
-    this.getPokemons();
+    this.getPokemons()
   },
 
   methods: {
-    pkHeight(height = 0) {
-      let h = height / 10;
-      const n = (h + "").split(".");
-      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "0cm" : ""}`;
+    openDetail(pokemon) {
+      this.dialog = !this.dialog
+      this.selectedPokemon = pokemon
     },
-    async findPokemon(obj) {
-      try {
-        const infos = await fetch(obj.url).then((resp) => resp.json());
-        const subInfos = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-species/${obj.name}`
-        ).then((resp) => resp.json());
-        this.selectedPokemon = { ...infos, ...subInfos };
-        console.log(this.selectedPokemon);
-      } catch (error) {
-        console.log(error);
-      }
+    pkHeight(height = 0) {
+      let h = height / 10
+      const n = (h + '').split('.')
+      return `${n[0] > 0 ? n[0] + 'm' : ''} ${n[1] ? n[1] + '0cm' : ''}`
     },
     toggleShiny(poke, index) {
-      poke.showShiny = !poke.showShiny;
-      Vue.set(this.filteredList, index, { ...poke });
+      poke.showShiny = !poke.showShiny
+      Vue.set(this.filteredList, index, { ...poke })
     },
     onScroll(e) {
-      const content = document.getElementById("content");
-      const scrollH = e.target.offsetHeight + e.target.scrollTop;
+      const content = document.getElementById('content')
+      const scrollH = e.target.offsetHeight + e.target.scrollTop
       if (content && content.offsetHeight - scrollH <= 100 && !this.loading)
-        this.getPokemons();
+        this.getPokemons()
     },
     async getPokemons() {
       try {
-        this.loading = true;
-        debugger;
+        this.loading = true
+        debugger
         const firstPokes = await Http.get(`pokemon?${this.nextPage}`).then(
           (resp) => resp.data
-        );
-        const splited = firstPokes.next.split("?");
-        this.nextPage = splited[1];
+        )
+        const splited = firstPokes.next.split('?')
+        this.nextPage = splited[1]
         this.getFullInfo(firstPokes.results).then((pokemons) => {
-          debugger;
-          console.log(pokemons);
-          this.pokemons.push(...pokemons);
-          console.log("pok: ", this.pokemons);
-          this.filteredList = [...this.pokemons];
-          console.log("filtred: ", this.filteredList);
-        });
+          debugger
+          console.log(pokemons)
+          this.pokemons.push(...pokemons)
+          console.log('pok: ', this.pokemons)
+          this.filteredList = [...this.pokemons]
+          console.log('filtred: ', this.filteredList)
+        })
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-      this.loading = false;
+      this.loading = false
     },
     async getFullInfo(list = []) {
-      const apiCalls = [];
+      const apiCalls = []
       list.forEach((item) => {
-        apiCalls.push(Http.get(`pokemon/${item.name}`));
-      });
+        apiCalls.push(Http.get(`pokemon/${item.name}`))
+      })
       const resps = await Promise.all(apiCalls).then((resp) =>
         resp.map((r) => r.data)
-      );
-      return resps;
+      )
+      return resps
     },
 
     filterPokemon: debounce(function () {
       this.filteredList = this.search.length
         ? this.pokemons.filter((p) => p.name.includes(this.search))
-        : this.pokemons;
+        : this.pokemons
       if (!this.filteredList.length) {
         Http.get(`${this.baseUrl}/${this.search}`).then((resp) =>
           this.filteredList.push(resp.data)
-        );
+        )
       }
     }, 500),
   },
-};
+}
 </script>
 
 <style scoped>
 .pokedex-box {
   height: calc(100vh - 50px);
   overflow: auto;
+}
+
+::v-deep .v-input__icon--append > .v-icon {
+  font-size: 15px;
 }
 </style>
