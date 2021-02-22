@@ -1,108 +1,15 @@
 <template>
   <v-app>
     <v-container v-if="screen === 'pokedex'" class="pa-0">
-      <Pokedex />
+      <Pokedex :colors="colors" />
     </v-container>
     <v-container v-if="screen === 'pokeEncounter'" class="pa-0">
-      <PokeEncounter />
+      <PokeEncounter :colors="colors" />
     </v-container>
-    <!-- <v-container v-if="screen === 'pokedex'">
-      <Pokedex />
-    </v-container> -->
+    <v-container v-if="screen === 'eventCards'" class="pa-0">
+      <EventCards />
+    </v-container>
 
-    <!-- <v-container
-      v-if="!loading && selectedPokemon.name && screen === 'pokeEncounter'"
-      fluid
-      fill-height
-      style="height: 430px"
-    >
-      <v-row dense style="max-height: 50px" class="justify-space-around pt-3">
-        <v-col cols="6" style="height: 50px">
-          <v-select
-            :items="habitats"
-            v-model="selectedHabitat"
-            item-text="name"
-            item-value="url"
-            color="red"
-            label="Habitat"
-            @change="changeHabitat"
-          ></v-select>
-        </v-col>
-      </v-row>
-      <v-row dense justify="center">
-        <v-col cols="6" class="d-flex justify-center">
-          <img
-            v-if="
-              selectedPokemon.sprites && selectedPokemon.sprites.front_default
-            "
-            height="150px"
-            width="150px"
-            :src="selectedPokemon.sprites.front_default"
-          />
-        </v-col>
-        <v-col
-          cols="6"
-          class="d-flex justify-center"
-          v-if="selectedPokemon.sprites && selectedPokemon.sprites.back_default"
-        >
-          <img
-            height="150px"
-            width="150px"
-            :src="selectedPokemon.sprites.back_default"
-          />
-        </v-col>
-
-        <v-col cols="12">
-          <h3 class="overline text-center text-capitalize">
-            {{ selectedPokemon.name }} #{{ selectedPokemon.order }} -
-            {{ selectedPokemon.base_experience }}xp
-          </h3>
-        </v-col>
-
-        <v-col cols="6" class="d-flex justify-center">
-          <v-chip
-            class="mx-2"
-            v-for="(item, idx) in selectedPokemon.types"
-            :key="idx"
-            :color="colors[item.type.name]"
-            >{{ item.type.name }}</v-chip
-          >
-        </v-col>
-        <v-row dense class="mt-4">
-          <v-col cols="3" class="ml-3">
-            <img :src="diceImg" width="60px" height="60px" />
-          </v-col>
-          <v-col class="text-center" align-self="center">
-            <span v-if="simpleChance"
-              >Tire <b>{{ diceValue }}</b> no dado para capturar</span
-            >
-            <span v-else
-              >Tire <b>{{ diceValue }}</b> ou <b>{{ diceValue2 }}</b> no dado
-              <br />
-              para capturar</span
-            >
-          </v-col>
-        </v-row>
-      </v-row>
-      <v-btn
-        @click="sortPokemon"
-        absolute
-        left
-        fab
-        width="50px"
-        height="50px"
-        style="bottom: 15px"
-      >
-        <img width="25px" height="25px" src="./assets/roll_dice.svg" />
-      </v-btn>
-    </v-container> -->
-    <!-- <main v-else>
-      <v-row dense justify="center" class="px-4">
-        <v-col class="d-flex justify-center">
-          <img :src="loadingImg" />
-        </v-col>
-      </v-row>
-    </main> -->
     <v-speed-dial v-model="fab" bottom right absolute direction="top">
       <template v-slot:activator>
         <v-btn v-model="fab" color="blue darken-2" dark fab>
@@ -115,11 +22,11 @@
       <v-btn fab dark small color="white" @click="screen = 'pokeEncounter'">
         <img width="25px" height="25px" src="./assets/pikachu.svg" />
       </v-btn>
-      <v-btn fab dark small color="white">
+      <v-btn fab dark small color="white" @click="screen = 'eventCards'">
         <img width="25px" height="25px" src="./assets/cards.svg" />
       </v-btn>
       <v-btn fab dark small color="white" @click="screen = 'pokedex'">
-        <img width="25px" height="25px" src="./assets/cards.svg" />
+        <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
       </v-btn>
     </v-speed-dial>
   </v-app>
@@ -128,6 +35,7 @@
 <script>
 import Pokedex from "@/components/Pokedex.vue";
 import PokeEncounter from "@/components/PokeEncounter.vue";
+import EventCards from "@/components/EventCards.vue";
 export default {
   name: "App",
   data: () => ({
@@ -174,6 +82,7 @@ export default {
   components: {
     Pokedex,
     PokeEncounter,
+    EventCards,
   },
 
   computed: {

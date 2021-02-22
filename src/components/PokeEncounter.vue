@@ -13,13 +13,8 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-container
-      v-if="!loading && selectedPokemon.name"
-      fluid
-      fill-height
-      style="height: 430px"
-    >
-      <v-row dense justify="center">
+    <v-container v-if="!loading" fluid fill-height style="height: 430px">
+      <v-row dense justify="center" v-if="selectedPokemon.name">
         <v-col cols="6" class="d-flex justify-center">
           <img
             v-if="
@@ -74,8 +69,15 @@
           </v-col>
         </v-row>
       </v-row>
+      <v-row dense justify="center" v-else>
+        <v-col cols="8" class="text-center">
+          <span>Escolha um tipo de Habitat</span>
+        </v-col>
+      </v-row>
       <v-btn
+        v-if="selectedPokemon.name"
         @click="sortPokemon"
+        :loading="btnLoading"
         absolute
         left
         fab
@@ -87,9 +89,9 @@
       </v-btn>
     </v-container>
     <v-container fill-height fluid v-else style="height: 430px">
-      <v-row dense justify="center">
-        <v-col cols="8" class="text-center">
-          <span>Escolha um tipo de Habitat</span>
+      <v-row dense justify="center" class="px-4">
+        <v-col class="d-flex justify-center">
+          <img src="../assets/loading.gif" />
         </v-col>
       </v-row>
     </v-container>
@@ -117,36 +119,15 @@ export default {
     simpleChance: true,
     diceType: "single_d6",
     showSecondDice: true,
-    colors: {
-      poison: "#ab6ac8",
-      grass: "#63bb5b",
-      ground: "#fdda96",
-      fighting: "#ce4069",
-      flying: "#8fa8dd",
-      rock: "#d1c17d",
-      bug: "#90c12c",
-      ghost: "#5269ac",
-      steel: "#5a8ea1",
-      fire: "#db4249",
-      water: "#4d90d5",
-      electric: "#f3d23b",
-      psychic: "#f97176",
-      ice: "#6db5ba",
-      dragon: "#0a6dc4",
-      dark: "#5a5366",
-      fairy: "#ec8fe6",
-      normal: "#c6c6a7",
-    },
   }),
 
   computed: {
     diceImg() {
       return require(`../assets/${this.diceType}.svg`);
     },
-    loadingImg() {
-      return require("../assets/loading.gif");
-    },
   },
+
+  props: ["colors"],
 
   created() {
     this.fecthHabitats();
@@ -176,7 +157,10 @@ export default {
         .finally(() => (this.btnLoading = false));
     },
     sortDices() {
-      this.diceValue = Math.floor(Math.random() * 6) + 1;
+      const t = this.diceType.split("d");
+      const range = t[1];
+      this.diceValue = Math.floor(Math.random() * range) + 1;
+      this.diceValue2 = Math.floor(Math.random() * range) + 1;
     },
     async sortPokemon() {
       debugger;
@@ -208,7 +192,6 @@ export default {
         this.loading = false;
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
-      // this.searchPokemon(selected.url);
     },
     setDiceDifficult() {
       this.simpleChance = true;
@@ -225,6 +208,7 @@ export default {
       if (this.selectedPokemon.base_experience < 120) {
         this.simpleChance = false;
       }
+      this.sortDices();
     },
   },
 };

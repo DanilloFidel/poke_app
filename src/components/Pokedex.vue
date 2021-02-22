@@ -1,7 +1,10 @@
 <template>
   <div>
-    <v-row dense style="max-height: 80px">
-      <v-col cols="6" style="height: 80px" class="mt-2 ml-2">
+    <v-row dense style="max-height: 80px" align="center" justify="center">
+      <v-col cols="5" align-self="center" class="text-center">
+        <h3 class="mr-3">Pokédex v.1</h3>
+      </v-col>
+      <v-col cols="6">
         <v-text-field
           v-model="search"
           color="red"
@@ -36,7 +39,11 @@
             </v-col>
             <v-col cols="6">
               <span class="text-capitalize"
-                ><b>Nome:</b> {{ pokemon.name }} #{{ pokemon.order }}</span
+                ><b>Nome:</b> {{ pokemon.name }} #{{ pokemon.order }}
+              </span>
+              <br />
+              <span class="text-capitalize"
+                ><b>XP:</b> {{ pokemon.base_experience }}xp</span
               >
               <br />
               <span class="text-capitalize"
@@ -92,26 +99,6 @@ export default {
     selectedPokemon: {},
     evolutions: [],
     selectedPkmEvols: [],
-    colors: {
-      poison: "#ab6ac8",
-      grass: "#63bb5b",
-      ground: "#fdda96",
-      fighting: "#ce4069",
-      flying: "#8fa8dd",
-      rock: "#d1c17d",
-      bug: "#90c12c",
-      ghost: "#5269ac",
-      steel: "#5a8ea1",
-      fire: "#db4249",
-      water: "#4d90d5",
-      electric: "#f3d23b",
-      psychic: "#f97176",
-      ice: "#6db5ba",
-      dragon: "#0a6dc4",
-      dark: "#5a5366",
-      fairy: "#ec8fe6",
-      normal: "#c6c6a7",
-    },
   }),
 
   watch: {
@@ -119,6 +106,8 @@ export default {
       !val.length && (this.filteredList = [...this.pokemons]);
     },
   },
+
+  props: ["colors"],
 
   created() {
     this.getPokemons();
