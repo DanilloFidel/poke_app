@@ -39,7 +39,7 @@
             </v-col>
             <v-col cols="6">
               <span class="text-capitalize"
-                ><b>Nome:</b> {{ pokemon.name }} #{{ pokemon.order }}
+                ><b>Nome:</b> {{ pokemon.name }} #{{ pokemon.id }}
               </span>
               <br />
               <span class="text-capitalize"
@@ -117,7 +117,7 @@ export default {
     pkHeight(height = 0) {
       let h = height / 10;
       const n = (h + "").split(".");
-      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "cm" : ""}`;
+      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "0cm" : ""}`;
     },
     async findPokemon(obj) {
       try {
