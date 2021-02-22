@@ -2,7 +2,7 @@
   <div>
     <v-row dense style="max-height: 80px" align="center" justify="center">
       <v-col cols="5" align-self="center" class="text-center">
-        <h3 class="mr-3">Pokédex v.1</h3>
+        <h3 class="mr-3">Pokédex v.1.5</h3>
       </v-col>
       <v-col cols="6">
         <v-text-field
