@@ -11,6 +11,8 @@
         height="300px"
         hide-delimiters
         class="mb-3"
+        :show-arrows="pkVersions.length > 1"
+        v-model="carrouselModel"
       >
         <v-carousel-item
           v-for="(item, i) in pkVersions"
@@ -22,11 +24,14 @@
         ><b>Chance de captura:</b> {{ fullPokemon.capture_rate }}%</span
       ><br />
       <span class="text-left"
-        ><b>Geração:</b> {{ fullPokemon.generation.name }}</span
+        ><b>Geração: </b>
+        <span class="text-uppercase ml-3">{{
+          fullPokemon.generation.name.split('-')[1]
+        }}</span></span
       ><br />
-      <span class="text-left mr-2"
+      <span class="text-left"
         ><b>Evolui de:</b>
-        <span class="text-capitalize">{{
+        <span class="text-capitalize ml-3">{{
           fullPokemon.evolves_from_species
             ? fullPokemon.evolves_from_species.name
             : '-.-'
@@ -34,9 +39,6 @@
       ><br />
       <span class="text-left"
         ><b>Habitat:</b> {{ fullPokemon.habitat.name }}</span
-      ><br />
-      <span class="text-left"
-        ><b>Chance de captura:</b> {{ fullPokemon.capture_rate }}%</span
       ><br />
       <span class="text-left" v-if="fullPokemon.is_legendary"
         ><b>Lendário</b></span
@@ -94,7 +96,7 @@
           <tbody>
             <tr
               v-for="(item, i) in fullPokemon.game_indices"
-              :key="item.game_index + i"
+              :key="`${item.game_index} - ${i}`"
             >
               <td>{{ item.version.name }}</td>
             </tr>
@@ -112,6 +114,7 @@ export default {
   name: 'PokemonDetailComponent',
   data: () => ({
     fullPokemon: {},
+    carrouselModel: 1,
     specialPokemon: {},
   }),
   props: ['dialog', 'pokemon'],
@@ -129,16 +132,16 @@ export default {
       this.pokemon.sprites &&
         Object.values(this.pokemon.sprites).forEach((item) => {
           if (!item) return
+          if (item['official-artwork']) {
+            item['official-artwork'].front_default &&
+              imgs.push(item['official-artwork'].front_default)
+          }
           if (item && item.length) imgs.push(item)
           if (item.dream_world) {
             item.dream_world.front_default &&
               imgs.push(item.dream_world.front_default)
             item.dream_world.front_female &&
               imgs.push(item.dream_world.front_female)
-          }
-          if (item['official-artwork']) {
-            item['official-artwork'].front_default &&
-              imgs.push(item['official-artwork'].front_default)
           }
         })
       console.log(imgs)
@@ -148,6 +151,7 @@ export default {
   methods: {
     closeModal() {
       this.specialPokemon = {}
+      this.carrouselModel = 1
       this.$emit('close')
     },
     async findPokemon(obj) {
@@ -163,8 +167,10 @@ export default {
     },
     getPokemon(url) {
       Http.get(url).then((resp) => {
-        this.specialPokemon = resp.data
-        console.log(this.specialPokemon)
+        this.$nextTick(() => {
+          this.carrouselModel = 0
+        })
+        this.$emit('update-pokemon', resp.data)
       })
     },
     specialPokemonImg(sprites) {
