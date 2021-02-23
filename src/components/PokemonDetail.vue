@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="overline">
-      {{ fullPokemon.name }}
+      {{ fullPokemon.name }} #{{ pokemon.id }}
     </v-card-title>
     <v-btn icon absolute top right @click="closeModal"
       ><v-icon>mdi-close</v-icon></v-btn
@@ -22,6 +22,9 @@
       </v-carousel>
       <span class="text-left"
         ><b>Chance de captura:</b> {{ fullPokemon.capture_rate }}%</span
+      ><br />
+      <span class="text-left"
+        ><b>Altura: </b>{{ pkHeight(pokemon.height) }}</span
       ><br />
       <span class="text-left"
         ><b>Geração: </b>
@@ -60,7 +63,10 @@
       <v-simple-table>
         <template v-slot:default>
           <tbody>
-            <tr v-for="(item, i) in fullPokemon.abilities" :key="item.name + i">
+            <tr
+              v-for="(item, i) in fullPokemon.abilities"
+              :key="`${item.name} - ${i}`"
+            >
               <td>{{ item.ability.name }}</td>
             </tr>
           </tbody>
@@ -164,6 +170,11 @@ export default {
         this.$emit("update-pokemon", resp.data);
       });
     },
+    pkHeight(height = 0) {
+      let h = height / 10;
+      const n = (h + "").split(".");
+      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "0cm" : ""}`;
+    },
   },
 };
 </script>
@@ -178,5 +189,9 @@ export default {
 
 ::v-deep .v-btn--icon.v-size--default .v-icon {
   font-size: 15px !important;
+}
+
+::v-deep .v-image__image--cover {
+  background-size: contain;
 }
 </style>

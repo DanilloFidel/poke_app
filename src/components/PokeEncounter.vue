@@ -91,7 +91,7 @@
     <v-container fill-height fluid v-else style="height: 430px">
       <v-row dense justify="center" class="px-4">
         <v-col class="d-flex justify-center">
-          <img class="loading-logo" src="../assets/loading.gif" />
+          <img class="loading-logo" src="../assets/aMz1Qtu.gif" />
         </v-col>
       </v-row>
     </v-container>

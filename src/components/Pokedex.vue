@@ -38,21 +38,19 @@
                 "
               />
             </v-col>
-            <v-col cols="6">
+            <v-col cols="6" align-self="center">
               <span class="text-capitalize"
-                ><b>Nome:</b> {{ pokemon.name }} #{{ pokemon.id }}
+                ><b>Nome:</b> {{ pokemon.name }}
               </span>
               <br />
               <span class="text-capitalize"
                 ><b>XP:</b> {{ pokemon.base_experience }}xp</span
               >
               <br />
-              <span class="text-capitalize"
-                ><b>Altura:</b> {{ pkHeight(pokemon.height) }}</span
-              >
-              <br />
               <v-chip
-                class="mt-2 mr-2"
+                small
+                outlined
+                class="mt-2 mr-2 overline elevation-3"
                 v-for="(item, idx) in pokemon.types"
                 :key="idx"
                 :color="colors[item.type.name]"
@@ -159,15 +157,12 @@ export default {
       this.dialog = false;
       this.selectedPokemon = {};
     },
-    pkHeight(height = 0) {
-      let h = height / 10;
-      const n = (h + "").split(".");
-      return `${n[0] > 0 ? n[0] + "m" : ""} ${n[1] ? n[1] + "0cm" : ""}`;
-    },
-    toggleShiny(poke, index) {
+
+    toggleShiny: throttle(function (poke, index) {
       poke.showShiny = !poke.showShiny;
       Vue.set(this.filteredList, index, { ...poke });
-    },
+    }, 500),
+
     onScroll: throttle(function (e) {
       const content = document.getElementById("content");
       const scrollH = e.target.offsetHeight + e.target.scrollTop;
