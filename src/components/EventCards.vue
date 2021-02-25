@@ -81,6 +81,12 @@ export default {
         },
         {
           isLucky: true,
+          descr:
+            "Role um d6, o número que obter é a quantidade de vezes que você deve clicar para encontrar um Pokemon aleatório",
+          type: "Normal",
+        },
+        {
+          isLucky: true,
           descr: "Ao encontrar um amigo ele te deu uma poção de reviver",
           type: "Ultra Rara",
         },
@@ -112,19 +118,19 @@ export default {
         {
           isLucky: true,
           descr:
-            "Role o dado, o valor que ganhar, multiplique por x10, é o total de XP que ganhou!",
+            "Role um d6, o valor que ganhar, multiplique por x10, é o total de XP que ganhou!",
           type: "Normal",
         },
         {
           isLucky: true,
           descr:
-            "Role o dado, o valor que ganhar, multiplique por x30, é o total de XP que ganhou!",
+            "Role o d6, o valor que ganhar, multiplique por x30, é o total de XP que ganhou!",
           type: "Ultra Rara",
         },
         {
           isLucky: true,
           descr:
-            "Role o dado, o valor que ganhar, multiplique por x20, é o total de XP que ganhou!",
+            "Role o d6, o valor que ganhar, multiplique por x20, é o total de XP que ganhou!",
           type: "Rara",
         },
         { isLucky: true, descr: "Avançe três casas", type: "Normal" },
@@ -183,7 +189,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   height: 250px;
   background: #fabcbc;

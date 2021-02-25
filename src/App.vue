@@ -11,6 +11,9 @@
         :habitats="habitats.map((h) => h.name).filter((h) => h.name !== 'rare')"
       />
     </v-container>
+    <v-container v-if="screen === 'enemies'" class="pa-0">
+      <Enemy />
+    </v-container>
 
     <v-speed-dial
       v-model="fab"
@@ -24,7 +27,7 @@
           <img width="60px" height="60px" src="./assets/pokeball.svg" />
         </v-btn>
       </template>
-      <v-btn fab dark small color="white">
+      <v-btn fab dark small color="white" @click="screen = 'enemies'">
         <img width="25px" height="25px" src="./assets/pokemon-trainer.svg" />
       </v-btn>
       <v-btn fab dark small color="white" @click="screen = 'pokeEncounter'">
@@ -44,6 +47,7 @@
 import Pokedex from "@/components/Pokedex.vue";
 import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
+import Enemy from "@/components/Enemy.vue";
 export default {
   name: "App",
   data: () => ({
@@ -91,6 +95,7 @@ export default {
     Pokedex,
     PokeEncounter,
     EventCards,
+    Enemy,
   },
 
   computed: {
