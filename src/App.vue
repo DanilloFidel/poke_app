@@ -12,7 +12,7 @@
       />
     </v-container>
     <v-container v-if="screen === 'enemies'" class="pa-0">
-      <Enemy />
+      <Enemy :colors="colors" />
     </v-container>
 
     <v-speed-dial
