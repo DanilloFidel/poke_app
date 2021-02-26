@@ -48,7 +48,7 @@
               v-ripple
             >
               <img
-                :src="sortedEnemy.img"
+                :src="require(`../assets/enemies/${sortedEnemy.img}`)"
                 width="inherit"
                 :class="{
                   'defeated-trainer': !sortedEnemy.pokemons.some(
@@ -135,387 +135,64 @@
 </template>
 
 <script>
-import VueFlip from 'vue-flip'
-import Http from '../plugins/http'
-import Vue from 'vue'
+import VueFlip from "vue-flip";
+import Http from "../plugins/http";
+import Vue from "vue";
 export default {
-  name: 'EnemyComponent',
+  name: "EnemyComponent",
   data: () => ({
     loading: false,
     sortedEnemy: {},
-    enemies: [
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'Jessie',
-        dice: 10,
-        pokemons: ["wobbuffet", "arbok", "mimikyu", "lickitung", "meowth"],
-        xp: 300,
-        img: require('../assets/enemies/jessie.png'),
-      },
-      {
-        name: 'Serena',
-        dice: 6,
-        pokemons: ["fletchling", "bunnelby", "absol", "braixen", "jolteon"],
-        xp: 150,
-        img: require('../assets/enemies/serena.png'),
-      },
-      {
-        name: 'Tracey',
-        dice: 12,
-        pokemons: ["venonat", "marill", "scyther"],
-        xp: 230,
-        img: require('../assets/enemies/tracey.png'),
-      },
-      {
-        name: 'Bonnie',
-        dice: 10,
-        pokemons: ["bunnelby", "pichu", "mamoswine", "goomy", "dedenne"],
-        xp: 320,
-        img: require('../assets/enemies/bonnie.png'),
-      },
-      {
-        name: 'Avery',
-        dice: 20,
-        pokemons: ["alakazam", "slowking", "swoobat", "rapidash"],
-        xp: 400,
-        img: require('../assets/enemies/avery.png'),
-      },
-      {
-        name: 'Klara',
-        dice: 10,
-        pokemons: ["scolipede", "slowbro", "drapion", "koffing"],
-        xp: 340,
-        img: require('../assets/enemies/klara.png'),
-      },
-      {
-        name: 'Peony',
-        dice: 10,
-        pokemons: ["aggron", "perrserker", "copperajah", "bronzong", "scizor"],
-        xp: 310,
-        img: require('../assets/enemies/peony.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-      {
-        name: 'James',
-        dice: 8,
-        pokemons: ["meowth", "morpeko", "weezing", "weepinbell", "bewear"],
-        xp: 200,
-        img: require('../assets/enemies/james.png'),
-      },
-    ],
+    enemies: [],
     diceType: 6,
     showLeaders: false,
-    gymLeaders: [
-      {
-        name: 'Brock',
-        dice: 6,
-        pokemons: [95, 74, 42, 185, 764],
-        type: 'Pedra',
-        bagde: 'da Rocha',
-        img: require('../assets/enemies/brock.png'),
-      },
-      {
-        name: 'Misty',
-        dice: 8,
-        pokemons: [120, 54, 222, 130, 118],
-        type: 'Água',
-        bagde: 'da Cascata',
-        img: require('../assets/enemies/misty.png'),
-      },
-      {
-        name: 'Chuck',
-        pokemons: [57, 62, 68, 237, 106],
-        dice: 8,
-        type: 'Lutador',
-        bagde: 'da Tempestade',
-        img: require('../assets/enemies/chuck.png'),
-      },
-      {
-        name: 'Clair',
-        pokemons: [147, 130, 230, 621, 149],
-        dice: 10,
-        type: 'Dragão',
-        bagde: 'da Ascensão',
-        img: require('../assets/enemies/clair.png'),
-      },
-      {
-        name: 'Erika',
-        pokemons: ['tangela', 'weepinbell', 'gloom', 'exeggcute', 'bellsprout'],
-        dice: 12,
-        type: 'Planta',
-        bagde: 'do Arco-Íris',
-        img: require('../assets/enemies/erika.png'),
-      },
-      {
-        name: 'Morty',
-        pokemons: ['gengar', 'gastly', 'haunter', 'misdreavus', 'cofagrigus'],
-        dice: 12,
-        type: 'Fantasma',
-        bagde: 'da Névoa',
-        img: require('../assets/enemies/morty.jpg'),
-      },
-      {
-        name: 'Falkner',
-        pokemons: ['hoothoot', 'dodrio', 'pidgeot', 'swellow', 'staraptor'],
-        dice: 10,
-        type: 'Voador',
-        bagde: 'do Zéfiro',
-        img: require('../assets/enemies/falkner.jpg'),
-      },
-      {
-        name: 'Flannery',
-        pokemons: ['magcargo', 'torkoal', 'slugma', 'vulpix'],
-        dice: 10,
-        type: 'Fogo',
-        bagde: 'do Calor',
-        img: require('../assets/enemies/flanery.png'),
-      },
-      {
-        name: 'Giovanni',
-        pokemons: ['persian', 'nidorino', 'tauros', 'moltres', 'mewtwo'],
-        dice: 20,
-        type: 'Terra',
-        bagde: 'da Terra',
-        img: require('../assets/enemies/giovanni.png'),
-      },
-      {
-        name: 'Pryce',
-        pokemons: ['dewgong', 'piloswine', 'lapras', 'articuno', 'quagsire'],
-        dice: 20,
-        type: 'Gelo',
-        bagde: 'da Geleira',
-        img: require('../assets/enemies/pryce.png'),
-      },
-      {
-        name: 'Sargento Surge',
-        pokemons: [
-          'raichu',
-          'electrode',
-          'magneton',
-          'electabuzz',
-          'manectric',
-        ],
-        dice: 20,
-        type: 'Elétrico',
-        bagde: 'do Trovão',
-        img: require('../assets/enemies/st_surge.png'),
-      },
-      {
-        name: 'Tate e Liza',
-        pokemons: ['claydol', 'xatu', 'lunatone', 'slowking', 'gallade'],
-        dice: 12,
-        type: 'Psíquico',
-        bagde: 'da Mente',
-        img: require('../assets/enemies/tate_and_liza.png'),
-      },
-    ],
   }),
   computed: {
     diceImg() {
-      return require(`../assets/d${this.diceType}.svg`)
+      return require(`../assets/d${this.diceType}.svg`);
     },
   },
-  props: ['colors'],
+  created() {
+    const enemies = require("../data/leaders.json");
+    this.enemies = enemies.trainers;
+    this.gymLeaders = enemies.leaders;
+  },
+  props: ["colors"],
   components: {
     VueFlip,
   },
   methods: {
     sortEnemy() {
-      this.showLeaders = false
-      //   this.sortedEnemy = this.enemies[
-      //     Math.floor(Math.random() * this.enemies.length)
-      //   ];
+      this.showLeaders = false;
+      const sorted = this.enemies[
+        Math.floor(Math.random() * this.enemies.length)
+      ];
+      this.setLeader(sorted);
     },
     setPokemonStatus(pokemon, idx) {
       Vue.set(this.sortedEnemy.pokemons, idx, {
         ...pokemon,
         defeated: !pokemon.defeated,
-      })
+      });
     },
     setLeader(leader) {
-      this.loading = true
+      this.loading = true;
       if (!leader.pokemons.some((p) => p.name)) {
-        const calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`))
+        const calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
         Promise.allSettled(calls)
-          .then((resp) => resp.filter((p) => p.status === 'fulfilled'))
+          .then((resp) => resp.filter((p) => p.status === "fulfilled"))
           .then((resp) => resp.map((p) => p.value.data))
           .then((pokemons) => {
-            this.sortedEnemy = { ...leader, pokemons }
+            this.sortedEnemy = { ...leader, pokemons };
           })
-          .finally(() => (this.loading = false))
+          .finally(() => (this.loading = false));
       } else {
-        this.loading = false
-        this.sortedEnemy = leader
+        this.loading = false;
+        this.sortedEnemy = leader;
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -529,7 +206,6 @@ export default {
 }
 
 @keyframes pulse {
-
   10% {
     opacity: 0.8;
   }

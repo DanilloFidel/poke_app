@@ -1,0 +1,585 @@
+{
+    "trainers": [
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "Jessie",
+            "dice": 10,
+            "pokemons": [
+                "wobbuffet",
+                "arbok",
+                "mimikyu",
+                "lickitung",
+                "meowth"
+            ],
+            "xp": 300,
+            "img": "jessie.png"
+        },
+        {
+            "name": "Serena",
+            "dice": 6,
+            "pokemons": [
+                "fletchling",
+                "bunnelby",
+                "absol",
+                "braixen",
+                "jolteon"
+            ],
+            "xp": 150,
+            "img": "serena.png"
+        },
+        {
+            "name": "Tracey",
+            "dice": 12,
+            "pokemons": [
+                "venonat",
+                "marill",
+                "scyther"
+            ],
+            "xp": 230,
+            "img": "tracey.png"
+        },
+        {
+            "name": "Bonnie",
+            "dice": 10,
+            "pokemons": [
+                "bunnelby",
+                "pichu",
+                "mamoswine",
+                "goomy",
+                "dedenne"
+            ],
+            "xp": 320,
+            "img": "bonnie.png"
+        },
+        {
+            "name": "Avery",
+            "dice": 20,
+            "pokemons": [
+                "alakazam",
+                "slowking",
+                "swoobat",
+                "rapidash"
+            ],
+            "xp": 400,
+            "img": "avery.png"
+        },
+        {
+            "name": "Klara",
+            "dice": 10,
+            "pokemons": [
+                "scolipede",
+                "slowbro",
+                "drapion",
+                "koffing"
+            ],
+            "xp": 340,
+            "img": "klara.png"
+        },
+        {
+            "name": "Peony",
+            "dice": 10,
+            "pokemons": [
+                "aggron",
+                "perrserker",
+                "copperajah",
+                "bronzong",
+                "scizor"
+            ],
+            "xp": 310,
+            "img": "peony.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        },
+        {
+            "name": "James",
+            "dice": 8,
+            "pokemons": [
+                "meowth",
+                "morpeko",
+                "weezing",
+                "weepinbell",
+                "bewear"
+            ],
+            "xp": 200,
+            "img": "james.png"
+        }
+    ],
+    "leaders": [
+        {
+            "name": "Brock",
+            "dice": 6,
+            "pokemons": [
+                95,
+                74,
+                42,
+                185,
+                764
+            ],
+            "type": "Pedra",
+            "bagde": "da Rocha",
+            "img": "brock.png"
+        },
+        {
+            "name": "Misty",
+            "dice": 8,
+            "pokemons": [
+                120,
+                54,
+                222,
+                130,
+                118
+            ],
+            "type": "Água",
+            "bagde": "da Cascata",
+            "img": "misty.png"
+        },
+        {
+            "name": "Chuck",
+            "pokemons": [
+                57,
+                62,
+                68,
+                237,
+                106
+            ],
+            "dice": 8,
+            "type": "Lutador",
+            "bagde": "da Tempestade",
+            "img": "chuck.png"
+        },
+        {
+            "name": "Clair",
+            "pokemons": [
+                147,
+                130,
+                230,
+                621,
+                149
+            ],
+            "dice": 10,
+            "type": "Dragão",
+            "bagde": "da Ascensão",
+            "img": "clair.png"
+        },
+        {
+            "name": "Erika",
+            "pokemons": [
+                "tangela",
+                "weepinbell",
+                "gloom",
+                "exeggcute",
+                "bellsprout"
+            ],
+            "dice": 12,
+            "type": "Planta",
+            "bagde": "do Arco-Íris",
+            "img": "erika.png"
+        },
+        {
+            "name": "Morty",
+            "pokemons": [
+                "gengar",
+                "gastly",
+                "haunter",
+                "misdreavus",
+                "cofagrigus"
+            ],
+            "dice": 12,
+            "type": "Fantasma",
+            "bagde": "da Névoa",
+            "img": "morty.jpg"
+        },
+        {
+            "name": "Falkner",
+            "pokemons": [
+                "hoothoot",
+                "dodrio",
+                "pidgeot",
+                "swellow",
+                "staraptor"
+            ],
+            "dice": 10,
+            "type": "Voador",
+            "bagde": "do Zéfiro",
+            "img": "falkner.jpg"
+        },
+        {
+            "name": "Flannery",
+            "pokemons": [
+                "magcargo",
+                "torkoal",
+                "slugma",
+                "vulpix"
+            ],
+            "dice": 10,
+            "type": "Fogo",
+            "bagde": "do Calor",
+            "img": "flanery.png"
+        },
+        {
+            "name": "Giovanni",
+            "pokemons": [
+                "persian",
+                "nidorino",
+                "tauros",
+                "moltres",
+                "mewtwo"
+            ],
+            "dice": 20,
+            "type": "Terra",
+            "bagde": "da Terra",
+            "img": "giovanni.png"
+        },
+        {
+            "name": "Pryce",
+            "pokemons": [
+                "dewgong",
+                "piloswine",
+                "lapras",
+                "articuno",
+                "quagsire"
+            ],
+            "dice": 20,
+            "type": "Gelo",
+            "bagde": "da Geleira",
+            "img": "pryce.png"
+        },
+        {
+            "name": "Sargento Surge",
+            "pokemons": [
+                "raichu",
+                "electrode",
+                "magneton",
+                "electabuzz",
+                "manectric"
+            ],
+            "dice": 20,
+            "type": "Elétrico",
+            "bagde": "do Trovão",
+            "img": "st_surge.png"
+        },
+        {
+            "name": "Tate e Liza",
+            "pokemons": [
+                "claydol",
+                "xatu",
+                "lunatone",
+                "slowking",
+                "gallade"
+            ],
+            "dice": 12,
+            "type": "Psíquico",
+            "bagde": "da Mente",
+            "img": "tate_and_liza.png"
+        }
+    ]
+}
