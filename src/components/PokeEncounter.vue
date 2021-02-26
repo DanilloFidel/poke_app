@@ -195,7 +195,7 @@ export default {
     },
     setDiceDifficult() {
       this.simpleChance = true;
-      this.diceType = "single_d6";
+      this.diceType = "d6";
       if (this.selectedPokemon.base_experience >= 120) {
         this.diceType = "d8";
       }

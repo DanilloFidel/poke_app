@@ -50,6 +50,11 @@
               <img
                 :src="sortedEnemy.img"
                 width="inherit"
+                :class="{
+                  'defeated-trainer': !sortedEnemy.pokemons.some(
+                    (p) => !p.defeated
+                  ),
+                }"
                 height="250px"
                 alt=""
               />
@@ -94,6 +99,7 @@
           v-if="sortedEnemy.name && sortedEnemy.pokemons.some((p) => p.name)"
           justify="center"
           class="mt-2"
+          dense
         >
           <v-col cols="8" class="d-flex justify-center">
             <img
@@ -111,6 +117,11 @@
             />
           </v-col>
         </v-row>
+        <v-row class="mx-2">
+          <span>{{
+            `${sortedEnemy.name} batalha com um dados de ${sortedEnemy.dice} lados`
+          }}</span>
+        </v-row>
       </v-col>
     </v-row>
     <v-row dense justify="center" style="height: 400px" v-else
@@ -124,116 +135,134 @@
 </template>
 
 <script>
-import VueFlip from "vue-flip";
-import Http from "../plugins/http";
-import Vue from "vue";
+import VueFlip from 'vue-flip'
+import Http from '../plugins/http'
+import Vue from 'vue'
 export default {
-  name: "EnemyComponent",
+  name: 'EnemyComponent',
   data: () => ({
     loading: false,
     sortedEnemy: {},
     enemies: [],
+    diceType: 6,
     showLeaders: false,
     gymLeaders: [
       {
-        name: "Brock",
+        name: 'Brock',
+        dice: 6,
         pokemons: [95, 74, 42, 185, 764],
-        type: "Pedra",
-        bagde: "da Rocha",
-        img: require("../assets/enemies/brock.png"),
+        type: 'Pedra',
+        bagde: 'da Rocha',
+        img: require('../assets/enemies/brock.png'),
       },
       {
-        name: "Misty",
+        name: 'Misty',
+        dice: 8,
         pokemons: [120, 54, 222, 130, 118],
-        type: "Água",
-        bagde: "da Cascata",
-        img: require("../assets/enemies/misty.png"),
+        type: 'Água',
+        bagde: 'da Cascata',
+        img: require('../assets/enemies/misty.png'),
       },
       {
-        name: "Chuck",
+        name: 'Chuck',
         pokemons: [57, 62, 68, 237, 106],
-        type: "Lutador",
-        bagde: "da Tempestade",
-        img: require("../assets/enemies/chuck.png"),
+        dice: 8,
+        type: 'Lutador',
+        bagde: 'da Tempestade',
+        img: require('../assets/enemies/chuck.png'),
       },
       {
-        name: "Clair",
+        name: 'Clair',
         pokemons: [147, 130, 230, 621, 149],
-        type: "Dragão",
-        bagde: "da Ascensão",
-        img: require("../assets/enemies/clair.png"),
+        dice: 10,
+        type: 'Dragão',
+        bagde: 'da Ascensão',
+        img: require('../assets/enemies/clair.png'),
       },
       {
-        name: "Erika",
-        pokemons: ["tangela", "weepinbell", "gloom", "exeggcute", "bellsprout"],
-        type: "Planta",
-        bagde: "do Arco-Íris",
-        img: require("../assets/enemies/erika.png"),
+        name: 'Erika',
+        pokemons: ['tangela', 'weepinbell', 'gloom', 'exeggcute', 'bellsprout'],
+        dice: 12,
+        type: 'Planta',
+        bagde: 'do Arco-Íris',
+        img: require('../assets/enemies/erika.png'),
       },
       {
-        name: "Morty",
-        pokemons: ["gengar", "gastly", "haunter", "misdreavus", "cofagrigus"],
-        type: "Fantasma",
-        bagde: "da Névoa",
-        img: require("../assets/enemies/morty.jpg"),
+        name: 'Morty',
+        pokemons: ['gengar', 'gastly', 'haunter', 'misdreavus', 'cofagrigus'],
+        dice: 12,
+        type: 'Fantasma',
+        bagde: 'da Névoa',
+        img: require('../assets/enemies/morty.jpg'),
       },
       {
-        name: "Falkner",
-        pokemons: ["hoothoot", "dodrio", "pidgeot", "swellow", "staraptor"],
-        type: "Voador",
-        bagde: "do Zéfiro",
-        img: require("../assets/enemies/falkner.jpg"),
+        name: 'Falkner',
+        pokemons: ['hoothoot', 'dodrio', 'pidgeot', 'swellow', 'staraptor'],
+        dice: 10,
+        type: 'Voador',
+        bagde: 'do Zéfiro',
+        img: require('../assets/enemies/falkner.jpg'),
       },
       {
-        name: "Flannery",
-        pokemons: ["magcargo", "torkoal", "slugma", "vulpix"],
-        type: "Fogo",
-        bagde: "do Calor",
-        img: require("../assets/enemies/flanery.png"),
+        name: 'Flannery',
+        pokemons: ['magcargo', 'torkoal', 'slugma', 'vulpix'],
+        dice: 10,
+        type: 'Fogo',
+        bagde: 'do Calor',
+        img: require('../assets/enemies/flanery.png'),
       },
       {
-        name: "Giovanni",
-        pokemons: ["persian", "nidorino", "tauros", "moltres", "mewtwo"],
-        type: "Terra",
-        bagde: "da Terra",
-        img: require("../assets/enemies/giovanni.png"),
+        name: 'Giovanni',
+        pokemons: ['persian', 'nidorino', 'tauros', 'moltres', 'mewtwo'],
+        dice: 20,
+        type: 'Terra',
+        bagde: 'da Terra',
+        img: require('../assets/enemies/giovanni.png'),
       },
       {
-        name: "Pryce",
-        pokemons: ["dewgong", "piloswine", "lapras", "articuno", "quagsire"],
-        type: "Gelo",
-        bagde: "da Geleira",
-        img: require("../assets/enemies/pryce.png"),
+        name: 'Pryce',
+        pokemons: ['dewgong', 'piloswine', 'lapras', 'articuno', 'quagsire'],
+        dice: 20,
+        type: 'Gelo',
+        bagde: 'da Geleira',
+        img: require('../assets/enemies/pryce.png'),
       },
       {
-        name: "Sargento Surge",
+        name: 'Sargento Surge',
         pokemons: [
-          "raichu",
-          "electrode",
-          "magneton",
-          "electabuzz",
-          "manectric",
+          'raichu',
+          'electrode',
+          'magneton',
+          'electabuzz',
+          'manectric',
         ],
-        type: "Elétrico",
-        bagde: "do Trovão",
-        img: require("../assets/enemies/st_surge.png"),
+        dice: 20,
+        type: 'Elétrico',
+        bagde: 'do Trovão',
+        img: require('../assets/enemies/st_surge.png'),
       },
       {
-        name: "Tate e Liza",
-        pokemons: ["claydol", "xatu", "lunatone", "slowking", "gallade"],
-        type: "Psíquico",
-        bagde: "da Mente",
-        img: require("../assets/enemies/tate_and_liza.png"),
+        name: 'Tate e Liza',
+        pokemons: ['claydol', 'xatu', 'lunatone', 'slowking', 'gallade'],
+        dice: 12,
+        type: 'Psíquico',
+        bagde: 'da Mente',
+        img: require('../assets/enemies/tate_and_liza.png'),
       },
     ],
   }),
-  props: ["colors"],
+  computed: {
+    diceImg() {
+      return require(`../assets/d${this.diceType}.svg`)
+    },
+  },
+  props: ['colors'],
   components: {
     VueFlip,
   },
   methods: {
     sortEnemy() {
-      this.showLeaders = false;
+      this.showLeaders = false
       //   this.sortedEnemy = this.enemies[
       //     Math.floor(Math.random() * this.enemies.length)
       //   ];
@@ -242,32 +271,62 @@ export default {
       Vue.set(this.sortedEnemy.pokemons, idx, {
         ...pokemon,
         defeated: !pokemon.defeated,
-      });
+      })
     },
     setLeader(leader) {
-      this.loading = true;
+      this.loading = true
       if (!leader.pokemons.some((p) => p.name)) {
-        const calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
+        const calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`))
         Promise.allSettled(calls)
-          .then((resp) => resp.filter((p) => p.status === "fulfilled"))
+          .then((resp) => resp.filter((p) => p.status === 'fulfilled'))
           .then((resp) => resp.map((p) => p.value.data))
           .then((pokemons) => {
-            this.sortedEnemy = { ...leader, pokemons };
+            this.sortedEnemy = { ...leader, pokemons }
           })
-          .finally(() => (this.loading = false));
+          .finally(() => (this.loading = false))
       } else {
-        this.loading = false;
-        this.sortedEnemy = leader;
+        this.loading = false
+        this.sortedEnemy = leader
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
 .card {
   height: 300px;
   width: 360px;
+}
+
+.defeated-trainer {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+
+  30% {
+    opacity: 0.7;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
 }
 
 .chip {
