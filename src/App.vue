@@ -14,6 +14,9 @@
     <v-container v-if="screen === 'enemies'" class="pa-0">
       <Enemy :colors="colors" />
     </v-container>
+    <v-container v-if="screen === 'typesCompare'" class="pa-0">
+      <TypesCompare :colors="colors" />
+    </v-container>
 
     <v-speed-dial
       v-model="fab"
@@ -29,6 +32,9 @@
       </template>
       <v-btn fab dark small color="white" @click="screen = 'enemies'">
         <img width="25px" height="25px" src="./assets/pokemon-trainer.svg" />
+      </v-btn>
+      <v-btn fab dark small color="white" @click="screen = 'typesCompare'">
+        <img width="25px" height="25px" src="./assets/fire.svg" />
       </v-btn>
       <v-btn fab dark small color="white" @click="screen = 'pokeEncounter'">
         <img width="25px" height="25px" src="./assets/pikachu.svg" />
@@ -48,6 +54,7 @@ import Pokedex from "@/components/Pokedex.vue";
 import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
 import Enemy from "@/components/Enemy.vue";
+import TypesCompare from "@/components/TypesCompare.vue";
 export default {
   name: "App",
   data: () => ({
@@ -96,6 +103,7 @@ export default {
     PokeEncounter,
     EventCards,
     Enemy,
+    TypesCompare,
   },
 
   computed: {
@@ -122,7 +130,6 @@ export default {
         .finally(() => (this.btnLoading = false));
     },
     changeHabitat(url) {
-      debugger;
       this.btnLoading = true;
       fetch(url)
         .then((resp) => resp.json())
@@ -138,7 +145,6 @@ export default {
       this.diceValue = Math.floor(Math.random() * 6) + 1;
     },
     async sortPokemon() {
-      debugger;
       this.loading = true;
       const idx = Math.floor(Math.random() * this.pokemons.length);
       // TODO buscar na regiao selecionada
@@ -150,7 +156,6 @@ export default {
           `https://pokeapi.co/api/v2/pokemon/${selected.name}`
         ).then((resp) => resp.json());
 
-        console.log("pk: ", { ...pokemonInfo, ...pokemonInfo2 });
         setTimeout(() => {
           this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 };
           if (

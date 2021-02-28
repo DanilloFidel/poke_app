@@ -16,25 +16,10 @@
     <v-container v-if="!loading" fluid fill-height style="height: 430px">
       <v-row dense justify="center" v-if="selectedPokemon.name">
         <v-col cols="6" class="d-flex justify-center">
-          <img
-            v-if="
-              selectedPokemon.sprites && selectedPokemon.sprites.front_default
-            "
-            height="150px"
-            width="150px"
-            :src="selectedPokemon.sprites.front_default"
-          />
+          <img height="150px" width="150px" :src="getSprite('front_default')" />
         </v-col>
-        <v-col
-          cols="6"
-          class="d-flex justify-center"
-          v-if="selectedPokemon.sprites && selectedPokemon.sprites.back_default"
-        >
-          <img
-            height="150px"
-            width="150px"
-            :src="selectedPokemon.sprites.back_default"
-          />
+        <v-col cols="6" class="d-flex justify-center">
+          <img height="150px" width="150px" :src="getSprite('back_default')" />
         </v-col>
 
         <v-col cols="12">
@@ -91,7 +76,14 @@
     <v-container fill-height fluid v-else style="height: 430px">
       <v-row dense justify="center" class="px-4">
         <v-col class="d-flex justify-center">
-          <img class="loading-logo" src="../assets/aMz1Qtu.gif" />
+          <v-img
+            class="loading-logo"
+            src="../assets/aMz1Qtu.gif"
+            eager
+            contain
+            height="150px"
+            width="200px"
+          ></v-img>
         </v-col>
       </v-row>
     </v-container>
@@ -99,6 +91,7 @@
 </template>
 
 <script>
+import Http from "../plugins/http";
 export default {
   name: "PokeEncounter",
   data: () => ({
@@ -136,15 +129,13 @@ export default {
   methods: {
     fecthHabitats() {
       this.btnLoading = true;
-      fetch("https://pokeapi.co/api/v2/pokemon-habitat")
-        .then((resp) => resp.json())
-        .then((data) => {
-          this.habitats = [...this.habitats, ...data.results];
+      Http.get("/pokemon-habitat")
+        .then((resp) => {
+          this.habitats = [...this.habitats, ...resp.data.results];
         })
         .finally(() => (this.btnLoading = false));
     },
     changeHabitat(url) {
-      debugger;
       this.btnLoading = true;
       fetch(url)
         .then((resp) => resp.json())
@@ -156,6 +147,9 @@ export default {
         })
         .finally(() => (this.btnLoading = false));
     },
+    getSprite(type) {
+      return this.selectedPokemon.sprites[type];
+    },
     sortDices() {
       const t = this.diceType.split("d");
       const range = t[1];
@@ -163,19 +157,18 @@ export default {
       this.diceValue2 = Math.floor(Math.random() * range) + 1;
     },
     async sortPokemon() {
-      debugger;
       this.loading = true;
       const idx = Math.floor(Math.random() * this.pokemons.length);
-      // TODO buscar na regiao selecionada
       const selected = this.pokemons[idx];
 
       try {
-        let pokemonInfo = await fetch(selected.url).then((resp) => resp.json());
-        let pokemonInfo2 = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${selected.name}`
-        ).then((resp) => resp.json());
+        let pokemonInfo = await Http.get(
+          `/pokemon-species/${selected.name}`
+        ).then((resp) => resp.data);
+        let pokemonInfo2 = await Http.get(`/pokemon/${selected.name}`).then(
+          (resp) => resp.data
+        );
 
-        console.log("pk: ", { ...pokemonInfo, ...pokemonInfo2 });
         setTimeout(() => {
           this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 };
           if (
@@ -214,7 +207,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .d6-number {
   font-size: 40px;
   margin: auto;
@@ -225,9 +218,5 @@ export default {
 
 html {
   overflow: hidden;
-}
-
-.loading-logo {
-  width: 100vw;
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <v-row dense style="max-height: 80px" align="center" justify="center">
       <v-col cols="5" align-self="center" class="text-center">
-        <h3 class="mr-3">Pokédex v.1.7</h3>
+        <h3 class="mr-3">Pokédex v2.0.0</h3>
       </v-col>
       <v-col cols="6">
         <v-text-field
@@ -189,7 +189,6 @@ export default {
     async getPokemons(params = this.nextPage) {
       try {
         this.loading = true;
-        debugger;
         const firstPokes = await Http.get(`pokemon?${params}`).then(
           (resp) => resp.data
         );
@@ -202,14 +201,10 @@ export default {
           this.previousPage = splitedPreviously[1];
         } else this.previousPage = null;
         const pokemons = await this.getFullInfo(firstPokes.results);
-        debugger;
-        console.log(pokemons);
         this.pokemons = pokemons;
-        console.log("pok: ", this.pokemons);
         this.filteredList = [...this.pokemons];
-        console.log("filtred: ", this.filteredList);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       this.loading = false;
       this.listInit = false;
@@ -251,6 +246,7 @@ export default {
 }
 
 .loading-logo {
-  width: 100vw;
+  width: 320px;
+  height: 300px;
 }
 </style>

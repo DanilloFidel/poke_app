@@ -138,15 +138,13 @@ export default {
           `https://pokeapi.co/api/v2/pokemon-species/${obj.name}`
         ).then((resp) => resp.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
-      debugger;
       Object.assign(this.fullPokemon, { ...this.pokemon, ...subInfos });
       this.pkVersions = [
         this.fullPokemon.sprites.other["official-artwork"].front_default,
       ];
       this.setImgs();
-      console.log(this.fullPokemon);
     },
     setImgs() {
       this.pokemon.sprites &&
@@ -160,7 +158,6 @@ export default {
               this.pkVersions.push(item.dream_world.front_female);
           }
         });
-      console.log(this.pkVersions);
     },
     getPokemon(url) {
       Http.get(url).then((resp) => {
