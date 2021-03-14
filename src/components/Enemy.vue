@@ -41,7 +41,7 @@
         <h3>{{ sortedEnemy.name }}</h3></v-col
       >
       <v-col>
-        <vue-flip active-click height="300px" width="360px">
+        <vue-flip active-click height="300px" width="300px">
           <template v-slot:front>
             <div
               class="card d-flex justify-center elevation-4 align-center px-2"
@@ -50,11 +50,6 @@
               <img
                 :src="require(`../assets/enemies/${sortedEnemy.img}`)"
                 width="inherit"
-                :class="{
-                  'defeated-trainer': !sortedEnemy.pokemons.some(
-                    (p) => !p.defeated
-                  ),
-                }"
                 height="250px"
                 alt=""
               />
@@ -66,24 +61,25 @@
               v-ripple
             >
               <v-row dense>
-                <v-col
-                  cols="6"
-                  class="d-flex align-center"
-                  v-for="(pokemon, i) in sortedEnemy.pokemons"
-                  :key="i"
-                >
+                <v-col class="d-flex align-center justify-center">
                   <img
-                    height="50px"
-                    width="50px"
-                    :src="pokemon.sprites.front_default"
+                    height="150px"
+                    width="150px"
+                    :src="
+                      sortedEnemy.activePokemon.sprites.other[
+                        'official-artwork'
+                      ].front_default
+                    "
                   />
-                  <div>
-                    <span class="overline">{{ pokemon.name }}</span>
+                  <div class="mr-3">
+                    <span class="overline">{{
+                      sortedEnemy.activePokemon.name
+                    }}</span>
                     <div>
                       <v-chip
-                        class="mx-2 chip overline"
+                        class="chip overline"
                         x-small
-                        v-for="(item, idx) in pokemon.types"
+                        v-for="(item, idx) in sortedEnemy.activePokemon.types"
                         :key="`type-${idx}`"
                         :color="colors[item.type.name]"
                         >{{ item.type.name }}</v-chip
@@ -104,7 +100,7 @@
           <v-col cols="8" class="d-flex justify-center">
             <img
               v-for="(pokemon, i) in sortedEnemy.pokemons"
-              @click="setPokemonStatus(pokemon, i)"
+              @click="previouslyIsDefeated(i) && setPokemonStatus(pokemon, i)"
               :key="`ball-${i}`"
               width="25px"
               :style="{
@@ -117,9 +113,17 @@
             />
           </v-col>
         </v-row>
-        <v-row class="mx-2">
+        <!-- <v-row class="mx-2">
           <span>{{
             `${sortedEnemy.name} batalha com um dados de ${sortedEnemy.dice} lados`
+          }}</span>
+        </v-row> -->
+        <v-row
+          class="mx-2"
+          v-if="!sortedEnemy.pokemons.some((p) => !p.defeated)"
+        >
+          <span>{{
+            `Você ganhou o ${giftPokemon.name} do ${sortedEnemy.name}`
           }}</span>
         </v-row>
       </v-col>
@@ -151,6 +155,11 @@ export default {
     diceImg() {
       return require(`../assets/d${this.diceType}.svg`);
     },
+    giftPokemon() {
+      return this.sortedEnemy.pokemons[
+        Math.floor(Math.random() * this.sortedEnemy.pokemons.length)
+      ];
+    },
   },
   created() {
     const enemies = require("../data/leaders.json");
@@ -169,11 +178,21 @@ export default {
       ];
       this.setLeader(sorted);
     },
+    setNextPokemon(idx) {
+      const next = this.sortedEnemy.pokemons[idx];
+      if (!next) return;
+      this.sortedEnemy = { ...this.sortedEnemy, activePokemon: next };
+    },
     setPokemonStatus(pokemon, idx) {
       Vue.set(this.sortedEnemy.pokemons, idx, {
         ...pokemon,
         defeated: !pokemon.defeated,
       });
+      this.setNextPokemon(idx + 1);
+    },
+    previouslyIsDefeated(idx) {
+      const pk = this.sortedEnemy.pokemons[idx - 1];
+      return (pk && pk.defeated) || idx === 0;
     },
     setLeader(leader) {
       this.loading = true;
@@ -184,6 +203,7 @@ export default {
           .then((resp) => resp.map((p) => p.value.data))
           .then((pokemons) => {
             this.sortedEnemy = { ...leader, pokemons };
+            this.setNextPokemon(0);
           })
           .finally(() => (this.loading = false));
       } else {
@@ -198,7 +218,7 @@ export default {
 <style scoped>
 .card {
   height: 300px;
-  width: 360px;
+  width: 300px;
 }
 
 .defeated-trainer {

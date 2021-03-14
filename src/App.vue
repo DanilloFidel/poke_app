@@ -1,51 +1,81 @@
 <template>
   <v-app>
-    <v-container v-if="screen === 'pokedex'" class="pa-0">
-      <Pokedex :colors="colors" />
-    </v-container>
-    <v-container v-if="screen === 'pokeEncounter'" class="pa-0">
-      <PokeEncounter :colors="colors" />
-    </v-container>
-    <v-container v-if="screen === 'eventCards'" class="pa-0">
-      <EventCards
-        :habitats="habitats.map((h) => h.name).filter((h) => h.name !== 'rare')"
-      />
-    </v-container>
-    <v-container v-if="screen === 'enemies'" class="pa-0">
-      <Enemy :colors="colors" />
-    </v-container>
-    <v-container v-if="screen === 'typesCompare'" class="pa-0">
-      <TypesCompare :colors="colors" />
-    </v-container>
+    <v-row dense>
+      <v-navigation-drawer v-model="drawer" permanent mini-variant>
+        <v-list-item class="px-2">
+          <v-list-item-avatar>
+            <v-img src="./assets/pokeball.svg"></v-img>
+          </v-list-item-avatar>
 
-    <v-speed-dial
-      v-model="fab"
-      style="bottom: 26px"
-      right
-      absolute
-      direction="top"
-    >
-      <template v-slot:activator>
-        <v-btn v-model="fab" color="blue darken-2" dark fab>
-          <img width="60px" height="60px" src="./assets/pokeball.svg" />
-        </v-btn>
-      </template>
-      <v-btn fab dark small color="white" @click="screen = 'enemies'">
-        <img width="25px" height="25px" src="./assets/pokemon-trainer.svg" />
-      </v-btn>
-      <v-btn fab dark small color="white" @click="screen = 'typesCompare'">
-        <img width="25px" height="25px" src="./assets/fire.svg" />
-      </v-btn>
-      <v-btn fab dark small color="white" @click="screen = 'pokeEncounter'">
-        <img width="25px" height="25px" src="./assets/pikachu.svg" />
-      </v-btn>
-      <v-btn fab dark small color="white" @click="screen = 'eventCards'">
-        <img width="25px" height="25px" src="./assets/cards.svg" />
-      </v-btn>
-      <v-btn fab dark small color="white" @click="screen = 'pokedex'">
-        <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
-      </v-btn>
-    </v-speed-dial>
+          <v-list-item-title>John Leider</v-list-item-title>
+
+          <v-btn icon @click.stop="mini = !mini">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list dense class="mt-5">
+          <v-list-item class="my-3" @click="screen = 'enemies'">
+            <v-list-item-icon>
+              <img
+                width="25px"
+                height="25px"
+                src="./assets/pokemon-trainer.svg"
+              />
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item class="my-3" @click="screen = 'typesCompare'">
+            <v-list-item-icon>
+              <img width="25px" height="25px" src="./assets/fire.svg" />
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item class="my-3" @click="screen = 'pokeEncounter'">
+            <v-list-item-icon>
+              <img width="25px" height="25px" src="./assets/pikachu.svg" />
+            </v-list-item-icon>
+          </v-list-item>
+
+          <v-list-item class="my-3" @click="screen = 'eventCards'">
+            <v-list-item-icon>
+              <img width="25px" height="25px" src="./assets/cards.svg" />
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item class="my-3" @click="screen = 'pokedex'">
+            <v-list-item-icon>
+              <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
+            </v-list-item-icon>
+          </v-list-item>
+          <v-list-item class="my-3" @click="screen = 'pokedex'">
+            <v-list-item-icon>
+              <img width="25px" height="25px" src="./assets/treasure-map.svg" />
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <div class="content">
+        <v-container v-show="screen === 'pokedex'" class="pa-0">
+          <Pokedex :colors="colors" />
+        </v-container>
+        <v-container v-show="screen === 'pokeEncounter'" class="pa-0">
+          <PokeEncounter :colors="colors" />
+        </v-container>
+        <v-container v-show="screen === 'eventCards'" class="pa-0">
+          <EventCards
+            :habitats="
+              habitats.map((h) => h.name).filter((h) => h.name !== 'rare')
+            "
+          />
+        </v-container>
+        <v-container v-show="screen === 'enemies'" class="pa-0">
+          <Enemy :colors="colors" />
+        </v-container>
+        <v-container v-show="screen === 'typesCompare'" class="pa-0">
+          <TypesCompare :colors="colors" />
+        </v-container>
+      </div>
+    </v-row>
   </v-app>
 </template>
 
@@ -58,6 +88,7 @@ import TypesCompare from "@/components/TypesCompare.vue";
 export default {
   name: "App",
   data: () => ({
+    drawer: true,
     screen: "pokeEncounter",
     fab: false,
     pokemons: [],
@@ -205,5 +236,10 @@ export default {
 
 html {
   overflow: hidden;
+}
+
+.content {
+  height: 100vh;
+  width: calc(100vw - 56px);
 }
 </style>
