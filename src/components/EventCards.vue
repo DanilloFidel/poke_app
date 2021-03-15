@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row dense justify="space-between" align="center">
+    <v-row dense justify="space-between" align="center" class="px-4">
       <v-col cols="6" class="ml-3">
         <v-radio-group v-model="cardType">
           <v-radio
