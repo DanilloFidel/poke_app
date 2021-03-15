@@ -122,9 +122,10 @@
           class="mx-2"
           v-if="!sortedEnemy.pokemons.some((p) => !p.defeated)"
         >
-          <span>{{
-            `Você ganhou o ${giftPokemon.name} do ${sortedEnemy.name}`
-          }}</span>
+          <span
+            >{{ `${sortedEnemy.name} te presenteou com: `
+            }}<b>{{ giftPokemon.name }}</b></span
+          >
         </v-row>
       </v-col>
     </v-row>

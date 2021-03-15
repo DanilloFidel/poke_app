@@ -3,15 +3,9 @@
     <v-row dense>
       <v-navigation-drawer v-model="drawer" permanent mini-variant>
         <v-list-item class="px-2">
-          <v-list-item-avatar>
+          <v-list-item-avatar @click="sortInitials">
             <v-img src="./assets/pokeball.svg"></v-img>
           </v-list-item-avatar>
-
-          <v-list-item-title>John Leider</v-list-item-title>
-
-          <v-btn icon @click.stop="mini = !mini">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -47,7 +41,7 @@
               <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
             </v-list-item-icon>
           </v-list-item>
-          <v-list-item class="my-3" @click="screen = 'pokedex'">
+          <v-list-item class="my-3" @click="screen = 'players'">
             <v-list-item-icon>
               <img width="25px" height="25px" src="./assets/treasure-map.svg" />
             </v-list-item-icon>
@@ -68,6 +62,9 @@
             "
           />
         </v-container>
+        <v-container v-show="screen === 'players'" class="pa-0">
+          <Players ref="players" :colors="colors" />
+        </v-container>
         <v-container v-show="screen === 'enemies'" class="pa-0">
           <Enemy :colors="colors" />
         </v-container>
@@ -85,6 +82,7 @@ import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
 import Enemy from "@/components/Enemy.vue";
 import TypesCompare from "@/components/TypesCompare.vue";
+import Players from "@/components/Players.vue";
 export default {
   name: "App",
   data: () => ({
@@ -135,6 +133,7 @@ export default {
     EventCards,
     Enemy,
     TypesCompare,
+    Players,
   },
 
   computed: {
@@ -174,6 +173,9 @@ export default {
     },
     sortDices() {
       this.diceValue = Math.floor(Math.random() * 6) + 1;
+    },
+    sortInitials() {
+      this.$refs.players.sortInitials();
     },
     async sortPokemon() {
       this.loading = true;

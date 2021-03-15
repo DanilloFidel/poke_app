@@ -43,10 +43,7 @@
             <img :src="diceImg" width="60px" height="60px" />
           </v-col>
           <v-col class="text-center" align-self="center">
-            <span v-if="simpleChance"
-              >Tire <b>{{ diceValue }}</b> no dado para capturar</span
-            >
-            <span v-else
+            <span
               >Tire <b>{{ diceValue }}</b> ou <b>{{ diceValue2 }}</b> no dado
               <br />
               para capturar</span
@@ -187,7 +184,6 @@ export default {
       }
     },
     setDiceDifficult() {
-      this.simpleChance = true;
       this.diceType = "d6";
       if (this.selectedPokemon.base_experience >= 120) {
         this.diceType = "d8";
@@ -197,9 +193,6 @@ export default {
       }
       if (this.selectedPokemon.base_experience >= 200) {
         this.diceType = "d20";
-      }
-      if (this.selectedPokemon.base_experience < 120) {
-        this.simpleChance = false;
       }
       this.sortDices();
     },
