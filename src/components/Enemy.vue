@@ -143,6 +143,7 @@
 import VueFlip from "vue-flip";
 import Http from "../plugins/http";
 import Vue from "vue";
+import { mapActions } from "vuex";
 export default {
   name: "EnemyComponent",
   data: () => ({
@@ -162,6 +163,14 @@ export default {
       ];
     },
   },
+  watch: {
+    sortedEnemy: {
+      handler: function (val) {
+        this.ADD_ACTIVE_FIGHTER(val);
+      },
+      deep: true,
+    },
+  },
   created() {
     const enemies = require("../data/leaders.json");
     this.enemies = enemies.trainers;
@@ -172,6 +181,7 @@ export default {
     VueFlip,
   },
   methods: {
+    ...mapActions(["ADD_ACTIVE_FIGHTER"]),
     sortEnemy() {
       this.showLeaders = false;
       const sorted = this.enemies[
@@ -204,6 +214,7 @@ export default {
           .then((resp) => resp.map((p) => p.value.data))
           .then((pokemons) => {
             this.sortedEnemy = { ...leader, pokemons };
+
             this.setNextPokemon(0);
           })
           .finally(() => (this.loading = false));

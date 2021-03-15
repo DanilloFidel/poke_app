@@ -46,6 +46,9 @@
               <img width="25px" height="25px" src="./assets/treasure-map.svg" />
             </v-list-item-icon>
           </v-list-item>
+          <v-list-item class="my-3" @click="loadProgress">
+            <v-list-item-icon> load </v-list-item-icon>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
       <div class="content">
@@ -158,6 +161,9 @@ export default {
           this.habitats = [...this.habitats, ...data.results];
         })
         .finally(() => (this.btnLoading = false));
+    },
+    loadProgress() {
+      this.$refs.players.load();
     },
     changeHabitat(url) {
       this.btnLoading = true;

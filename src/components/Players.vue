@@ -37,8 +37,6 @@
                 <tr>
                   <th class="text-left">Nome</th>
                   <th class="text-left">Tipo</th>
-                  <th class="text-left">xp</th>
-                  <th class="text-left"></th>
                   <th class="text-left"></th>
                 </tr>
               </thead>
@@ -46,6 +44,7 @@
                 <tr
                   v-for="(item, i) in activePlayer.pokemons"
                   :key="`${item} - ${i}`"
+                  @dblclick="removePokemon(item)"
                   :style="{
                     backgroundColor: item.defeated ? '#ff00005c' : null,
                   }"
@@ -55,6 +54,7 @@
                     <v-chip
                       small
                       x-small
+                      @click="openTypesModal(item.types)"
                       pill
                       outlined
                       class="mt-2 mr-2 overline elevation-3"
@@ -64,12 +64,7 @@
                       >{{ item_2.type.name }}</v-chip
                     >
                   </td>
-                  <td>{{ item.base_experience }}</td>
-                  <td>
-                    <v-icon @click="removePokemon(item)">{{
-                      closeIcon
-                    }}</v-icon>
-                  </td>
+
                   <td>
                     <v-icon @click="changePokemonStatus(item)">{{
                       defeatedIcon
@@ -96,6 +91,46 @@
         </v-row>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="typesDialog">
+      <v-card class="pa-3">
+        <v-row dense>
+          <span>Inimigo</span>
+          <v-chip
+            small
+            x-small
+            pill
+            outlined
+            class="ml-3 overline elevation-3"
+            v-for="(item_2, idx) in enemyTypes"
+            :key="idx"
+            :color="colors[item_2.name]"
+            >{{ item_2.name }}</v-chip
+          >
+        </v-row>
+        <v-row dense class="mt-5">
+          <span>Jogador</span>
+          <v-chip
+            small
+            x-small
+            pill
+            outlined
+            :style="{
+              opacity: item_2.lose ? 0.3 : 1,
+            }"
+            class="ml-3 overline elevation-3"
+            v-for="(item_2, idx) in playerTypes"
+            :key="idx"
+            :color="colors[item_2.type.name]"
+            >{{ item_2.type.name }}</v-chip
+          >
+        </v-row>
+      </v-card>
+    </v-dialog>
+
+    <v-btn absolute bottom right x-small @click="saveProgress"
+      >Salvar progresso</v-btn
+    >
   </div>
 </template>
 
@@ -106,9 +141,13 @@ import { mdiBottleTonicPlus } from "@mdi/js";
 import Http from "../plugins/http";
 
 import Vue from "vue";
+import { mapActions, mapState } from "vuex";
 export default {
   data: () => ({
+    typesDialog: false,
     closeIcon: mdiClose,
+    enemyTypes: [],
+    playerTypes: [],
     defeatedIcon: mdiEmoticonDeadOutline,
     potionIcon: mdiBottleTonicPlus,
     tab: 0,
@@ -142,6 +181,7 @@ export default {
     activePlayer() {
       return this.players[this.tab];
     },
+    ...mapState(["activeFighter", "types", "savedPlayers"]),
   },
   props: ["colors"],
   created() {
@@ -150,12 +190,48 @@ export default {
     );
   },
   methods: {
+    ...mapActions(["SET_PLAYERS"]),
     removePokemon(item) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
       );
-
+      this.setXp(item.base_experience, false);
       Vue.delete(this.activePlayer.pokemons, idx);
+    },
+    saveProgress() {
+      this.SET_PLAYERS(this.players);
+    },
+    load() {
+      this.players = [...this.savedPlayers];
+    },
+    openTypesModal(types) {
+      if (!this.activeFighter.name) return;
+      const enemyTypes = this.activeFighter.activePokemon.types.map(
+        (t) => t.type.name
+      );
+      const typesInfo = this.types.filter((t) => enemyTypes.includes(t.name));
+      if (typesInfo.length) {
+        typesInfo.forEach((type) => {
+          const win = type.damage_relations.double_damage_to.map((x) => x.name);
+          const lose = type.damage_relations.double_damage_from.map(
+            (x) => x.name
+          );
+
+          types.forEach((playerT) => {
+            const name = playerT.type.name;
+            if (win.includes(name)) {
+              playerT.lose = true;
+            }
+            if (lose.includes(name)) {
+              playerT.win = true;
+            }
+          });
+        });
+        this.enemyTypes = typesInfo;
+        this.playerTypes = types;
+        console.log(this.playerTypes);
+      }
+      this.typesDialog = !this.typesDialog;
     },
     sortInitials() {
       this.players = [];
@@ -176,7 +252,7 @@ export default {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
       );
-      item.defeated = cure ? false : !item.defeatePokemon;
+      item.defeated = cure ? false : !item.defeated;
       Vue.set(this.activePlayer.pokemons, idx, item);
     },
     openAddModal() {

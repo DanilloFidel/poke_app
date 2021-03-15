@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import Http from "../plugins/http";
 
 export default {
@@ -67,13 +68,16 @@ export default {
         const calls = types.map((type) => Http.get(`/type/${type.name}`));
         Promise.all(calls)
           .then((resp) => resp.map((r) => r.data))
-          .then(
-            (datas) =>
-              (this.types = datas.filter(
-                (t) => !["unknown", "shadow"].includes(t.name)
-              ))
-          );
+          .then((datas) => {
+            this.types = datas.filter(
+              (t) => !["unknown", "shadow"].includes(t.name)
+            );
+            this.SET_TYPES(this.types);
+          });
       });
+  },
+  methods: {
+    ...mapActions(["SET_TYPES"]),
   },
 };
 </script>
