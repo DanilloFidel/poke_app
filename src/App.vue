@@ -185,7 +185,9 @@ export default {
       this.diceValue = Math.floor(Math.random() * 6) + 1
     },
     sortInitials() {
-      this.$refs.players.sortInitials()
+      if (confirm('desejar reiniciar o jogo?')) {
+        this.$refs.players.sortInitials()
+      }
     },
     async sortPokemon() {
       this.loading = true

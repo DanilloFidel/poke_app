@@ -190,7 +190,12 @@ export default {
     activePlayer() {
       return this.players[this.tab]
     },
-    ...mapState(['activeFighter', 'types', 'savedPlayers']),
+    ...mapState(['activeFighter', 'types', 'savedPlayers', 'applyXp']),
+  },
+  watch: {
+    applyXp(obj) {
+      obj.val && this.setXp(obj.val, obj.win)
+    },
   },
   props: ['colors'],
   created() {
