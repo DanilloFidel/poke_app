@@ -49,7 +49,16 @@
                     backgroundColor: item.defeated ? '#ff00005c' : null,
                   }"
                 >
-                  <td>{{ item.name }}</td>
+                  <td @click="addOnTeam(item, i)">
+                    <img
+                      style="position: absolute; left: 10px"
+                      v-if="item.onTeam"
+                      width="10px"
+                      height="10px"
+                      src="../assets/pokeball.svg"
+                    />
+                    {{ item.name }}
+                  </td>
                   <td>
                     <v-chip
                       small
@@ -129,19 +138,19 @@
     </v-dialog>
 
     <v-btn absolute bottom right x-small @click="saveProgress"
-      >Salvar progresso</v-btn
+      >Salvar partida</v-btn
     >
   </div>
 </template>
 
 <script>
-import { mdiClose } from "@mdi/js";
-import { mdiEmoticonDeadOutline } from "@mdi/js";
-import { mdiBottleTonicPlus } from "@mdi/js";
-import Http from "../plugins/http";
+import { mdiClose } from '@mdi/js'
+import { mdiEmoticonDeadOutline } from '@mdi/js'
+import { mdiBottleTonicPlus } from '@mdi/js'
+import Http from '../plugins/http'
 
-import Vue from "vue";
-import { mapActions, mapState } from "vuex";
+import Vue from 'vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   data: () => ({
     typesDialog: false,
@@ -155,12 +164,12 @@ export default {
     pokemons: [],
     players: [
       {
-        name: "Danillo",
+        name: 'Danillo',
         xp: 0,
         pokemons: [],
       },
       {
-        name: "Eduardo",
+        name: 'Eduardo',
         xp: 0,
         pokemons: [],
       },
@@ -169,116 +178,123 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Pokemons",
-        align: "start",
+        text: 'Pokemons',
+        align: 'start',
         sortable: false,
-        value: "name",
+        value: 'name',
       },
-      { text: "Tipo", value: "type" },
+      { text: 'Tipo', value: 'type' },
     ],
   }),
   computed: {
     activePlayer() {
-      return this.players[this.tab];
+      return this.players[this.tab]
     },
-    ...mapState(["activeFighter", "types", "savedPlayers"]),
+    ...mapState(['activeFighter', 'types', 'savedPlayers']),
   },
-  props: ["colors"],
+  props: ['colors'],
   created() {
-    Http.get("pokemon?limit=1118").then(
+    Http.get('pokemon?limit=1118').then(
       (resp) => (this.pokemons = resp.data.results)
-    );
+    )
   },
   methods: {
-    ...mapActions(["SET_PLAYERS"]),
+    ...mapActions(['SET_PLAYERS']),
     removePokemon(item) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
-      );
-      this.setXp(item.base_experience, false);
-      Vue.delete(this.activePlayer.pokemons, idx);
+      )
+      this.setXp(item.base_experience, false)
+      Vue.delete(this.activePlayer.pokemons, idx)
+    },
+    addOnTeam(pk, idx) {
+      const teamLength = this.activePlayer.pokemons.filter((p) => p.onTeam)
+        .length
+      const canAdd = teamLength < 6
+      const poke = { ...pk, onTeam: canAdd ? !pk['onTeam'] : false }
+      Vue.set(this.activePlayer.pokemons, idx, poke)
     },
     saveProgress() {
-      this.SET_PLAYERS(this.players);
+      this.SET_PLAYERS(this.players)
     },
     load() {
-      this.players = [...this.savedPlayers];
+      if (this.savedPlayers.length) this.players = [...this.savedPlayers]
     },
     openTypesModal(types) {
-      if (!this.activeFighter.name) return;
+      if (!this.activeFighter.name) return
       const enemyTypes = this.activeFighter.activePokemon.types.map(
         (t) => t.type.name
-      );
-      const typesInfo = this.types.filter((t) => enemyTypes.includes(t.name));
+      )
+      const typesInfo = this.types.filter((t) => enemyTypes.includes(t.name))
       if (typesInfo.length) {
         typesInfo.forEach((type) => {
-          const win = type.damage_relations.double_damage_to.map((x) => x.name);
+          const win = type.damage_relations.double_damage_to.map((x) => x.name)
           const lose = type.damage_relations.double_damage_from.map(
             (x) => x.name
-          );
+          )
 
           types.forEach((playerT) => {
-            const name = playerT.type.name;
+            const name = playerT.type.name
             if (win.includes(name)) {
-              playerT.lose = true;
+              playerT.lose = true
             }
             if (lose.includes(name)) {
-              playerT.win = true;
+              playerT.win = true
             }
-          });
-        });
-        this.enemyTypes = typesInfo;
-        this.playerTypes = types;
-        console.log(this.playerTypes);
+          })
+        })
+        this.enemyTypes = typesInfo
+        this.playerTypes = types
+        console.log(this.playerTypes)
       }
-      this.typesDialog = !this.typesDialog;
+      this.typesDialog = !this.typesDialog
     },
     sortInitials() {
-      this.players = [];
+      this.players = []
       this.players = [
         {
-          name: "Danillo",
+          name: 'Danillo',
           xp: 0,
           pokemons: [],
         },
         {
-          name: "Eduardo",
+          name: 'Eduardo',
           xp: 0,
           pokemons: [],
         },
-      ];
+      ]
     },
     changePokemonStatus(item, cure) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
-      );
-      item.defeated = cure ? false : !item.defeated;
-      Vue.set(this.activePlayer.pokemons, idx, item);
+      )
+      item.defeated = cure ? false : !item.defeated
+      Vue.set(this.activePlayer.pokemons, idx, item)
     },
     openAddModal() {
-      this.addMenu = !this.addMenu;
+      this.addMenu = !this.addMenu
     },
     closeAndAdd(name) {
-      this.addMenu = false;
+      this.addMenu = false
       Http.get(`pokemon/${name}`).then((resp) => {
-        this.activePlayer.pokemons.push(resp.data);
-        this.setXp(resp.data.base_experience, true);
-      });
+        this.activePlayer.pokemons.push(resp.data)
+        this.setXp(resp.data.base_experience, true)
+      })
     },
     setXp(xp, add) {
       const p = {
         ...this.activePlayer,
         xp: add ? this.activePlayer.xp + xp : this.activePlayer.xp - xp,
-      };
-      Vue.set(this.players, this.tab, p);
+      }
+      Vue.set(this.players, this.tab, p)
     },
     cureAll() {
       this.activePlayer.pokemons.forEach((p) => {
-        this.changePokemonStatus(p, true);
-      });
+        this.changePokemonStatus(p, true)
+      })
     },
   },
-};
+}
 </script>
 
 <style>
