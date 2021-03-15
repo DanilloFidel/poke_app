@@ -10,6 +10,7 @@ export default new Vuex.Store({
     types: [],
     savedPlayers: [],
     applyXp: {},
+    pokemonToTeam: {}
   },
   mutations: {
     setActiveFighter(state, data) {
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     },
     applyXp(state, data) {
       state.applyXp = data
+    },
+    joinTeam(state, data) {
+      state.pokemonToTeam = data
     },
   },
   actions: {
@@ -38,6 +42,10 @@ export default new Vuex.Store({
     APPLY_XP({ commit }, data) {
       commit('applyXp', data)
     },
+    JOIN_TEAM({ commit }, data) {
+      commit('joinTeam', data)
+    }
+
   },
   modules: {},
 })

@@ -190,11 +190,20 @@ export default {
     activePlayer() {
       return this.players[this.tab]
     },
-    ...mapState(['activeFighter', 'types', 'savedPlayers', 'applyXp']),
+    ...mapState([
+      'activeFighter',
+      'types',
+      'savedPlayers',
+      'applyXp',
+      'pokemonToTeam',
+    ]),
   },
   watch: {
     applyXp(obj) {
       obj.val && this.setXp(obj.val, obj.win)
+    },
+    pokemonToTeam(obj) {
+      obj.name && this.activePlayer.pokemons.push(obj)
     },
   },
   props: ['colors'],

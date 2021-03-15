@@ -3,8 +3,8 @@
     <v-row dense>
       <v-navigation-drawer v-model="drawer" permanent mini-variant>
         <v-list-item class="px-2">
-          <v-list-item-avatar @click="sortInitials">
-            <v-img src="./assets/pokeball.svg"></v-img>
+          <v-list-item-avatar @click="sortInitials" width="30px" height="30px">
+            <img width="30px" height="30px" src="./assets/pokeball.svg">
           </v-list-item-avatar>
         </v-list-item>
 

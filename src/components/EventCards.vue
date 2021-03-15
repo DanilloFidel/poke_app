@@ -192,7 +192,6 @@ export default {
       return this.habitats[parseInt(Math.random() * this.habitats.length)]
     },
     applyEffect() {
-      alert('app')
       this.APPLY_XP({ win: this.sortedCard.winXp, val: this.sortedCard.xp })
     },
     randomCards() {
