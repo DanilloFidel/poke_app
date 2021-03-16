@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid class="pa-0">
       <v-row dense>
-        <v-app-bar color="deep-purple accent-4" dense>
+        <v-app-bar color="white" dense>
           <v-btn icon @click="screen = 'enemies'">
             <img
               width="25px"
@@ -30,6 +30,9 @@
           <v-btn icon @click="loadProgress">
             <v-icon>{{ loadIcon }}</v-icon>
           </v-btn>
+          <v-btn icon @click="sortInitials">
+            <img width="25px" height="25px" src="./assets/pokeball.svg" />
+          </v-btn>
         </v-app-bar>
 
         <div class="content">
@@ -50,7 +53,7 @@
             <Players ref="players" :colors="colors" />
           </v-container>
           <v-container v-show="screen === 'enemies'" class="pa-0">
-            <Enemy :colors="colors" />
+            <Enemy @set-xp="$refs.players.savePlayerXp()" :colors="colors" />
           </v-container>
           <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />

@@ -10,7 +10,8 @@ export default new Vuex.Store({
     types: [],
     savedPlayers: [],
     applyXp: {},
-    pokemonToTeam: {}
+    pokemonToTeam: {},
+    activePlayerXp: 0
   },
   mutations: {
     setActiveFighter(state, data) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     setPlayers(state, data) {
       state.savedPlayers = data
+    },
+    setPlayerXp(state, data) {
+      state.activePlayerXp = data
     },
     setTypes(state, data) {
       state.types = data
@@ -35,6 +39,9 @@ export default new Vuex.Store({
     },
     SET_TYPES({ commit }, data) {
       commit('setTypes', data)
+    },
+    SET_PLAYER_XP({ commit }, data) {
+      commit('setPlayerXp', data)
     },
     SET_PLAYERS({ commit }, data) {
       commit('setPlayers', data)

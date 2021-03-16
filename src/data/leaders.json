@@ -3,222 +3,126 @@
         {
             "name": "James",
             "dice": 8,
-            "pokemons": [
-                "meowth",
-                "morpeko",
-                "weezing",
-                "weepinbell",
-                "bewear"
-            ],
+            "pokemons": [],
             "xp": 200,
             "img": "james.png"
         },
         {
             "name": "Jessie",
             "dice": 10,
-            "pokemons": [
-                "wobbuffet",
-                "arbok",
-                "mimikyu",
-                "lickitung",
-                "meowth"
-            ],
+            "pokemons": [],
             "xp": 300,
             "img": "jessie.png"
         },
         {
             "name": "Serena",
             "dice": 6,
-            "pokemons": [
-                "fletchling",
-                "bunnelby",
-                "absol",
-                "braixen",
-                "jolteon"
-            ],
+            "pokemons": [],
             "xp": 150,
             "img": "serena.png"
         },
         {
             "name": "Tracey",
             "dice": 12,
-            "pokemons": [
-                "venonat",
-                "marill",
-                "scyther"
-            ],
+            "pokemons": [],
             "xp": 230,
             "img": "tracey.png"
         },
         {
             "name": "Bonnie",
             "dice": 10,
-            "pokemons": [
-                "bunnelby",
-                "pichu",
-                "mamoswine",
-                "goomy",
-                "dedenne"
-            ],
+            "pokemons": [],
             "xp": 320,
             "img": "bonnie.png"
         },
         {
             "name": "Avery",
             "dice": 20,
-            "pokemons": [
-                "alakazam",
-                "slowking",
-                "swoobat",
-                "rapidash"
-            ],
+            "pokemons": [],
             "xp": 400,
             "img": "avery.png"
         },
         {
             "name": "Klara",
             "dice": 10,
-            "pokemons": [
-                "scolipede",
-                "slowbro",
-                "drapion",
-                "koffing"
-            ],
+            "pokemons": [],
             "xp": 340,
             "img": "klara.png"
         },
         {
             "name": "Peony",
             "dice": 10,
-            "pokemons": [
-                "aggron",
-                "perrserker",
-                "copperajah",
-                "bronzong",
-                "scizor"
-            ],
+            "pokemons": [],
             "xp": 310,
             "img": "peony.png"
         },
         {
             "name": "Clemont",
             "dice": 20,
-            "pokemons": [
-                "emolga",
-                "magneton",
-                "heliolisk"
-            ],
+            "pokemons": [],
             "xp": 300,
             "img": "clemont.png"
         },
         {
             "name": "Gary",
             "dice": 10,
-            "pokemons": [
-                "aerodactyl",
-                "hoothoot",
-                "magmar",
-                "golem",
-                "nidoqueen"
-            ],
+            "pokemons": [],
             "xp": 350,
             "img": "gary.png"
         },
         {
             "name": "May",
             "dice": 10,
-            "pokemons": [
-                "blaziken",
-                "skitty",
-                "venusaur",
-                "wartortle",
-                "swablu"
-            ],
+            "pokemons": [],
             "xp": 270,
             "img": "may.png"
         },
         {
             "name": "Zoey",
             "dice": 6,
-            "pokemons": [
-                "glameow",
-                "mismagius",
-                "gastrodon",
-                "leafeon",
-                "gallade"
-            ],
+            "pokemons": [],
             "xp": 180,
             "img": "zoey.png"
         },
         {
             "name": "Íris",
             "dice": 10,
-            "pokemons": [
-                "haxorus",
-                "archeops",
-                "lapras",
-                "hydreigon",
-                "salamence"
-            ],
+            "pokemons": [],
             "xp": 330,
             "img": "iris.png"
         },
         {
             "name": "Sanpei",
             "dice": 20,
-            "pokemons": [
-                "greninja"
-            ],
+            "pokemons": [],
             "xp": 180,
             "img": "sanpei.jpg"
         },
         {
             "name": "Harriet",
             "dice": 6,
-            "pokemons": [
-                "totodile",
-                "marill",
-                "togepi",
-                "xatu",
-                "snubbull"
-            ],
+            "pokemons": [],
             "xp": 170,
             "img": "harriet.png"
         },
         {
             "name": "Callahan",
             "dice": 6,
-            "pokemons": [
-                "sudowoodo",
-                "girafarig",
-                "golduck",
-                "cyndaquil",
-                "staryu"
-            ],
+            "pokemons": [],
             "xp": 190,
             "img": "callahan.png"
         },
         {
             "name": "Toren",
             "dice": 6,
-            "pokemons": [
-                "chansey",
-                "lurantis",
-                "smeargle",
-                "vileplume"
-            ],
+            "pokemons": [],
             "xp": 270,
             "img": "toren.jpg"
         },
         {
             "name": "Sophocles",
             "dice": 12,
-            "pokemons": [
-                "vikavolt",
-                "golem",
-                "togedemaru",
-                "electivire"
-            ],
+            "pokemons": [],
             "xp": 340,
             "img": "sophocles.png"
         }
