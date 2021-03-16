@@ -11,9 +11,9 @@
             />
           </v-btn>
 
-          <v-btn icon @click="screen = 'typesCompare'">
+          <!-- <v-btn icon @click="screen = 'typesCompare'">
             <img width="25px" height="25px" src="./assets/fire.svg" />
-          </v-btn>
+          </v-btn> -->
 
           <v-btn icon @click="screen = 'pokeEncounter'">
             <img width="25px" height="25px" src="./assets/pikachu.svg" />
