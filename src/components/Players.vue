@@ -241,7 +241,6 @@ export default {
       Vue.delete(this.activePlayer.pokemons, idx)
     },
     moveTeam(pk, add = true) {
-      debugger
       const teamLength = this.activePlayer.pokemons.filter((p) => p.onTeam)
         .length
       const idx = this.activePlayer.pokemons.findIndex((p) => p.id === pk.id)
@@ -384,7 +383,7 @@ export default {
       )
       pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1
       Vue.set(this.activePlayer.pokemons, idx, pokemon)
-      if (pokemon.wins == 10 || pokemon.wins == 20) {
+      if (pokemon.wins == 14 || pokemon.wins == 26) {
         this.evolvePokemon(pokemon)
       }
     },
@@ -400,7 +399,6 @@ export default {
 
       this.setEvolveEffect(idx, pokemon, true)
 
-      debugger
 
       try {
         Http.get(`/pokemon-species/${pokemon.name}`)
@@ -437,7 +435,6 @@ export default {
       }
     },
     replaceEvoluted(pokemon, idx, oldPokemon) {
-      debugger
       pokemon['onTeam'] = oldPokemon.onTeam
       pokemon['wins'] = oldPokemon.wins
       pokemon['defeated'] = oldPokemon.defeated
