@@ -41,7 +41,7 @@
         <h3>{{ sortedEnemy.name }}</h3></v-col
       >
       <v-col>
-        <vue-flip active-click height="300px" width="300px">
+        <vue-flip active-click height="400px" width="400px">
           <template v-slot:front>
             <div
               class="card d-flex justify-center elevation-4 align-center px-2"
@@ -229,8 +229,8 @@ export default {
 
 <style scoped>
 .card {
-  height: 300px;
-  width: 300px;
+  height: 400px;
+  width: 400px;
 }
 
 .defeated-trainer {

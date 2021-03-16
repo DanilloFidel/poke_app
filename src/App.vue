@@ -1,136 +1,116 @@
 <template>
   <v-app>
-    <v-row dense>
-      <v-navigation-drawer v-model="drawer" permanent mini-variant>
-        <v-list-item class="px-2">
-          <v-list-item-avatar @click="sortInitials" width="30px" height="30px">
-            <img width="30px" height="30px" src="./assets/pokeball.svg">
-          </v-list-item-avatar>
-        </v-list-item>
+    <v-container fluid class="pa-0">
+      <v-row dense>
+        <v-app-bar color="deep-purple accent-4" dense>
+          <v-btn icon @click="screen = 'enemies'">
+            <img
+              width="25px"
+              height="25px"
+              src="./assets/pokemon-trainer.svg"
+            />
+          </v-btn>
 
-        <v-divider></v-divider>
+          <v-btn icon @click="screen = 'typesCompare'">
+            <img width="25px" height="25px" src="./assets/fire.svg" />
+          </v-btn>
 
-        <v-list dense class="mt-5">
-          <v-list-item class="my-3" @click="screen = 'enemies'">
-            <v-list-item-icon>
-              <img
-                width="25px"
-                height="25px"
-                src="./assets/pokemon-trainer.svg"
-              />
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item class="my-3" @click="screen = 'typesCompare'">
-            <v-list-item-icon>
-              <img width="25px" height="25px" src="./assets/fire.svg" />
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item class="my-3" @click="screen = 'pokeEncounter'">
-            <v-list-item-icon>
-              <img width="25px" height="25px" src="./assets/pikachu.svg" />
-            </v-list-item-icon>
-          </v-list-item>
+          <v-btn icon @click="screen = 'pokeEncounter'">
+            <img width="25px" height="25px" src="./assets/pikachu.svg" />
+          </v-btn>
+          <v-btn icon @click="screen = 'players'">
+            <img width="25px" height="25px" src="./assets/treasure-map.svg" />
+          </v-btn>
+          <v-btn icon @click="screen = 'eventCards'">
+            <img width="25px" height="25px" src="./assets/cards.svg" />
+          </v-btn>
+          <v-btn icon @click="screen = 'pokedex'">
+            <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
+          </v-btn>
+          <v-btn icon @click="loadProgress">
+            <v-icon>{{ loadIcon }}</v-icon>
+          </v-btn>
+        </v-app-bar>
 
-          <v-list-item class="my-3" @click="screen = 'eventCards'">
-            <v-list-item-icon>
-              <img width="25px" height="25px" src="./assets/cards.svg" />
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item class="my-3" @click="screen = 'pokedex'">
-            <v-list-item-icon>
-              <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item class="my-3" @click="screen = 'players'">
-            <v-list-item-icon>
-              <img width="25px" height="25px" src="./assets/treasure-map.svg" />
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item class="my-3" @click="loadProgress">
-            <v-list-item-icon
-              ><v-icon>{{ loadIcon }}</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-      <div class="content">
-        <v-container v-show="screen === 'pokedex'" class="pa-0">
-          <Pokedex :colors="colors" />
-        </v-container>
-        <v-container v-show="screen === 'pokeEncounter'" class="pa-0">
-          <PokeEncounter :colors="colors" />
-        </v-container>
-        <v-container v-show="screen === 'eventCards'" class="pa-0">
-          <EventCards
-            :habitats="
-              habitats.map((h) => h.name).filter((h) => h.name !== 'rare')
-            "
-          />
-        </v-container>
-        <v-container v-show="screen === 'players'" class="pa-0">
-          <Players ref="players" :colors="colors" />
-        </v-container>
-        <v-container v-show="screen === 'enemies'" class="pa-0">
-          <Enemy :colors="colors" />
-        </v-container>
-        <v-container v-show="screen === 'typesCompare'" class="pa-0">
-          <TypesCompare :colors="colors" />
-        </v-container>
-      </div>
-    </v-row>
+        <div class="content">
+          <v-container v-show="screen === 'pokedex'" class="pa-0">
+            <Pokedex :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'pokeEncounter'" class="pa-0">
+            <PokeEncounter :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'eventCards'" class="pa-0">
+            <EventCards
+              :habitats="
+                habitats.map((h) => h.name).filter((h) => h.name !== 'rare')
+              "
+            />
+          </v-container>
+          <v-container v-show="screen === 'players'" class="pa-0">
+            <Players ref="players" :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'enemies'" class="pa-0">
+            <Enemy :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'typesCompare'" class="pa-0">
+            <TypesCompare :colors="colors" />
+          </v-container>
+        </div>
+      </v-row>
+    </v-container>
   </v-app>
 </template>
 
 <script>
-import Pokedex from '@/components/Pokedex.vue'
-import PokeEncounter from '@/components/PokeEncounter.vue'
-import EventCards from '@/components/EventCards.vue'
-import Enemy from '@/components/Enemy.vue'
-import TypesCompare from '@/components/TypesCompare.vue'
-import Players from '@/components/Players.vue'
-import { mdiCalendarClockOutline } from '@mdi/js'
+import Pokedex from "@/components/Pokedex.vue";
+import PokeEncounter from "@/components/PokeEncounter.vue";
+import EventCards from "@/components/EventCards.vue";
+import Enemy from "@/components/Enemy.vue";
+import TypesCompare from "@/components/TypesCompare.vue";
+import Players from "@/components/Players.vue";
+import { mdiCalendarClockOutline } from "@mdi/js";
 export default {
-  name: 'App',
+  name: "App",
   data: () => ({
     loadIcon: mdiCalendarClockOutline,
     drawer: true,
-    screen: 'pokeEncounter',
+    screen: "pokeEncounter",
     fab: false,
     pokemons: [],
     loading: false,
     btnLoading: false,
     habitats: [
       {
-        name: 'random all',
-        url: 'https://pokeapi.co/api/v2/pokemon?limit=1118',
+        name: "random all",
+        url: "https://pokeapi.co/api/v2/pokemon?limit=1118",
       },
     ],
     selectedPokemon: {},
-    selectedHabitat: '',
+    selectedHabitat: "",
     diceValue: 1,
     diceValue2: 1,
     simpleChance: true,
-    diceType: 'single_d6',
+    diceType: "single_d6",
     showSecondDice: true,
     colors: {
-      poison: '#ab6ac8',
-      grass: '#63bb5b',
-      ground: '#fdda96',
-      fighting: '#ce4069',
-      flying: '#8fa8dd',
-      rock: '#d1c17d',
-      bug: '#90c12c',
-      ghost: '#5269ac',
-      steel: '#5a8ea1',
-      fire: '#db4249',
-      water: '#4d90d5',
-      electric: '#f3d23b',
-      psychic: '#f97176',
-      ice: '#6db5ba',
-      dragon: '#0a6dc4',
-      dark: '#5a5366',
-      fairy: '#ec8fe6',
-      normal: '#c6c6a7',
+      poison: "#ab6ac8",
+      grass: "#63bb5b",
+      ground: "#fdda96",
+      fighting: "#ce4069",
+      flying: "#8fa8dd",
+      rock: "#d1c17d",
+      bug: "#90c12c",
+      ghost: "#5269ac",
+      steel: "#5a8ea1",
+      fire: "#db4249",
+      water: "#4d90d5",
+      electric: "#f3d23b",
+      psychic: "#f97176",
+      ice: "#6db5ba",
+      dragon: "#0a6dc4",
+      dark: "#5a5366",
+      fairy: "#ec8fe6",
+      normal: "#c6c6a7",
     },
   }),
 
@@ -145,98 +125,98 @@ export default {
 
   computed: {
     diceImg() {
-      return require(`./assets/${this.diceType}.svg`)
+      return require(`./assets/${this.diceType}.svg`);
     },
     loadingImg() {
-      return require('./assets/loading.gif')
+      return require("./assets/loading.gif");
     },
   },
 
   created() {
-    this.fecthHabitats()
+    this.fecthHabitats();
   },
 
   methods: {
     fecthHabitats() {
-      this.btnLoading = true
-      fetch('https://pokeapi.co/api/v2/pokemon-habitat')
+      this.btnLoading = true;
+      fetch("https://pokeapi.co/api/v2/pokemon-habitat")
         .then((resp) => resp.json())
         .then((data) => {
-          this.habitats = [...this.habitats, ...data.results]
+          this.habitats = [...this.habitats, ...data.results];
         })
-        .finally(() => (this.btnLoading = false))
+        .finally(() => (this.btnLoading = false));
     },
     loadProgress() {
-      this.$refs.players.load()
+      this.$refs.players.load();
     },
     changeHabitat(url) {
-      this.btnLoading = true
+      this.btnLoading = true;
       fetch(url)
         .then((resp) => resp.json())
         .then((data) => {
           this.pokemons = data.pokemon_species
             ? data.pokemon_species
-            : data.results
-          this.sortPokemon()
+            : data.results;
+          this.sortPokemon();
         })
-        .finally(() => (this.btnLoading = false))
+        .finally(() => (this.btnLoading = false));
     },
     sortDices() {
-      this.diceValue = Math.floor(Math.random() * 6) + 1
+      this.diceValue = Math.floor(Math.random() * 6) + 1;
     },
     sortInitials() {
-      if (confirm('desejar reiniciar o jogo?')) {
-        this.$refs.players.sortInitials()
+      if (confirm("desejar reiniciar o jogo?")) {
+        this.$refs.players.sortInitials();
       }
     },
     async sortPokemon() {
-      this.loading = true
-      const idx = Math.floor(Math.random() * this.pokemons.length)
+      this.loading = true;
+      const idx = Math.floor(Math.random() * this.pokemons.length);
       // TODO buscar na regiao selecionada
-      const selected = this.pokemons[idx]
+      const selected = this.pokemons[idx];
 
       try {
-        let pokemonInfo = await fetch(selected.url).then((resp) => resp.json())
+        let pokemonInfo = await fetch(selected.url).then((resp) => resp.json());
         let pokemonInfo2 = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${selected.name}`
-        ).then((resp) => resp.json())
+        ).then((resp) => resp.json());
 
         setTimeout(() => {
-          this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 }
+          this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 };
           if (
             this.selectedPokemon.sprites &&
             !this.selectedPokemon.sprites.front_default
           ) {
-            this.sortPokemon()
+            this.sortPokemon();
           } else {
-            this.setDiceDifficult()
-            this.loading = false
+            this.setDiceDifficult();
+            this.loading = false;
           }
-        }, 1500)
+        }, 1500);
       } catch (error) {
-        this.loading = false
-        alert('Ocorreu um erro ao carregar o Pokemon')
+        this.loading = false;
+        alert("Ocorreu um erro ao carregar o Pokemon");
       }
       // this.searchPokemon(selected.url);
     },
     setDiceDifficult() {
-      this.simpleChance = true
-      this.diceType = 'single_d6'
+      this.simpleChance = true;
+      this.diceType = "single_d6";
       if (this.selectedPokemon.base_experience >= 120) {
-        this.diceType = 'd8'
+        this.diceType = "d8";
       }
       if (this.selectedPokemon.base_experience >= 170) {
-        this.diceType = 'd8'
+        this.diceType = "d8";
       }
       if (this.selectedPokemon.base_experience >= 200) {
-        this.diceType = 'd20'
+        this.diceType = "d20";
       }
       if (this.selectedPokemon.base_experience < 120) {
-        this.simpleChance = false
+        this.simpleChance = false;
       }
     },
   },
-}
+};
 </script>
 
 <style>
@@ -253,7 +233,7 @@ html {
 }
 
 .content {
-  height: 100vh;
-  width: calc(100vw - 56px);
+  height: calc(100vh - 48px);
+  width: 100%;
 }
 </style>
