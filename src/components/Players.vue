@@ -42,8 +42,10 @@
                 :color="pokemon.defeated ? '#ff00005c' : 'white'"
                 class="pa-2"
               >
-                <v-row dense justify="space-around">
-                  <span style="position: absolute; left: 0; font-size: 13px"><b> wins:</b> {{ pokemon.wins || 0 }}</span>
+                <v-row dense justify="space-around" style="height: 87px">
+                  <span style="position: absolute; left: 0; font-size: 13px"
+                    ><b> wins:</b> {{ pokemon.wins || 0 }}</span
+                  >
                   <v-col cols="6" class="mt-1" @click="upPokemon(pokemon)">
                     <img
                       height="85px"
@@ -81,15 +83,19 @@
                     ></v-col
                   >
                 </v-row>
-                <v-btn icon absolute style="right: 25px; top: 0;">
-                  <v-icon style="font-size: 8px" @click.stop="changePokemonStatus(pokemon)">{{
-                    defeatedIcon
-                  }}</v-icon>
+                <v-btn icon absolute style="right: 25px; top: 0">
+                  <v-icon
+                    style="font-size: 8px"
+                    @click.stop="changePokemonStatus(pokemon)"
+                    >{{ defeatedIcon }}</v-icon
+                  >
                 </v-btn>
-                <v-btn icon absolute style="right: 0px; top: 0;">
-                  <v-icon style="font-size: 8px" @click.stop="moveTeam(pokemon, false)">{{
-                    closeIcon
-                  }}</v-icon>
+                <v-btn icon absolute style="right: 0px; top: 0">
+                  <v-icon
+                    style="font-size: 8px"
+                    @click.stop="moveTeam(pokemon, false)"
+                    >{{ closeIcon }}</v-icon
+                  >
                 </v-btn>
               </v-card>
             </v-col>
