@@ -43,7 +43,7 @@
                 class="pa-2"
               >
                 <v-row dense justify="space-around" style="height: 87px">
-                  <span style="position: absolute; left: 0; font-size: 13px"
+                  <span style="position: absolute; left: 3px; font-size: 13px"
                     ><b> wins:</b> {{ pokemon.wins || 0 }}</span
                   >
                   <v-col cols="6" class="mt-1" @click="upPokemon(pokemon)">
@@ -51,6 +51,7 @@
                       height="85px"
                       width="85px"
                       :src="pokemon.sprites.front_default"
+                      :class="{ evolving: pokemon.isEvolving }"
                     />
                   </v-col>
                   <v-col
@@ -377,10 +378,69 @@ export default {
       Vue.set(this.activePlayer.pokemons, idx, item)
     },
     upPokemon(pokemon) {
+      if (pokemon.isEvolving || pokemon.defeated) return
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === pokemon.name
       )
       pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1
+      Vue.set(this.activePlayer.pokemons, idx, pokemon)
+      if (pokemon.wins == 10 || pokemon.wins == 20) {
+        this.evolvePokemon(pokemon)
+      }
+    },
+    setEvolveEffect(idx, pokemon, evolving) {
+      pokemon['isEvolving'] = evolving
+      Vue.set(this.activePlayer.pokemons, idx, pokemon)
+    },
+    evolvePokemon(pokemon) {
+      if (pokemon.name === 'eevee') return
+      const idx = this.activePlayer.pokemons.findIndex(
+        (p) => p.name === pokemon.name
+      )
+
+      this.setEvolveEffect(idx, pokemon, true)
+
+      debugger
+
+      try {
+        Http.get(`/pokemon-species/${pokemon.name}`)
+          .then((resp) => resp.data.evolution_chain)
+          .then((data) => {
+            Http.get(data.url)
+              .then((resp) => {
+                console.log(resp.data)
+                return resp.data.chain
+              })
+              .then((chain) => {
+                if (chain.evolves_to.length) {
+                  let evol = chain.evolves_to[0]
+
+                  if (
+                    evol.species.name === pokemon.name &&
+                    evol.evolves_to.length
+                  ) {
+                    evol = evol.evolves_to[0]
+                  }
+
+                  Http.get(evol.species.url).then((resp) => {
+                    Http.get(`pokemon/${resp.data.name}`)
+                      .then((resp) => {
+                        this.replaceEvoluted(resp.data, idx, pokemon)
+                      })
+                      .finally(() => (this.isEvolving = false))
+                  })
+                }
+              })
+          })
+      } catch (error) {
+        this.setEvolveEffect(idx, pokemon, false)
+      }
+    },
+    replaceEvoluted(pokemon, idx, oldPokemon) {
+      debugger
+      pokemon['onTeam'] = oldPokemon.onTeam
+      pokemon['wins'] = oldPokemon.wins
+      pokemon['defeated'] = oldPokemon.defeated
       Vue.set(this.activePlayer.pokemons, idx, pokemon)
     },
     openAddModal() {
@@ -416,5 +476,35 @@ export default {
 ::v-deep .v-data-table {
   height: 188px;
   overflow-y: auto;
+}
+
+.evolving {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  10% {
+    opacity: 0.8;
+  }
+
+  30% {
+    opacity: 0.7;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
 }
 </style>
