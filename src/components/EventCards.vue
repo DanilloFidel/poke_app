@@ -105,7 +105,7 @@ export default {
         },
         {
           isLucky: true,
-          descr: 'Você encontrou um Pokemon aleatório',
+          descr: 'Você encontrou um Pokemon aleatório (use o dado 3x)',
           type: 'Normal',
         },
         {
@@ -146,6 +146,11 @@ export default {
         { isLucky: true, descr: 'Cure um Pokemon', type: 'Normal' },
         { isLucky: true, descr: 'Avançe três casas', type: 'Normal' },
         { isLucky: true, descr: 'Avançe cinco casas', type: 'Rara' },
+        { isLucky: true, descr: 'Escolha um pokemon p/ subir 2 níveis', type: 'Rara' },
+        { isLucky: true, descr: 'Escolha um pokemon p/ subir 3 níveis', type: 'Rara' },
+        { isLucky: true, descr: 'Escolha um pokemon p/ subir 1 nível', type: 'Nommal' },
+        { isLucky: true, descr: 'Escolha um pokemon p/ subir 4 níveis', type: 'Ultra Rara' },
+        { isLucky: true, descr: 'Escolha um pokemon p/ subir 5 níveis', type: 'Ultra Rara' },
         { isLucky: true, descr: 'Avançe seis casas', type: 'Rara' },
         { isLucky: false, descr: 'Seu Pokemon fugiu!', type: 'Rara' },
         { isLucky: true, descr: 'Ganhou item de Chance Extra', type: 'Rara' },
@@ -159,12 +164,12 @@ export default {
         },
         {
           isLucky: true,
-          descr: 'Escolha um Pokemon para evoluir (Coleção)',
+          descr: 'Escolha um Pokemon para evoluir (Box)',
           type: 'Ultra Rara',
         },
         {
           isLucky: true,
-          descr: 'Meu Deus, aquilo é um... (Pokemon raro aleatório)',
+          descr: 'Meu Deus, aquilo é um... (Pokemon raro aleatório) use o dado 3x',
           type: 'Ultra Rara',
         },
         {
