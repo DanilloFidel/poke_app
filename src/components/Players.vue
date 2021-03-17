@@ -224,6 +224,9 @@ export default {
     pokemonToTeam(obj) {
       obj.name && this.activePlayer.pokemons.push(obj)
     },
+    tab(val) {
+      val !== null && val !== undefined && this.ADD_ACTIVE_PLAYER(this.players[val])
+    },
   },
   props: ['colors'],
   created() {
@@ -232,7 +235,7 @@ export default {
     )
   },
   methods: {
-    ...mapActions(['SET_PLAYERS', 'SET_PLAYER_XP']),
+    ...mapActions(['SET_PLAYERS', 'SET_PLAYER_XP', "ADD_ACTIVE_PLAYER"]),
     removePokemon(item) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
@@ -399,14 +402,12 @@ export default {
 
       this.setEvolveEffect(idx, pokemon, true)
 
-
       try {
         Http.get(`/pokemon-species/${pokemon.name}`)
           .then((resp) => resp.data.evolution_chain)
           .then((data) => {
             Http.get(data.url)
               .then((resp) => {
-                console.log(resp.data)
                 return resp.data.chain
               })
               .then((chain) => {

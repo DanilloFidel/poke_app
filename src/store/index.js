@@ -7,6 +7,7 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     activeFighter: {},
+    activePlayer: {},
     types: [],
     savedPlayers: [],
     applyXp: {},
@@ -16,6 +17,9 @@ export default new Vuex.Store({
   mutations: {
     setActiveFighter(state, data) {
       state.activeFighter = data
+    },
+    setActivePlayer(state, data) {
+      state.activePlayer = data
     },
     setPlayers(state, data) {
       state.savedPlayers = data
@@ -36,6 +40,9 @@ export default new Vuex.Store({
   actions: {
     ADD_ACTIVE_FIGHTER({ commit }, data) {
       commit('setActiveFighter', data)
+    },
+    ADD_ACTIVE_PLAYER({ commit }, data) {
+      commit('setActivePlayer', data)
     },
     SET_TYPES({ commit }, data) {
       commit('setTypes', data)
