@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container fluid class="pa-0">
+    <v-container fluid class="pa-0 main">
       <v-row dense>
         <v-app-bar color="white" dense>
           <v-btn icon @click="screen = 'enemies'">
@@ -11,9 +11,9 @@
             />
           </v-btn>
 
-          <!-- <v-btn icon @click="screen = 'typesCompare'">
-            <img width="25px" height="25px" src="./assets/fire.svg" />
-          </v-btn> -->
+          <v-btn icon @click="setupDiceBattle">
+            <img width="25px" height="25px" src="./assets/d6.svg" />
+          </v-btn>
 
           <v-btn icon @click="screen = 'pokeEncounter'">
             <img width="25px" height="25px" src="./assets/pikachu.svg" />
@@ -55,12 +55,61 @@
           <v-container v-show="screen === 'enemies'" class="pa-0">
             <Enemy @set-xp="$refs.players.savePlayerXp()" :colors="colors" />
           </v-container>
-          <v-container v-show="screen === 'typesCompare'" class="pa-0">
+          <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />
-          </v-container>
+          </v-container> -->
         </div>
       </v-row>
     </v-container>
+
+    <v-dialog v-model="diceModal">
+      <v-card color="white" class="pa-3">
+        <v-row dense>
+          <v-select
+            :items="
+              activePlayer.pokemons.filter((p) => p.onTeam && !p.defeated)
+            "
+            item-text="name"
+            return-object
+            @change="setPlayerPokemonInBattle"
+          ></v-select>
+        </v-row>
+        <v-row dense
+          ><v-col cols="12">
+            <span
+              >Adversário: {{ diceBattle.enemy.poke }}
+              <b class="ml-5">D{{ diceBattle.enemy.type }}</b></span
+            >
+          </v-col>
+          <v-row dense justify="center" align="center">
+            <v-col
+              cols="4"
+              @click="sortBattleDice('enemy')"
+              style="height: 280px, width: 150px; border: 1px solid"
+            >
+              {{ diceBattle.enemy.value }}</v-col
+            >
+          </v-row>
+        </v-row>
+        <v-row dense
+          ><v-col cols="12">
+            <span
+              >Jogador: {{ diceBattle.player.poke
+              }}<b class="ml-5">D{{ diceBattle.player.type }}</b></span
+            >
+          </v-col>
+          <v-row dense justify="center" align="center">
+            <v-col
+              cols="4"
+              @click="sortBattleDice('player')"
+              style="height: 280px, width: 150px; border: 1px solid"
+            >
+              {{ diceBattle.player.value }}</v-col
+            >
+          </v-row>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -69,12 +118,14 @@ import Pokedex from "@/components/Pokedex.vue";
 import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
 import Enemy from "@/components/Enemy.vue";
-import TypesCompare from "@/components/TypesCompare.vue";
+// import TypesCompare from "@/components/TypesCompare.vue";
 import Players from "@/components/Players.vue";
 import { mdiCalendarClockOutline } from "@mdi/js";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "App",
   data: () => ({
+    diceModal: false,
     loadIcon: mdiCalendarClockOutline,
     drawer: true,
     screen: "pokeEncounter",
@@ -122,11 +173,18 @@ export default {
     PokeEncounter,
     EventCards,
     Enemy,
-    TypesCompare,
+    // TypesCompare,
     Players,
   },
 
+  watch: {
+    screen() {
+      this.$refs.players && this.$refs.players.saveActivePlayer();
+    },
+  },
+
   computed: {
+    ...mapState(["diceBattle", "activePlayer"]),
     diceImg() {
       return require(`./assets/${this.diceType}.svg`);
     },
@@ -140,6 +198,11 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      "SET_DICE_BATTLE",
+      "SET_SINGLE_DICE_BATTLE",
+      "SET_VALUE_DICE_BATTLE",
+    ]),
     fecthHabitats() {
       this.btnLoading = true;
       fetch("https://pokeapi.co/api/v2/pokemon-habitat")
@@ -148,6 +211,26 @@ export default {
           this.habitats = [...this.habitats, ...data.results];
         })
         .finally(() => (this.btnLoading = false));
+    },
+    setupDiceBattle() {
+      this.diceModal = !this.diceModal;
+      this.SET_DICE_BATTLE();
+    },
+    sortBattleDice(to) {
+      const type = this.diceBattle[to].type;
+      const value = Math.floor(Math.random() * type) + 1;
+      this.SET_VALUE_DICE_BATTLE({
+        val: value,
+        name: to,
+      });
+      console.log(value);
+    },
+    setPlayerPokemonInBattle(poke) {
+      this.SET_SINGLE_DICE_BATTLE({
+        val: poke.base_experience,
+        poke: poke.name,
+        name: "player",
+      });
     },
     loadProgress() {
       this.$refs.players.load();
@@ -222,7 +305,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .d6-number {
   font-size: 40px;
   margin: auto;
@@ -238,5 +321,10 @@ html {
 .content {
   height: calc(100vh - 48px);
   width: 100%;
+}
+
+.main ::v-deep .v-toolbar__content {
+  max-width: 100vw;
+  overflow-x: auto;
 }
 </style>
