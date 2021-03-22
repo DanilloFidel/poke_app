@@ -85,7 +85,7 @@ export default new Vuex.Store({
       commit('setPlayers', data)
     },
     SET_SINGLE_DICE_BATTLE({ commit }, { val, name, poke }) {
-      const data = { value: 6, type: diceUse(val), poke }
+      const data = { value: 0, type: diceUse(val), poke }
       name === 'player'
         ? commit('setDiceBattlePlayer', data)
         : commit('setDiceBattleEnemy', data)
