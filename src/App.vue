@@ -180,6 +180,11 @@ export default {
     screen() {
       this.$refs.players && this.$refs.players.saveActivePlayer();
     },
+    diceModal(val) {
+      if (!val) {
+        this.SET_DICE_BATTLE();
+      }
+    },
   },
 
   computed: {
@@ -267,7 +272,6 @@ export default {
     async sortPokemon() {
       this.loading = true;
       const idx = Math.floor(Math.random() * this.pokemons.length);
-      // TODO buscar na regiao selecionada
       const selected = this.pokemons[idx];
 
       try {
