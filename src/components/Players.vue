@@ -245,8 +245,8 @@ export default {
       this.setXp(item.base_experience, false);
       Vue.delete(this.activePlayer.pokemons, idx);
     },
-    saveActivePlayer(){
-       this.ADD_ACTIVE_PLAYER(this.players[this.tab]);
+    saveActivePlayer() {
+      this.ADD_ACTIVE_PLAYER(this.players[this.tab]);
     },
     moveTeam(pk, add = true) {
       const teamLength = this.activePlayer.pokemons.filter((p) => p.onTeam)
@@ -377,12 +377,26 @@ export default {
           .then((pokes) => (p.pokemons = pokes));
       });
     },
+    defeatPokemon(pokemon) {
+      const idx = this.activePlayer.pokemons.findIndex(
+        (p) => p.name === pokemon
+      );
+      let item = this.activePlayer.pokemons[idx];
+      this.changePokemonStatus(item);
+    },
     changePokemonStatus(item, cure) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
       );
       item.defeated = cure ? false : !item.defeated;
       Vue.set(this.activePlayer.pokemons, idx, item);
+    },
+    winBattle(pokemon) {
+      const idx = this.activePlayer.pokemons.findIndex(
+        (p) => p.name === pokemon
+      );
+      let item = this.activePlayer.pokemons[idx];
+      this.upPokemon(item);
     },
     upPokemon(pokemon) {
       if (pokemon.isEvolving || pokemon.defeated) return;

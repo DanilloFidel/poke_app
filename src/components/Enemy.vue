@@ -225,6 +225,14 @@ export default {
       });
       this.setNextPokemon(idx + 1);
     },
+    defeatePokemon(pokemon) {
+      const idx = this.sortedEnemy.pokemons.findIndex(
+        (p) => p.name === pokemon
+      );
+      debugger;
+      let item = this.sortedEnemy.pokemons[idx];
+      this.setPokemonStatus(item, idx);
+    },
     previouslyIsDefeated(idx) {
       const pk = this.sortedEnemy.pokemons[idx - 1];
       return (pk && pk.defeated) || idx === 0;
