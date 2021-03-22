@@ -410,7 +410,7 @@ export default {
       );
       pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1;
       Vue.set(this.activePlayer.pokemons, idx, pokemon);
-      if (pokemon.wins == 14 || pokemon.wins == 26) {
+      if (pokemon.wins == 10 || pokemon.wins == 20) {
         this.evolvePokemon(pokemon);
       }
     },
