@@ -181,6 +181,7 @@ export default {
       this.$refs.players && this.$refs.players.saveActivePlayer();
     },
     diceModal(val) {
+      debugger;
       if (!val) {
         this.SET_DICE_BATTLE();
       }
@@ -199,6 +200,9 @@ export default {
 
   created() {
     this.fecthHabitats();
+    setInterval(() => {
+      this.$refs.players.saveProgress();
+    }, 60000);
   },
 
   methods: {
