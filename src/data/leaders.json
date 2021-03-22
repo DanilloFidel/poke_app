@@ -140,12 +140,9 @@
             "dice": 6,
             "pokemons": [
                 95,
-                74,
-                42,
-                185,
-                764
+                74
             ],
-            "type": "Pedra",
+            "type": "rock",
             "bagde": "da Rocha",
             "img": "brock.png"
         },
@@ -154,12 +151,9 @@
             "dice": 8,
             "pokemons": [
                 120,
-                54,
-                222,
-                130,
-                118
+                54
             ],
-            "type": "Água",
+            "type": "water",
             "bagde": "da Cascata",
             "img": "misty.png"
         },
@@ -167,13 +161,10 @@
             "name": "Chuck",
             "pokemons": [
                 57,
-                62,
-                68,
-                237,
-                106
+                62
             ],
             "dice": 8,
-            "type": "Lutador",
+            "type": "fighting",
             "bagde": "da Tempestade",
             "img": "chuck.png"
         },
@@ -181,13 +172,10 @@
             "name": "Clair",
             "pokemons": [
                 147,
-                130,
-                230,
-                621,
-                149
+                130
             ],
             "dice": 10,
-            "type": "Dragão",
+            "type": "dragon",
             "bagde": "da Ascensão",
             "img": "clair.png"
         },
@@ -195,13 +183,10 @@
             "name": "Erika",
             "pokemons": [
                 "tangela",
-                "weepinbell",
-                "gloom",
-                "exeggcute",
-                "bellsprout"
+                "weepinbell"
             ],
             "dice": 12,
-            "type": "Planta",
+            "type": "grass",
             "bagde": "do Arco-Íris",
             "img": "erika.png"
         },
@@ -209,13 +194,10 @@
             "name": "Morty",
             "pokemons": [
                 "gengar",
-                "gastly",
-                "haunter",
-                "misdreavus",
-                "cofagrigus"
+                "gastly"
             ],
             "dice": 12,
-            "type": "Fantasma",
+            "type": "ghost",
             "bagde": "da Névoa",
             "img": "morty.jpg"
         },
@@ -223,13 +205,10 @@
             "name": "Falkner",
             "pokemons": [
                 "hoothoot",
-                "dodrio",
-                "pidgeot",
-                "swellow",
-                "staraptor"
+                "dodrio"
             ],
             "dice": 10,
-            "type": "Voador",
+            "type": "flying",
             "bagde": "do Zéfiro",
             "img": "falkner.jpg"
         },
@@ -237,12 +216,10 @@
             "name": "Flannery",
             "pokemons": [
                 "magcargo",
-                "torkoal",
-                "slugma",
-                "vulpix"
+                "torkoal"
             ],
             "dice": 10,
-            "type": "Fogo",
+            "type": "fire",
             "bagde": "do Calor",
             "img": "flanery.png"
         },
@@ -250,13 +227,10 @@
             "name": "Giovanni",
             "pokemons": [
                 "persian",
-                "nidorino",
-                "tauros",
-                "moltres",
-                "mewtwo"
+                "nidorino"
             ],
             "dice": 20,
-            "type": "Terra",
+            "type": "ground",
             "bagde": "da Terra",
             "img": "giovanni.png"
         },
@@ -264,13 +238,10 @@
             "name": "Pryce",
             "pokemons": [
                 "dewgong",
-                "piloswine",
-                "lapras",
-                "articuno",
-                "quagsire"
+                "piloswine"
             ],
             "dice": 20,
-            "type": "Gelo",
+            "type": "ice",
             "bagde": "da Geleira",
             "img": "pryce.png"
         },
@@ -278,13 +249,10 @@
             "name": "Sargento Surge",
             "pokemons": [
                 "raichu",
-                "electrode",
-                "magneton",
-                "electabuzz",
-                "manectric"
+                "electrode"
             ],
             "dice": 20,
-            "type": "Elétrico",
+            "type": "electric",
             "bagde": "do Trovão",
             "img": "st_surge.png"
         },
@@ -292,13 +260,10 @@
             "name": "Tate e Liza",
             "pokemons": [
                 "claydol",
-                "xatu",
-                "lunatone",
-                "slowking",
-                "gallade"
+                "xatu"
             ],
             "dice": 12,
-            "type": "Psíquico",
+            "type": "psychic",
             "bagde": "da Mente",
             "img": "tate_and_liza.png"
         }

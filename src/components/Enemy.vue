@@ -8,6 +8,7 @@
           color="#fca838"
           @click="sortEnemy"
           :disabled="loading"
+          x-small
           >Sortear Inimigo</v-btn
         >
         <v-btn
@@ -15,6 +16,7 @@
           class="my-2"
           color="#6cb7f2"
           :disabled="loading"
+          x-small
           @click="showLeaders = true"
           >Líder de Ginásio</v-btn
         >
@@ -26,10 +28,20 @@
           :loading="loading"
           color="#6cb7f2"
           item-text="name"
+          v-model="selectedLeader"
           return-object
+          x-small
           @change="setLeader($event, true)"
         >
         </v-select>
+        <v-btn
+          small
+          class="my-2"
+          color="#6cb7f2"
+          :disabled="loading"
+          @click="setLeader(selectedLeader, true)"
+          >restaurar</v-btn
+        >
       </v-col>
     </v-row>
     <v-row
@@ -162,6 +174,7 @@ export default {
     enemies: [],
     diceType: 6,
     showLeaders: false,
+    selectedLeader: {},
   }),
   computed: {
     diceImg() {
@@ -224,6 +237,9 @@ export default {
         defeated: !pokemon.defeated,
       });
       this.setNextPokemon(idx + 1);
+    },
+    restoreEnemy(enemy) {
+      this.setLeader(enemy, true);
     },
     defeatePokemon(pokemon) {
       const idx = this.sortedEnemy.pokemons.findIndex(
@@ -292,18 +308,40 @@ export default {
               .finally(() => (this.loading = false));
           });
         } else {
-          const calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
-          Promise.allSettled(calls)
-            .then((resp) => resp.filter((p) => p.status === "fulfilled"))
-            .then((resp) => resp.map((p) => p.value.data))
-            .then((pokemons) => {
-              this.$emit("set-xp");
-              const poks = isGymLeader ? pokemons : this.removeByExp(pokemons);
-              this.sortedEnemy = { ...leader, pokemons: poks };
+          Http.get(`type/${leader.type}`)
+            .then((resp) => resp.data.pokemon)
+            .then((pokemonsByType) => {
+              const p1 =
+                pokemonsByType[
+                  Math.floor(Math.random() * pokemonsByType.length)
+                ];
+              const p2 =
+                pokemonsByType[
+                  Math.floor(Math.random() * pokemonsByType.length)
+                ];
+              const p3 =
+                pokemonsByType[
+                  Math.floor(Math.random() * pokemonsByType.length)
+                ];
+              leader.pokemons.push(p1.pokemon.name);
+              leader.pokemons.push(p2.pokemon.name);
+              leader.pokemons.push(p3.pokemon.name);
 
-              this.setNextPokemon(0);
-            })
-            .finally(() => (this.loading = false));
+              let calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
+              Promise.allSettled(calls)
+                .then((resp) => resp.filter((p) => p.status === "fulfilled"))
+                .then((resp) => resp.map((p) => p.value.data))
+                .then((pokemons) => {
+                  this.$emit("set-xp");
+                  const poks = isGymLeader
+                    ? pokemons
+                    : this.removeByExp(pokemons);
+                  this.sortedEnemy = { ...leader, pokemons: poks };
+
+                  this.setNextPokemon(0);
+                })
+                .finally(() => (this.loading = false));
+            });
         }
       } else {
         this.loading = false;
