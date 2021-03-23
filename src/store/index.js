@@ -95,9 +95,6 @@ export default new Vuex.Store({
       commit('setDiceBattlePlayer', playerData)
       commit('setDiceBattleEnemy', enemyData)
     },
-    APPLY_XP({ commit }, data) {
-      commit('applyXp', data)
-    },
     JOIN_TEAM({ commit }, data) {
       commit('joinTeam', data)
     },

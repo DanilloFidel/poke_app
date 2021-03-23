@@ -26,12 +26,9 @@
             'no-selected': !sortedCard.descr,
           }"
         >
-          <span
-            v-if="showCardText"
-            @click.once="applyEffect"
-            class="mt-3 text-center overline"
-            >{{ sortedCard.descr }}</span
-          >
+          <span v-if="showCardText" class="mt-3 text-center overline">{{
+            sortedCard.descr
+          }}</span>
         </div>
       </v-col>
     </v-row>
@@ -39,180 +36,172 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 export default {
-  name: 'EventCardsComponent',
+  name: "EventCardsComponent",
   data: () => ({
-    cardType: 'Normal',
+    cardType: "Normal",
     showCardText: false,
-    types: ['Normal', 'Rara', 'Ultra Rara'],
+    types: ["Normal", "Rara", "Ultra Rara"],
     sortedCard: {},
-    xp: 10,
-    cardTypeXpRange: {
-      Normal: [10, 200],
-      Rara: [201, 400],
-      'Ultra Rara': [401, 800],
-    },
   }),
   computed: {
     cards() {
       const cards = [
         {
-          isLucky: true,
-          descr: `Você ganhou ${this.xp}xp`,
-          xp: this.xp,
-          type: 'Normal',
-          winXp: true,
-        },
-        {
-          isLucky: true,
-          descr: `Você ganhou ${this.xp}xp`,
-          xp: this.xp,
-          type: 'Rara',
-          winXp: true,
-        },
-        {
-          isLucky: true,
-          descr: `Você ganhou ${this.xp}xp`,
-          xp: this.xp,
-          type: 'Ultra Rara',
-          winXp: true,
-        },
-        {
-          isLucky: false,
-          descr: `Você perdeu ${this.xp}xp`,
-          xp: this.xp,
-          type: 'Normal',
-          winXp: false,
-        },
-        {
           isLucky: false,
           descr: `Você deu Berrys estragadas para seu Pokemon, perca de ${this.xp}xp`,
-          type: 'Rara',
+          type: "Rara",
         },
-        {
-          isLucky: false,
-          descr: `Você perdeu ${this.xp}xp`,
-          xp: this.xp,
-          type: 'Ultra Rara',
-          winXp: false,
-        },
-        {
-          isLucky: true,
-          descr:
-            'Você dormiu bem e está com muita energia, role o dado novamente',
-          type: 'Normal',
-        },
-        {
-          isLucky: true,
-          descr: 'Você encontrou um Pokemon aleatório (use o dado 3x)',
-          type: 'Normal',
-        },
-        {
-          isLucky: true,
-          descr:
-            'Role um d6, o número que obter é a quantidade de vezes que você deve clicar para encontrar um Pokemon aleatório',
-          type: 'Normal',
-        },
-        {
-          isLucky: true,
-          descr: 'Ao encontrar um amigo ele te deu uma poção de reviver',
-          type: 'Ultra Rara',
-        },
-        {
-          isLucky: true,
-          descr: 'Você ganhou um item de anulação de tipo',
-          type: 'Rara',
-        },
-        {
-          isLucky: false,
-          descr: 'Oh não, um Snorlax no caminho! perca uma rodada',
-          type: 'Normal',
-        },
-        {
-          isLucky: true,
-          descr: 'Você ganhou Item de Fuga, para escapar de uma batalha',
-          type: 'Rara',
-        },
-        {
-          isLucky: false,
-          descr:
-            'Entregue um Pokemon do seu time para os cuidados de um adversário',
-          type: 'Rara',
-        },
-        { isLucky: true, descr: 'Avançe duas casas', type: 'Normal' },
 
-        { isLucky: true, descr: 'Avançe uma casa', type: 'Normal' },
-        { isLucky: true, descr: 'Cure um Pokemon', type: 'Normal' },
-        { isLucky: true, descr: 'Avançe três casas', type: 'Normal' },
-        { isLucky: true, descr: 'Avançe cinco casas', type: 'Rara' },
-        { isLucky: true, descr: 'Escolha um pokemon p/ subir 2 níveis', type: 'Rara' },
-        { isLucky: true, descr: 'Escolha um pokemon p/ subir 3 níveis', type: 'Rara' },
-        { isLucky: true, descr: 'Escolha um pokemon p/ subir 1 nível', type: 'Nommal' },
-        { isLucky: true, descr: 'Escolha um pokemon p/ subir 4 níveis', type: 'Ultra Rara' },
-        { isLucky: true, descr: 'Escolha um pokemon p/ subir 5 níveis', type: 'Ultra Rara' },
-        { isLucky: true, descr: 'Avançe seis casas', type: 'Rara' },
-        { isLucky: false, descr: 'Seu Pokemon fugiu!', type: 'Rara' },
-        { isLucky: true, descr: 'Ganhou item de Chance Extra', type: 'Rara' },
-        { isLucky: true, descr: 'Avançe oito casas', type: 'Ultra Rara' },
-        { isLucky: true, descr: 'Vá para floresta Oculta', type: 'Rara' },
-        { isLucky: false, descr: 'Volte quatro casas', type: 'Rara' },
         {
           isLucky: true,
-          descr: 'Escolha um Pokemon para evoluir (Time)',
-          type: 'Ultra Rara',
+          descr:
+            "Você dormiu bem e está com muita energia, role o dado novamente",
+          type: "Normal",
         },
         {
           isLucky: true,
-          descr: 'Escolha um Pokemon para evoluir (Box)',
-          type: 'Ultra Rara',
+          descr: "Você encontrou um Pokemon aleatório (use o dado 3x)",
+          type: "Normal",
         },
         {
           isLucky: true,
-          descr: 'Meu Deus, aquilo é um... (Pokemon raro aleatório) use o dado 3x',
-          type: 'Ultra Rara',
+          descr:
+            "Role um d6, o número que obter é a quantidade de vezes que você deve clicar para encontrar um Pokemon aleatório",
+          type: "Normal",
+        },
+        {
+          isLucky: true,
+          descr: "Hora da batalha, sorteie um adversário",
+          type: "Normal",
+        },
+        {
+          isLucky: true,
+          descr: "Ao encontrar um amigo ele te deu uma poção de reviver",
+          type: "Ultra Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Você ganhou um item de anulação de tipo",
+          type: "Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Hora de lutar contra seu amigo ao lado",
+          type: "Rara",
+        },
+        {
+          isLucky: false,
+          descr: "Oh não, um Snorlax no caminho! perca uma rodada",
+          type: "Normal",
+        },
+        {
+          isLucky: true,
+          descr: "Você ganhou Item de Fuga, para escapar de uma batalha",
+          type: "Rara",
+        },
+        {
+          isLucky: false,
+          descr:
+            "Entregue um Pokemon do seu time para os cuidados de um adversário",
+          type: "Rara",
+        },
+        { isLucky: true, descr: "Avançe duas casas", type: "Normal" },
+
+        { isLucky: true, descr: "Avançe uma casa", type: "Normal" },
+        { isLucky: true, descr: "Cure um Pokemon", type: "Normal" },
+        { isLucky: true, descr: "Avançe três casas", type: "Normal" },
+        { isLucky: true, descr: "Avançe cinco casas", type: "Rara" },
+        {
+          isLucky: true,
+          descr: "Vá p/ o centro de cura mais próximo",
+          type: "Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Acesse sua box a partir desta casa",
+          type: "Rara",
+        },
+        { isLucky: true, descr: "Pegue um pokemon do seu amigo", type: "Rara" },
+        {
+          isLucky: true,
+          descr: "Escolha um pokemon p/ subir 2 níveis",
+          type: "Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Escolha um pokemon p/ subir 3 níveis",
+          type: "Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Escolha um pokemon p/ subir 1 nível",
+          type: "Nommal",
+        },
+        {
+          isLucky: true,
+          descr: "Escolha um pokemon p/ subir 4 níveis",
+          type: "Ultra Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Escolha um pokemon p/ subir 5 níveis",
+          type: "Ultra Rara",
+        },
+        { isLucky: true, descr: "Avançe seis casas", type: "Rara" },
+        { isLucky: false, descr: "Seu Pokemon fugiu!", type: "Rara" },
+        { isLucky: true, descr: "Ganhou item de Chance Extra", type: "Rara" },
+        { isLucky: true, descr: "Avançe oito casas", type: "Ultra Rara" },
+        { isLucky: true, descr: "Vá para floresta Oculta", type: "Rara" },
+        { isLucky: false, descr: "Volte quatro casas", type: "Rara" },
+        {
+          isLucky: true,
+          descr: "Escolha um Pokemon para evoluir (Time)",
+          type: "Ultra Rara",
+        },
+        {
+          isLucky: true,
+          descr: "Escolha um Pokemon para evoluir (Box)",
+          type: "Ultra Rara",
+        },
+        {
+          isLucky: true,
+          descr:
+            "Meu Deus, aquilo é um... (Pokemon raro aleatório) use o dado 3x",
+          type: "Ultra Rara",
         },
         {
           isLucky: true,
           descr: `Meu Deus, aquilo é um... (Pokemon ${this.getHabitat()} aleatório)`,
-          type: 'Rara',
+          type: "Rara",
         },
         {
           isLucky: true,
           descr:
-            'Escolha um Pokemon de um adversário para juntar-se ao seu time',
-          type: 'Ultra Rara',
+            "Escolha um Pokemon de um adversário para juntar-se ao seu time",
+          type: "Ultra Rara",
         },
-      ]
-      return new Array(10).fill(cards).flat()
+      ];
+      return new Array(10).fill(cards).flat();
     },
   },
-  props: ['habitats'],
+  props: ["habitats"],
   methods: {
-    ...mapActions(['APPLY_XP']),
-    getRandomArbitrary(min, max) {
-      return parseInt(Math.random() * (max - min) + min)
-    },
     getHabitat() {
-      return this.habitats[parseInt(Math.random() * this.habitats.length)]
-    },
-    applyEffect() {
-      this.APPLY_XP({ win: this.sortedCard.winXp, val: this.sortedCard.xp })
+      return this.habitats[parseInt(Math.random() * this.habitats.length)];
     },
     randomCards() {
       this.$nextTick(() => {
-        this.showCardText = false
-      })
-      let group = this.cards.filter((c) => c.type == this.cardType)
-      const xpRanges = this.cardTypeXpRange[this.cardType]
-      this.xp = this.getRandomArbitrary(xpRanges[0], xpRanges[1])
-      this.sortedCard = group[Math.floor(Math.random() * group.length)]
+        this.showCardText = false;
+      });
+      let group = this.cards.filter((c) => c.type == this.cardType);
+      this.sortedCard = group[Math.floor(Math.random() * group.length)];
       this.$nextTick(() => {
-        this.showCardText = true
-      })
+        this.showCardText = true;
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
