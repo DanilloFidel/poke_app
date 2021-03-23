@@ -323,9 +323,9 @@ export default {
                 pokemonsByType[
                   Math.floor(Math.random() * pokemonsByType.length)
                 ];
-              leader.pokemons.push(p1.pokemon.name);
-              leader.pokemons.push(p2.pokemon.name);
-              leader.pokemons.push(p3.pokemon.name);
+              leader.pokemons[3] = p1.pokemon.name;
+              leader.pokemons[4] = p2.pokemon.name;
+              leader.pokemons[5] = p3.pokemon.name;
 
               let calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
               Promise.allSettled(calls)
