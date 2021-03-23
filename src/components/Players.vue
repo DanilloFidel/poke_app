@@ -17,7 +17,7 @@
           <v-row>
             <v-col>
               <span
-                >XP: <b>{{ activePlayer.xp }}</b></span
+                >XP: <b>{{ playerXp }}</b></span
               >
             </v-col>
             <v-col>
@@ -202,21 +202,18 @@ export default {
     activePlayer() {
       return this.players[this.tab];
     },
-    ...mapState([
-      "activeFighter",
-      "types",
-      "savedPlayers",
-      "applyXp",
-      "pokemonToTeam",
-    ]),
+    playerXp() {
+      return this.activePlayer.pokemons.reduce(
+        (acc, el) => (acc += el.base_experience),
+        0
+      );
+    },
+    ...mapState(["activeFighter", "types", "savedPlayers", "pokemonToTeam"]),
     onTeam() {
       return this.activePlayer.pokemons.filter((p) => p.onTeam);
     },
   },
   watch: {
-    applyXp(obj) {
-      obj.val && this.setXp(obj.val, obj.win);
-    },
     pokemonToTeam(obj) {
       obj.name && this.activePlayer.pokemons.push(obj);
     },
@@ -233,12 +230,11 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["SET_PLAYERS", "SET_PLAYER_XP", "ADD_ACTIVE_PLAYER"]),
+    ...mapActions(["SET_PLAYERS", "ADD_ACTIVE_PLAYER"]),
     removePokemon(item) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
       );
-      this.setXp(item.base_experience, false);
       Vue.delete(this.activePlayer.pokemons, idx);
     },
     saveActivePlayer() {
@@ -472,18 +468,7 @@ export default {
       this.addMenu = false;
       Http.get(`pokemon/${name}`).then((resp) => {
         this.activePlayer.pokemons.push(resp.data);
-        this.setXp(resp.data.base_experience, true);
       });
-    },
-    savePlayerXp() {
-      this.SET_PLAYER_XP(this.activePlayer.xp);
-    },
-    setXp(xp, add) {
-      const p = {
-        ...this.activePlayer,
-        xp: add ? this.activePlayer.xp + xp : this.activePlayer.xp - xp,
-      };
-      Vue.set(this.players, this.tab, p);
     },
     cureAll() {
       this.activePlayer.pokemons.forEach((p) => {

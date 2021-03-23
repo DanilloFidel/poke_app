@@ -180,7 +180,7 @@ export default {
     diceImg() {
       return require(`../assets/d${this.diceType}.svg`);
     },
-    ...mapState(["activePlayerXp", "activePlayer"]),
+    ...mapState(["activePlayer"]),
     giftPokemon() {
       return this.sortedEnemy.pokemons[
         Math.floor(Math.random() * this.sortedEnemy.pokemons.length)
@@ -255,11 +255,16 @@ export default {
     },
     removeByExp(pokemons) {
       let qtd = 6;
-      if (this.activePlayerXp <= 300) qtd = 3;
-      else if (this.activePlayerXp <= 650) qtd = 4;
-      else if (this.activePlayerXp <= 900) qtd = 4;
-      else if (this.activePlayerXp <= 1000) qtd = 5;
-      else if (this.activePlayerXp <= 1500) qtd = 6;
+      const xp = this.activePlayer.pokemons.reduce(
+        (acc, el) => (acc += el.base_experience),
+        0
+      );
+      console.log(xp);
+      if (xp <= 300) qtd = 3;
+      else if (xp <= 650) qtd = 4;
+      else if (xp <= 900) qtd = 4;
+      else if (xp <= 1000) qtd = 5;
+      else if (xp <= 1500) qtd = 6;
       return pokemons.splice(0, qtd);
     },
     getRandomPokes() {
@@ -297,7 +302,6 @@ export default {
               .then((resp) => resp.filter((p) => p.status === "fulfilled"))
               .then((resp) => resp.map((p) => p.value.data))
               .then((pokemons) => {
-                this.$emit("set-xp");
                 const poks = isGymLeader
                   ? pokemons
                   : this.removeByExp(pokemons);
@@ -332,7 +336,6 @@ export default {
                 .then((resp) => resp.filter((p) => p.status === "fulfilled"))
                 .then((resp) => resp.map((p) => p.value.data))
                 .then((pokemons) => {
-                  this.$emit("set-xp");
                   const poks = isGymLeader
                     ? pokemons
                     : this.removeByExp(pokemons);

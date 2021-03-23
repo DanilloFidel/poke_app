@@ -25,7 +25,6 @@ export default new Vuex.Store({
     savedPlayers: [],
     applyXp: {},
     pokemonToTeam: {},
-    activePlayerXp: 0,
     diceBattle: {
       player: {
         type: 'd6',
@@ -55,14 +54,8 @@ export default new Vuex.Store({
     setDiceBattleEnemy(state, data) {
       state.diceBattle.enemy = data
     },
-    setPlayerXp(state, data) {
-      state.activePlayerXp = data
-    },
     setTypes(state, data) {
       state.types = data
-    },
-    applyXp(state, data) {
-      state.applyXp = data
     },
     joinTeam(state, data) {
       state.pokemonToTeam = data
@@ -77,9 +70,6 @@ export default new Vuex.Store({
     },
     SET_TYPES({ commit }, data) {
       commit('setTypes', data)
-    },
-    SET_PLAYER_XP({ commit }, data) {
-      commit('setPlayerXp', data)
     },
     SET_PLAYERS({ commit }, data) {
       commit('setPlayers', data)

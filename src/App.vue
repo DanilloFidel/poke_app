@@ -53,11 +53,7 @@
             <Players ref="players" :colors="colors" />
           </v-container>
           <v-container v-show="screen === 'enemies'" class="pa-0">
-            <Enemy
-              ref="enemies"
-              @set-xp="$refs.players.savePlayerXp()"
-              :colors="colors"
-            />
+            <Enemy ref="enemies" :colors="colors" />
           </v-container>
           <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />
