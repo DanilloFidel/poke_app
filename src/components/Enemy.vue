@@ -299,8 +299,14 @@ export default {
           this.getRandomPokes().then((pokes) => {
             const calls = pokes.map((p) => Http.get(`/pokemon/${p}`));
             Promise.allSettled(calls)
-              .then((resp) => resp.filter((p) => p.status === "fulfilled"))
-              .then((resp) => resp.map((p) => p.value.data))
+              .then((resp) => {
+                debugger;
+                return resp.filter((p) => p.status === "fulfilled");
+              })
+              .then((resp) => {
+                debugger;
+                return resp.map((p) => p.value.data);
+              })
               .then((pokemons) => {
                 const poks = isGymLeader
                   ? pokemons
@@ -327,14 +333,22 @@ export default {
                 pokemonsByType[
                   Math.floor(Math.random() * pokemonsByType.length)
                 ];
-              leader.pokemons[3] = p1.pokemon.name;
-              leader.pokemons[4] = p2.pokemon.name;
-              leader.pokemons[5] = p3.pokemon.name;
+              leader.pokemons[2] = p1.pokemon.url;
+              leader.pokemons[3] = p2.pokemon.url;
+              leader.pokemons[4] = p3.pokemon.url;
 
-              let calls = leader.pokemons.map((p) => Http.get(`/pokemon/${p}`));
+              let calls = leader.pokemons.map((p) =>
+                Http.get(p.length ? p : `/pokemon/${p}`)
+              );
               Promise.allSettled(calls)
-                .then((resp) => resp.filter((p) => p.status === "fulfilled"))
-                .then((resp) => resp.map((p) => p.value.data))
+                .then((resp) => {
+                  debugger;
+                  return resp.filter((p) => p.status === "fulfilled");
+                })
+                .then((resp) => {
+                  debugger;
+                  return resp.map((p) => p.value.data);
+                })
                 .then((pokemons) => {
                   const poks = isGymLeader
                     ? pokemons
