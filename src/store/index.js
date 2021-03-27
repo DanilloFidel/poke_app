@@ -46,7 +46,9 @@ export default new Vuex.Store({
       state.activePlayer = data
     },
     setPlayers(state, data) {
-      state.savedPlayers = data
+      const idx = state.savedPlayers.findIndex(s => s.progressName === data.progressName);
+      idx >= 0 ? Vue.set(state.savedPlayers, idx, data) :
+        state.savedPlayers.push(data)
     },
     setDiceBattlePlayer(state, data) {
       state.diceBattle.player = data

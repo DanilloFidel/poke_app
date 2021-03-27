@@ -174,6 +174,23 @@ export default {
     tab: 0,
     addMenu: false,
     pokemons: [],
+    startPlayers: [
+      {
+        name: "Danillo",
+        xp: 0,
+        pokemons: [],
+      },
+      {
+        name: "Eduardo",
+        xp: 0,
+        pokemons: [],
+      },
+      {
+        name: "Matheus",
+        xp: 0,
+        pokemons: [],
+      },
+    ],
     players: [
       {
         name: "Danillo",
@@ -182,6 +199,11 @@ export default {
       },
       {
         name: "Eduardo",
+        xp: 0,
+        pokemons: [],
+      },
+      {
+        name: "Matheus",
         xp: 0,
         pokemons: [],
       },
@@ -253,12 +275,18 @@ export default {
       }
       Vue.set(this.activePlayer.pokemons, idx, poke);
     },
-    saveProgress() {
+    saveProgress(progressName = "slot-1") {
       console.log("salvando...");
-      this.SET_PLAYERS(this.players);
+      this.SET_PLAYERS({ progressName, players: this.players });
     },
-    load() {
-      if (this.savedPlayers.length) this.players = [...this.savedPlayers];
+    load(slot) {
+      debugger;
+      if (this.savedPlayers.length) {
+        const idx = this.savedPlayers.findIndex((s) => s.progressName === slot);
+        if (idx >= 0) {
+          this.players = this.savedPlayers[idx].players;
+        }
+      }
     },
     diceUse(xp) {
       let diceType = "d6";
@@ -309,18 +337,7 @@ export default {
     },
     sortInitials() {
       this.players = [];
-      this.players = [
-        {
-          name: "Danillo",
-          xp: 0,
-          pokemons: [],
-        },
-        {
-          name: "Eduardo",
-          xp: 0,
-          pokemons: [],
-        },
-      ];
+      this.players = [...this.startPlayers];
 
       let starters = [
         [

@@ -27,10 +27,7 @@
           <v-btn icon @click="screen = 'pokedex'">
             <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
           </v-btn>
-          <v-btn icon @click="loadProgress">
-            <v-icon>{{ loadIcon }}</v-icon>
-          </v-btn>
-          <v-btn icon @click="sortInitials">
+          <v-btn icon @click="screen = 'data'">
             <img width="25px" height="25px" src="./assets/pokeball.svg" />
           </v-btn>
         </v-app-bar>
@@ -38,6 +35,13 @@
         <div class="content">
           <v-container v-show="screen === 'pokedex'" class="pa-0">
             <Pokedex :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'data'" class="pa-0">
+            <DataSetup
+              @update-slot="slot = $event"
+              @load-slot="loadProgress"
+              @new-game="sortInitials"
+            />
           </v-container>
           <v-container v-show="screen === 'pokeEncounter'" class="pa-0">
             <PokeEncounter :colors="colors" />
@@ -64,7 +68,7 @@
 
     <v-dialog v-model="diceModal">
       <v-card color="white" class="pa-3" style="height: 60vh">
-        <v-row dense>
+        <v-row dense v-if="activePlayer.pokemons">
           <v-select
             :items="
               activePlayer.pokemons.filter((p) => p.onTeam && !p.defeated)
@@ -136,6 +140,7 @@ import Pokedex from "@/components/Pokedex.vue";
 import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
 import Enemy from "@/components/Enemy.vue";
+import DataSetup from "@/components/DataSetup.vue";
 // import TypesCompare from "@/components/TypesCompare.vue";
 import Players from "@/components/Players.vue";
 import { mdiCalendarClockOutline } from "@mdi/js";
@@ -152,6 +157,7 @@ export default {
     pokemons: [],
     loading: false,
     btnLoading: false,
+    slot: "slot-1",
     habitats: [
       {
         name: "random all",
@@ -194,6 +200,7 @@ export default {
     Enemy,
     // TypesCompare,
     Players,
+    DataSetup,
   },
 
   watch: {
@@ -221,8 +228,8 @@ export default {
   created() {
     this.fecthHabitats();
     setInterval(() => {
-      this.$refs.players.saveProgress();
-    }, 60000);
+      this.$refs.players.saveProgress(this.slot);
+    }, 10000);
   },
 
   methods: {
@@ -263,8 +270,8 @@ export default {
         name: "player",
       });
     },
-    loadProgress() {
-      this.$refs.players.load();
+    loadProgress(slot) {
+      this.$refs.players.load(slot);
     },
     changeHabitat(url) {
       this.btnLoading = true;
@@ -282,7 +289,7 @@ export default {
       this.diceValue = Math.floor(Math.random() * 6) + 1;
     },
     sortInitials() {
-      if (confirm("desejar reiniciar o jogo?")) {
+      if (confirm("desejar iniciar um novo jogo?")) {
         this.$refs.players.sortInitials();
       }
     },
