@@ -16,7 +16,73 @@
       </div>
     </div>
 
-    <div class="arena"></div>
+    <div class="arena">
+      <div class="enemy-side side">
+        <div v-if="activeEnemyPoke.name" class="pokemon">
+          <div class="info-box">
+            <p class="overline pokemon-name">{{ activeEnemyPoke.name }}</p>
+            <p>Dado: {{ getDiceType(activeEnemyPoke.base_experience) }}</p>
+            <v-chip
+              x-small
+              outlined
+              label
+              class="mt-2 mr-2 overline elevation-3"
+              v-for="(item, idx) in activeEnemyPoke.types"
+              :key="idx"
+              :color="colors[item.type.name]"
+              >{{ item.type.name }} -
+              {{ getTypeBattle(item.type.name) }}</v-chip
+            >
+          </div>
+          <img
+            :src="activeEnemyPoke.sprites.front_default"
+            alt=""
+            class="img"
+          />
+        </div>
+        <div v-else>
+          <v-select
+            :items="activePlayer.pokemons"
+            item-text="name"
+            return-object
+            v-model="activePokemon"
+          ></v-select>
+        </div>
+      </div>
+      <div class="player-side side">
+        <div v-if="activePokemon.name" class="pokemon pokemon-player">
+          <div class="info-box">
+            <p class="overline pokemon-name">{{ activePokemon.name }}</p>
+            <p>Dado: {{ getDiceType(activePokemon.base_experience) }}</p>
+            <v-chip
+              x-small
+              outlined
+              label
+              class="mt-2 mr-2 overline elevation-3"
+              v-for="(item, idx) in activePokemon.types"
+              :key="idx"
+              :color="colors[item.type.name]"
+              >{{ item.type.name }} -
+              {{ getTypeBattle(item.type.name) }}</v-chip
+            >
+            <h2 class="mt-4">{{ activePlayer.diceValue || 0 }}</h2>
+          </div>
+          <img
+            :src="activePokemon.sprites.back_default"
+            @click="rollDice"
+            class="img"
+          />
+        </div>
+        <div v-else>
+          <v-select
+            :items="activePlayer.pokemons.filter((p) => !p.isDefeated)"
+            item-text="name"
+            return-object
+            v-model="activePokemon"
+          ></v-select>
+        </div>
+      </div>
+    </div>
     <div class="bar">
       <img src="../assets/sprites/trainer.png" class="player" />
       <div class="player-pokeballs">
@@ -43,18 +109,29 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "ArenaComponent",
   data: () => ({
+    activePokemon: {},
     loading: false,
     sortedEnemy: {},
     enemies: [],
     diceType: 6,
     showLeaders: false,
     selectedLeader: {},
+    enemyPokeIdx: 0,
   }),
   computed: {
     diceImg() {
       return require(`../assets/d${this.diceType}.svg`);
     },
-    ...mapState(["activePlayer"]),
+    activeEnemyPoke() {
+      return this.activeFighter.pokemons[this.enemyPokeIdx];
+    },
+    ...mapState([
+      "activePlayer",
+      "activeFighter",
+      "types",
+      "savedPlayers",
+      "pokemonToTeam",
+    ]),
     giftPokemon() {
       return this.sortedEnemy.pokemons[
         Math.floor(Math.random() * this.sortedEnemy.pokemons.length)
@@ -62,6 +139,9 @@ export default {
     },
   },
   watch: {
+    activePokemon(val) {
+      console.log(val);
+    },
     sortedEnemy: {
       handler: function (val) {
         this.ADD_ACTIVE_FIGHTER(val);
@@ -77,7 +157,7 @@ export default {
   props: ["colors"],
   methods: {
     ...mapActions(["ADD_ACTIVE_FIGHTER"]),
-    diceUse(xp) {
+    getDiceType(xp) {
       let diceType = "d6";
       if (xp >= 120) {
         diceType = "d8";
@@ -109,6 +189,42 @@ export default {
       });
       this.setNextPokemon(idx + 1);
     },
+    getTypeBattle(type_player_poke) {
+      debugger;
+      if (!this.activeFighter.name) return "N/A";
+
+      const enemyTypes = this.activeFighter.activePokemon.types.map(
+        (t) => t.type.name
+      );
+      const enemyTypesInfo = this.types.filter((t) =>
+        enemyTypes.includes(t.name)
+      );
+      const enemyTypesWins = enemyTypesInfo.map((t) =>
+        t.damage_relations.double_damage_to.map((x) => x.name)
+      );
+
+      const enemyTypesLoses = enemyTypesInfo.map((t) =>
+        t.damage_relations.double_damage_from.map((x) => x.name)
+      );
+
+      if (
+        enemyTypesLoses.flat().includes(type_player_poke) &&
+        !enemyTypesWins.flat().includes(type_player_poke)
+      ) {
+        return "W";
+      } else if (
+        !enemyTypesLoses.flat().includes(type_player_poke) &&
+        !enemyTypesWins.flat().includes(type_player_poke)
+      ) {
+        return "E";
+      } else if (
+        !enemyTypesLoses.flat().includes(type_player_poke) &&
+        enemyTypesWins.flat().includes(type_player_poke)
+      ) {
+        return "L";
+      }
+    },
+    rollDice() {},
     restoreEnemy(enemy) {
       this.setLeader(enemy, true);
     },
@@ -253,6 +369,42 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   height: calc(100vh - 46px);
+}
+
+.enemy-side {
+  margin-left: 10px;
+}
+
+.player-side {
+  justify-content: flex-end;
+  margin-right: 10px;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  height: 50%;
+}
+
+.pokemon {
+  &-player {
+    flex-direction: row-reverse;
+  }
+  &-name {
+    font-size: 18px;
+    // position: absolute;
+    // left: 0;
+  }
+  justify-content: flex-start;
+  display: flex;
+  border: 1px solid red;
+  height: 200px;
+  width: 250px;
+}
+
+.img {
+  // height: 150px;
+  max-height: 180px;
 }
 
 .arena {

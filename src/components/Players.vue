@@ -79,8 +79,7 @@
                       v-for="(item, idx) in pokemon.types"
                       :key="idx"
                       :color="colors[item.type.name]"
-                      >{{ item.type.name }} -
-                      {{ getTypeBattle(item.type.name) }}</v-chip
+                      >{{ item.type.name }}</v-chip
                     ></v-col
                   >
                 </v-row>
@@ -301,40 +300,7 @@ export default {
       }
       return diceType;
     },
-    getTypeBattle(type_player_poke) {
-      if (!this.activeFighter.name) return "N/A";
 
-      const enemyTypes = this.activeFighter.activePokemon.types.map(
-        (t) => t.type.name
-      );
-      const enemyTypesInfo = this.types.filter((t) =>
-        enemyTypes.includes(t.name)
-      );
-      const enemyTypesWins = enemyTypesInfo.map((t) =>
-        t.damage_relations.double_damage_to.map((x) => x.name)
-      );
-
-      const enemyTypesLoses = enemyTypesInfo.map((t) =>
-        t.damage_relations.double_damage_from.map((x) => x.name)
-      );
-
-      if (
-        enemyTypesLoses.flat().includes(type_player_poke) &&
-        !enemyTypesWins.flat().includes(type_player_poke)
-      ) {
-        return "W";
-      } else if (
-        !enemyTypesLoses.flat().includes(type_player_poke) &&
-        !enemyTypesWins.flat().includes(type_player_poke)
-      ) {
-        return "E";
-      } else if (
-        !enemyTypesLoses.flat().includes(type_player_poke) &&
-        enemyTypesWins.flat().includes(type_player_poke)
-      ) {
-        return "L";
-      }
-    },
     sortInitials() {
       this.players = [];
       this.players = [...this.startPlayers];
