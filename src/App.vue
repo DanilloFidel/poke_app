@@ -11,7 +11,7 @@
             />
           </v-btn>
 
-          <v-btn icon @click="setupDiceBattle">
+          <v-btn icon @click="screen = 'arena'">
             <img width="25px" height="25px" src="./assets/d6.svg" />
           </v-btn>
 
@@ -58,6 +58,9 @@
           </v-container>
           <v-container v-show="screen === 'enemies'" class="pa-0">
             <Enemy ref="enemies" :colors="colors" />
+          </v-container>
+          <v-container v-show="screen === 'arena'" class="pa-0">
+            <arena :colors="colors"></arena>
           </v-container>
           <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />
@@ -141,6 +144,7 @@ import PokeEncounter from "@/components/PokeEncounter.vue";
 import EventCards from "@/components/EventCards.vue";
 import Enemy from "@/components/Enemy.vue";
 import DataSetup from "@/components/DataSetup.vue";
+import Arena from "@/components/Arena.vue";
 // import TypesCompare from "@/components/TypesCompare.vue";
 import Players from "@/components/Players.vue";
 import { mdiCalendarClockOutline } from "@mdi/js";
@@ -201,6 +205,7 @@ export default {
     // TypesCompare,
     Players,
     DataSetup,
+    Arena,
   },
 
   watch: {
