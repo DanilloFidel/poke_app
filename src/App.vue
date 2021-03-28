@@ -11,7 +11,7 @@
             />
           </v-btn>
 
-          <v-btn icon @click="screen = 'arena'">
+          <v-btn icon @click="setupDiceBattle">
             <img width="25px" height="25px" src="./assets/d6.svg" />
           </v-btn>
 
@@ -29,6 +29,9 @@
           </v-btn>
           <v-btn icon @click="screen = 'data'">
             <img width="25px" height="25px" src="./assets/pokeball.svg" />
+          </v-btn>
+          <v-btn icon @click="screen = 'arena'">
+            <img width="25px" height="25px" src="./assets/d6.svg" />
           </v-btn>
         </v-app-bar>
 
