@@ -279,7 +279,6 @@ export default {
       this.SET_PLAYERS({ progressName, players: this.players });
     },
     load(slot) {
-      debugger;
       if (this.savedPlayers.length) {
         const idx = this.savedPlayers.findIndex((s) => s.progressName === slot);
         if (idx >= 0) {
@@ -337,7 +336,6 @@ export default {
       ];
 
       this.players.forEach((p) => {
-        debugger;
         const p1 = starters[0][Math.floor(Math.random() * starters[0].length)];
         starters[0] = starters[0].filter((p) => p !== p1);
         const p2 = starters[1][Math.floor(Math.random() * starters[1].length)];

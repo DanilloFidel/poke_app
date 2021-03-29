@@ -2,19 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
-const diceUse = (xp) => {
-  let diceType = 6
-  if (xp >= 120) {
-    diceType = 8
-  }
-  if (xp >= 170) {
-    diceType = 10
-  }
-  if (xp >= 200) {
-    diceType = 12
-  }
-  return diceType
-}
+
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -45,6 +33,13 @@ export default new Vuex.Store({
     setActivePlayer(state, data) {
       state.activePlayer = data
     },
+    updatePlayer(state, pokes) {
+      debugger
+      state.activePlayer.pokemons = pokes;
+    },
+    updateEnemy(state, pokes) {
+      state.activeFighter.pokemons = pokes;
+    },
     setPlayers(state, data) {
       const idx = state.savedPlayers.findIndex(s => s.progressName === data.progressName);
       idx >= 0 ? Vue.set(state.savedPlayers, idx, data) :
@@ -70,32 +65,37 @@ export default new Vuex.Store({
     ADD_ACTIVE_PLAYER({ commit }, data) {
       commit('setActivePlayer', data)
     },
+    CURE_ALL({ commit }, { pks, isPlayer }) {
+      isPlayer ? commit('updatePlayer', pks) : commit('updateEnemy', pks);
+    },
+    UPDATE_PLAYER({ commit, state }, data) {
+
+      let pokes = state.activePlayer.pokemons
+      try {
+        const idx = pokes.findIndex(p => p.name === data.pokemon.name);
+        pokes[idx] = data.pokemon;
+
+        commit('updatePlayer', pokes)
+      } catch (error) {
+        alert(error)
+      }
+    },
+    UPDATE_ENEMY({ commit, state }, data) {
+      debugger
+      let pokes = state.activeFighter.pokemons
+      try {
+        const idx = pokes.findIndex(p => p.name === data.pokemon.name);
+        pokes[idx] = data.pokemon;
+        commit('updateEnemy', pokes)
+      } catch (error) {
+        alert(error)
+      }
+    },
     SET_TYPES({ commit }, data) {
       commit('setTypes', data)
     },
     SET_PLAYERS({ commit }, data) {
       commit('setPlayers', data)
-    },
-    SET_SINGLE_DICE_BATTLE({ commit }, { val, name, poke }) {
-      const data = { value: 0, type: diceUse(val), poke }
-      name === 'player'
-        ? commit('setDiceBattlePlayer', data)
-        : commit('setDiceBattleEnemy', data)
-    },
-    SET_VALUE_DICE_BATTLE({ commit, state }, { val, name }) {
-      const p = state.diceBattle[name]
-      const data = { value: (p.value += val) }
-      name === 'player'
-        ? commit('setDiceBattlePlayer', { ...p, ...data })
-        : commit('setDiceBattleEnemy', { ...p, ...data })
-    },
-    SET_DICE_BATTLE({ commit, state }) {
-      const enemyXp = state.activeFighter.activePokemon.base_experience
-      const poke = state.activeFighter.activePokemon.name
-      const playerData = { type: 6, value: 0 }
-      const enemyData = { type: diceUse(enemyXp), value: 0, poke }
-      commit('setDiceBattlePlayer', playerData)
-      commit('setDiceBattleEnemy', enemyData)
     },
     JOIN_TEAM({ commit }, data) {
       commit('joinTeam', data)

@@ -63,7 +63,7 @@
             <Enemy ref="enemies" :colors="colors" />
           </v-container>
           <v-container v-show="screen === 'arena'" class="pa-0">
-            <arena :colors="colors"></arena>
+            <arena :colors="colors" :screen="screen"></arena>
           </v-container>
           <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />
@@ -216,7 +216,6 @@ export default {
       this.$refs.players && this.$refs.players.saveActivePlayer();
     },
     diceModal(val) {
-      debugger;
       if (!val) {
         this.SET_DICE_BATTLE();
       }
@@ -235,9 +234,9 @@ export default {
 
   created() {
     this.fecthHabitats();
-    setInterval(() => {
-      this.$refs.players.saveProgress(this.slot);
-    }, 10000);
+    // setInterval(() => {
+    //   this.$refs.players.saveProgress(this.slot);
+    // }, 10000);
   },
 
   methods: {

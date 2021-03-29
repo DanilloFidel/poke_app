@@ -245,7 +245,6 @@ export default {
       const idx = this.sortedEnemy.pokemons.findIndex(
         (p) => p.name === pokemon
       );
-      debugger;
       let item = this.sortedEnemy.pokemons[idx];
       this.setPokemonStatus(item, idx);
     },
@@ -300,11 +299,9 @@ export default {
             const calls = pokes.map((p) => Http.get(`/pokemon/${p}`));
             Promise.allSettled(calls)
               .then((resp) => {
-                debugger;
                 return resp.filter((p) => p.status === "fulfilled");
               })
               .then((resp) => {
-                debugger;
                 return resp.map((p) => p.value.data);
               })
               .then((pokemons) => {
@@ -342,11 +339,9 @@ export default {
               );
               Promise.allSettled(calls)
                 .then((resp) => {
-                  debugger;
                   return resp.filter((p) => p.status === "fulfilled");
                 })
                 .then((resp) => {
-                  debugger;
                   return resp.map((p) => p.value.data);
                 })
                 .then((pokemons) => {
