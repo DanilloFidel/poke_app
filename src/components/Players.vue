@@ -163,7 +163,6 @@ import { mdiEmoticonDeadOutline } from "@mdi/js";
 import { mdiBottleTonicPlus } from "@mdi/js";
 import Http from "../plugins/http";
 
-import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 export default {
   data: () => ({
@@ -173,40 +172,6 @@ export default {
     tab: 0,
     addMenu: false,
     pokemons: [],
-    startPlayers: [
-      {
-        name: "Danillo",
-        xp: 0,
-        pokemons: [],
-      },
-      {
-        name: "Eduardo",
-        xp: 0,
-        pokemons: [],
-      },
-      {
-        name: "Matheus",
-        xp: 0,
-        pokemons: [],
-      },
-    ],
-    players: [
-      {
-        name: "Danillo",
-        xp: 0,
-        pokemons: [],
-      },
-      {
-        name: "Eduardo",
-        xp: 0,
-        pokemons: [],
-      },
-      {
-        name: "Matheus",
-        xp: 0,
-        pokemons: [],
-      },
-    ],
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -229,7 +194,13 @@ export default {
         0
       );
     },
-    ...mapState(["activeFighter", "types", "savedPlayers", "pokemonToTeam"]),
+    ...mapState([
+      "activeFighter",
+      "types",
+      "savedPlayers",
+      "pokemonToTeam",
+      "players",
+    ]),
     onTeam() {
       return this.activePlayer.pokemons.filter((p) => p.onTeam);
     },
@@ -237,11 +208,6 @@ export default {
   watch: {
     pokemonToTeam(obj) {
       obj.name && this.activePlayer.pokemons.push(obj);
-    },
-    tab(val) {
-      val !== null &&
-        val !== undefined &&
-        this.ADD_ACTIVE_PLAYER(this.players[val]);
     },
   },
   props: ["colors"],
@@ -251,20 +217,22 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["SET_PLAYERS", "ADD_ACTIVE_PLAYER"]),
+    ...mapActions([
+      "SAVE_GAME",
+      "UPDATE_PLAYER",
+      "SET_PLAYERS",
+      "REMOVE_PLAYERS_POKE",
+      "ADD_POKE_TO_PLAYER",
+    ]),
     removePokemon(item) {
       const idx = this.activePlayer.pokemons.findIndex(
         (p) => p.name === item.name
       );
-      Vue.delete(this.activePlayer.pokemons, idx);
-    },
-    saveActivePlayer() {
-      this.ADD_ACTIVE_PLAYER(this.players[this.tab]);
+      this.REMOVE_PLAYERS_POKE({ idx, playerIdx: this.tab });
     },
     moveTeam(pk, add = true) {
       const teamLength = this.activePlayer.pokemons.filter((p) => p.onTeam)
         .length;
-      const idx = this.activePlayer.pokemons.findIndex((p) => p.id === pk.id);
       const canAdd = teamLength < 6;
       let poke = {};
       if (!add) {
@@ -272,19 +240,19 @@ export default {
       } else {
         poke = { ...pk, onTeam: canAdd ? !pk["onTeam"] : false };
       }
-      Vue.set(this.activePlayer.pokemons, idx, poke);
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon: poke });
     },
     saveProgress(progressName = "slot-1") {
-      console.log("salvando...");
-      this.SET_PLAYERS({ progressName, players: this.players });
+      console.log("salvando...", progressName);
+      // this.SAVE_GAME({ progressName, players: this.players });
     },
-    load(slot) {
-      if (this.savedPlayers.length) {
-        const idx = this.savedPlayers.findIndex((s) => s.progressName === slot);
-        if (idx >= 0) {
-          this.players = this.savedPlayers[idx].players;
-        }
-      }
+    load() {
+      // if (this.savedPlayers.length) {
+      //   const idx = this.savedPlayers.findIndex((s) => s.progressName === slot);
+      //   if (idx >= 0) {
+      //     this.players = this.savedPlayers[idx].players;
+      //   }
+      // }
     },
     diceUse(xp) {
       let diceType = "d6";
@@ -301,9 +269,6 @@ export default {
     },
 
     sortInitials() {
-      this.players = [];
-      this.players = [...this.startPlayers];
-
       let starters = [
         [
           "charmander",
@@ -335,7 +300,7 @@ export default {
         ],
       ];
 
-      this.players.forEach((p) => {
+      this.players.forEach((p, idx, arr) => {
         const p1 = starters[0][Math.floor(Math.random() * starters[0].length)];
         starters[0] = starters[0].filter((p) => p !== p1);
         const p2 = starters[1][Math.floor(Math.random() * starters[1].length)];
@@ -356,7 +321,15 @@ export default {
               return pk;
             });
           })
-          .then((pokes) => (p.pokemons = pokes));
+          .then((pokes) => {
+            p.pokemons = pokes;
+            return p;
+          })
+          .then(() => {
+            if (idx === arr.length - 1) {
+              this.SET_PLAYERS(arr);
+            }
+          });
       });
     },
     defeatPokemon(pokemon) {
@@ -367,11 +340,8 @@ export default {
       this.changePokemonStatus(item);
     },
     changePokemonStatus(item, cure) {
-      const idx = this.activePlayer.pokemons.findIndex(
-        (p) => p.name === item.name
-      );
       item.defeated = cure ? false : !item.defeated;
-      Vue.set(this.activePlayer.pokemons, idx, item);
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon: item });
     },
     winBattle(pokemon) {
       const idx = this.activePlayer.pokemons.findIndex(
@@ -382,18 +352,16 @@ export default {
     },
     upPokemon(pokemon) {
       if (pokemon.isEvolving || pokemon.defeated) return;
-      const idx = this.activePlayer.pokemons.findIndex(
-        (p) => p.name === pokemon.name
-      );
       pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1;
-      Vue.set(this.activePlayer.pokemons, idx, pokemon);
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
       if (pokemon.wins == 10 || pokemon.wins == 20) {
+        console.log(pokemon);
         this.evolvePokemon(pokemon);
       }
     },
-    setEvolveEffect(idx, pokemon, evolving) {
+    setEvolveEffect(pokemon, evolving) {
       pokemon["isEvolving"] = evolving;
-      Vue.set(this.activePlayer.pokemons, idx, pokemon);
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
     },
     evolvePokemon(pokemon) {
       if (pokemon.name === "eevee") return;
@@ -405,13 +373,17 @@ export default {
 
       try {
         Http.get(`/pokemon-species/${pokemon.name}`)
-          .then((resp) => resp.data.evolution_chain)
+          .then((resp) => {
+            return resp.data.evolution_chain;
+          })
           .then((data) => {
             Http.get(data.url)
               .then((resp) => {
+                console.log(resp.data);
                 return resp.data.chain;
               })
               .then((chain) => {
+                console.log(chain.evolution_details);
                 if (chain.evolves_to.length) {
                   let evol = chain.evolves_to[0];
 
@@ -421,7 +393,7 @@ export default {
                   ) {
                     evol = evol.evolves_to[0];
                   }
-
+                  console.log("d", evol.evolution_details);
                   Http.get(evol.species.url).then((resp) => {
                     Http.get(`pokemon/${resp.data.name}`)
                       .then((resp) => {
@@ -440,7 +412,7 @@ export default {
       pokemon["onTeam"] = oldPokemon.onTeam;
       pokemon["wins"] = oldPokemon.wins;
       pokemon["defeated"] = oldPokemon.defeated;
-      Vue.set(this.activePlayer.pokemons, idx, pokemon);
+      this.UPDATE_PLAYER({ idx, poke: pokemon, playerIdx: this.tab });
     },
     openAddModal() {
       this.addMenu = !this.addMenu;
@@ -448,7 +420,7 @@ export default {
     closeAndAdd(name) {
       this.addMenu = false;
       Http.get(`pokemon/${name}`).then((resp) => {
-        this.activePlayer.pokemons.push(resp.data);
+        this.ADD_POKE_TO_PLAYER({ poke: resp.data, playerIdx: this.tab });
       });
     },
     cureAll() {

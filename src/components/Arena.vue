@@ -13,7 +13,7 @@
       <div class="enemy-pokeballs">
         <img
           class="mx-2"
-          v-for="(n, idx) in activeFighter.pokemons"
+          v-for="(n, idx) in filteredEnemyPokes()"
           :key="`enemy-ball-${idx}`"
           width="20px"
           :style="{
@@ -25,10 +25,10 @@
       </div>
     </div>
 
-    <div class="arena">
+    <div class="arena" v-if="filteredEnemyPokes()">
       <div class="enemy-side side">
         <div
-          v-if="activeFighter.pokemons.filter((p) => !p.isDefeated).length"
+          v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"
           class="pokemon"
           v-ripple
           @click="playerHit < 3 && rollDice('player')"
@@ -36,7 +36,7 @@
           <img
             :style="{ opacity: playerDice > enemyDice ? 0.4 : 1 }"
             :src="
-              activeFighter.pokemons.filter((p) => !p.isDefeated)[0].sprites
+              filteredEnemyPokes().filter((p) => !p.isDefeated)[0].sprites
                 .front_default
             "
             alt=""
@@ -49,15 +49,15 @@
         </div>
         <div
           class="info-box"
-          v-if="activeFighter.pokemons.filter((p) => !p.isDefeated).length"
+          v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"
         >
           <p class="overline pokemon-name">
-            {{ activeFighter.pokemons.filter((p) => !p.isDefeated)[0].name }}
+            {{ filteredEnemyPokes().filter((p) => !p.isDefeated)[0].name }}
           </p>
           <p>
             Dado: D{{
               getDiceType(
-                activeFighter.pokemons.filter((p) => !p.isDefeated)[0]
+                filteredEnemyPokes().filter((p) => !p.isDefeated)[0]
                   .base_experience
               )
             }}
@@ -67,7 +67,7 @@
             outlined
             label
             class="mt-2 mr-2 overline elevation-3"
-            v-for="(item, idx) in activeFighter.pokemons.filter(
+            v-for="(item, idx) in filteredEnemyPokes().filter(
               (p) => !p.isDefeated
             )[0].types"
             :key="idx"
@@ -104,10 +104,10 @@
             class="img"
           />
         </div>
-        <div v-else>
+        <div v-else-if="selectedPlayer.pokemons">
           <v-select
             :items="
-              activePlayer.pokemons
+              selectedPlayer.pokemons
                 .filter((p) => !p.isDefeated)
                 .filter((p, i) => i <= 5)
             "
@@ -124,11 +124,20 @@
         src="../assets/sprites/trainer.png"
         class="player"
       />
-      <b v-if="activePlayer" class="player-name">{{ activePlayer.name }}</b>
-      <div class="player-pokeballs">
+      <b v-if="selectedPlayer.name" class="player-name">{{
+        selectedPlayer.name
+      }}</b>
+      <v-select
+        v-else
+        v-model="selectedPlayer"
+        :items="players"
+        item-text="name"
+        return-object
+      ></v-select>
+      <div class="player-pokeballs" v-if="selectedPlayer.pokemons">
         <img
           class="mx-2"
-          v-for="(n, idx) in activePlayer.pokemons.filter((p, i) => i <= 5)"
+          v-for="(n, idx) in selectedPlayer.pokemons.filter((p, i) => i <= 5)"
           :key="`player-ball-${idx}`"
           width="20px"
           :style="{
@@ -160,15 +169,13 @@ export default {
     loading: false,
     diceType: 6,
     enemyPokeIdx: 0,
+    selectedPlayer: {},
   }),
   computed: {
-    activePlayer() {
-      return cloneDeep(this.$store.state.activePlayer);
-    },
     activeFighter() {
       return cloneDeep(this.$store.state.activeFighter);
     },
-    ...mapState(["types", "savedPlayers", "pokemonToTeam"]),
+    ...mapState(["types", "savedPlayers", "pokemonToTeam", "players"]),
     giftPokemon() {
       return this.$store.state.activeFighter.pokemons[
         Math.floor(Math.random() * this.activeFighter.pokemons.length)
@@ -180,9 +187,11 @@ export default {
   },
   watch: {
     playerHit() {
+      console.log(this.enemyHit + this.playerHit);
       if (this.enemyHit + this.playerHit >= this.totalHits) this.finishBattle();
     },
     enemyHit() {
+      console.log(this.enemyHit + this.playerHit);
       if (this.enemyHit + this.playerHit >= this.totalHits) this.finishBattle();
     },
     screen(name) {
@@ -196,7 +205,7 @@ export default {
   },
   props: ["colors", "screen"],
   methods: {
-    ...mapActions(["UPDATE_ENEMY", "UPDATE_PLAYER", "CURE_ALL"]),
+    ...mapActions(["UPDATE_ENEMY", "CURE_ALL", "UPDATE_ON_END_BATTLE"]),
     getDiceType(xp) {
       let diceType = 6;
       if (xp >= 120) {
@@ -210,13 +219,40 @@ export default {
       }
       return diceType;
     },
+    filteredEnemyPokes() {
+      debugger;
+      if (!this.selectedPlayer.pokemons || !this.activeFighter.pokemons) {
+        return this.activeFighter.pokemons
+          ? [...this.activeFighter.pokemons]
+          : [];
+      }
+
+      let pokemons = [...this.activeFighter.pokemons];
+      let qtd = 6;
+      const xp = this.selectedPlayer.pokemons.reduce(
+        (acc, el) => (acc += el.base_experience),
+        0
+      );
+      if (xp <= 300) qtd = 3;
+      else if (xp <= 650) qtd = 4;
+      else if (xp <= 900) qtd = 4;
+      else if (xp <= 1000) qtd = 5;
+      else if (xp <= 1500) qtd = 6;
+      return pokemons.splice(0, qtd);
+    },
     restoreAll(name) {
+      debugger;
       const isPlayer = name === "player";
       const pks = isPlayer
-        ? this.activePlayer.pokemons
+        ? this.selectedPlayer.pokemons
         : this.activeFighter.pokemons;
       pks.forEach((p) => (p.isDefeated = false));
-      this.CURE_ALL({ pks, isPlayer });
+      // let playerIdx = false;
+      if (isPlayer)
+        this.selectedPlayer = { ...this.selectedPlayer, pokemons: pks };
+      else {
+        this.CURE_ALL({ pks });
+      }
     },
     finishBattle() {
       const playerWins = this.playerDice > this.enemyDice;
@@ -229,12 +265,16 @@ export default {
         )[0];
         firstPoke.isDefeated = true;
         this.UPDATE_ENEMY({ pokemon: firstPoke });
+        if (this.activeFighter.pokemons.every((p) => p.isDefeated))
+          this.UPDATE_ON_END_BATTLE({
+            name: this.selectedPlayer.name,
+            pokemons: this.selectedPlayer.pokemons,
+          });
       } else {
-        const firstPoke = this.activePokemon;
-        firstPoke.isDefeated = true;
-        this.UPDATE_PLAYER({ pokemon: firstPoke });
-        console.log("enemy wins");
+        this.activePokemon.isDefeated = true;
         this.activePokemon = {};
+        if (this.filteredEnemyPokes().every((p) => p.isDefeated))
+          this.selectedPlayer = {};
       }
       this.resetScores();
     },
@@ -355,6 +395,7 @@ export default {
 .info-box {
   &--player {
     align-self: self-start;
+    padding-left: 10%;
   }
 }
 

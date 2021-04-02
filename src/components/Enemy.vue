@@ -252,20 +252,6 @@ export default {
       const pk = this.sortedEnemy.pokemons[idx - 1];
       return (pk && pk.defeated) || idx === 0;
     },
-    removeByExp(pokemons) {
-      let qtd = 6;
-      const xp = this.activePlayer.pokemons.reduce(
-        (acc, el) => (acc += el.base_experience),
-        0
-      );
-      console.log(xp);
-      if (xp <= 300) qtd = 3;
-      else if (xp <= 650) qtd = 4;
-      else if (xp <= 900) qtd = 4;
-      else if (xp <= 1000) qtd = 5;
-      else if (xp <= 1500) qtd = 6;
-      return pokemons.splice(0, qtd);
-    },
     getRandomPokes() {
       return new Promise((resolve) => {
         Http.get("pokemon?limit=1118").then((resp) => {
@@ -288,12 +274,12 @@ export default {
     setLeader(leader, isGymLeader) {
       this.loading = true;
       if (!leader.pokemons.some((p) => p.name)) {
-        if (this.sortedEnemy.isPlayer) {
-          this.setPlayerAsEnemy();
-          this.setNextPokemon(0);
-          this.loading = false;
-          return;
-        }
+        // if (this.sortedEnemy.isPlayer) {
+        //   this.setPlayerAsEnemy();
+        //   this.setNextPokemon(0);
+        //   this.loading = false;
+        //   return;
+        // }
         if (!isGymLeader) {
           this.getRandomPokes().then((pokes) => {
             const calls = pokes.map((p) => Http.get(`/pokemon/${p}`));
@@ -305,9 +291,8 @@ export default {
                 return resp.map((p) => p.value.data);
               })
               .then((pokemons) => {
-                const poks = isGymLeader
-                  ? pokemons
-                  : this.removeByExp(pokemons);
+                const poks = pokemons;
+
                 this.sortedEnemy = { ...leader, pokemons: poks };
 
                 this.setNextPokemon(0);

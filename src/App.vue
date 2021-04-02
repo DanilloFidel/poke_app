@@ -11,10 +11,6 @@
             />
           </v-btn>
 
-          <v-btn icon @click="setupDiceBattle">
-            <img width="25px" height="25px" src="./assets/d6.svg" />
-          </v-btn>
-
           <v-btn icon @click="screen = 'pokeEncounter'">
             <img width="25px" height="25px" src="./assets/pikachu.svg" />
           </v-btn>
@@ -71,73 +67,6 @@
         </div>
       </v-row>
     </v-container>
-
-    <v-dialog v-model="diceModal">
-      <v-card color="white" class="pa-3" style="height: 60vh">
-        <v-row dense v-if="activePlayer.pokemons">
-          <v-select
-            :items="
-              activePlayer.pokemons.filter((p) => p.onTeam && !p.defeated)
-            "
-            item-text="name"
-            v-model="battlePokemon"
-            return-object
-            @change="setPlayerPokemonInBattle"
-          ></v-select>
-        </v-row>
-        <v-row dense style="height: 35%"
-          ><v-col cols="12" style="height: 15%">
-            <span
-              >Adversário: {{ diceBattle.enemy.poke }}
-              <b class="ml-5">D{{ diceBattle.enemy.type }}</b></span
-            >
-          </v-col>
-          <v-row dense justify="center" align="center">
-            <v-col
-              cols="4"
-              @click="sortBattleDice('enemy')"
-              class="dice_main"
-              :style="{
-                border: `1px solid ${
-                  diceBattle.enemy.value > diceBattle.player.value
-                    ? 'green'
-                    : 'black'
-                }`,
-              }"
-            >
-              {{ diceBattle.enemy.value }}</v-col
-            >
-          </v-row>
-        </v-row>
-        <v-row dense style="height: 35%"
-          ><v-col cols="12" style="height: 15%">
-            <span
-              >Jogador: {{ diceBattle.player.poke
-              }}<b class="ml-5">D{{ diceBattle.player.type }}</b></span
-            >
-          </v-col>
-          <v-row dense justify="center" align="center">
-            <v-col
-              cols="4"
-              @click="sortBattleDice('player')"
-              class="dice_main"
-              :style="{
-                border: `1px solid ${
-                  diceBattle.player.value > diceBattle.enemy.value
-                    ? 'green'
-                    : 'black'
-                }`,
-              }"
-            >
-              {{ diceBattle.player.value }}</v-col
-            >
-          </v-row>
-        </v-row>
-        <v-row dense class="d-flex mt-3" style="justofy-content: flex-end">
-          <v-btn @click="endBattle" x-small>Finalizar</v-btn>
-        </v-row>
-      </v-card>
-    </v-dialog>
   </v-app>
 </template>
 
@@ -212,9 +141,6 @@ export default {
   },
 
   watch: {
-    screen() {
-      this.$refs.players && this.$refs.players.saveActivePlayer();
-    },
     diceModal(val) {
       if (!val) {
         this.SET_DICE_BATTLE();
@@ -254,29 +180,6 @@ export default {
         })
         .finally(() => (this.btnLoading = false));
     },
-    setupDiceBattle() {
-      this.diceModal = !this.diceModal;
-      this.SET_DICE_BATTLE();
-      if (this.diceModal) {
-        this.setPlayerPokemonInBattle(this.battlePokemon);
-      }
-    },
-    sortBattleDice(to) {
-      const type = this.diceBattle[to].type;
-      const value = Math.floor(Math.random() * type) + 1;
-      this.SET_VALUE_DICE_BATTLE({
-        val: value,
-        name: to,
-      });
-      console.log(value);
-    },
-    setPlayerPokemonInBattle(poke) {
-      this.SET_SINGLE_DICE_BATTLE({
-        val: poke.base_experience,
-        poke: poke.name,
-        name: "player",
-      });
-    },
     loadProgress(slot) {
       this.$refs.players.load(slot);
     },
@@ -292,38 +195,9 @@ export default {
         })
         .finally(() => (this.btnLoading = false));
     },
-    sortDices() {
-      this.diceValue = Math.floor(Math.random() * 6) + 1;
-    },
     sortInitials() {
       if (confirm("desejar iniciar um novo jogo?")) {
         this.$refs.players.sortInitials();
-      }
-    },
-    endBattle() {
-      if (this.diceBattle.player.value > this.diceBattle.enemy.value) {
-        this.$refs.enemies.defeatePokemon(this.diceBattle.enemy.poke);
-        this.$refs.players.winBattle(this.diceBattle.player.poke);
-
-        const nextPoke = this.activeFighter.pokemons.filter(
-          (p) => !p.defeated
-        )[0];
-
-        if (this.activeFighter.pokemons.every((p) => p.defeated)) {
-          this.diceModal = false;
-          this.screen = "enemies";
-        } else {
-          this.SET_SINGLE_DICE_BATTLE({
-            name: "enemie",
-            val: nextPoke.base_experience,
-            poke: nextPoke.name,
-          });
-          this.setPlayerPokemonInBattle(this.battlePokemon);
-        }
-      } else if (this.diceBattle.player.value < this.diceBattle.enemy.value) {
-        this.$refs.players.defeatPokemon(this.diceBattle.player.poke);
-        this.battlePokemon = {};
-        this.diceModal = false;
       }
     },
     async sortPokemon() {
