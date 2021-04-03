@@ -412,8 +412,6 @@ export default {
   }
   justify-content: flex-start;
   display: flex;
-  height: 200px;
-  width: 180px;
 }
 
 .img {

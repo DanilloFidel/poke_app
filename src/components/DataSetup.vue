@@ -1,16 +1,5 @@
 <template>
-  <v-row dense class="ml-3">
-    <v-col cols="8"
-      ><v-select
-        v-model="slot"
-        :items="slots"
-        label="Savar jogo"
-        @change="$emit('update-slot', $event)"
-      ></v-select
-    ></v-col>
-    <v-col cols="8"
-      ><v-select :items="slots" label="Carregar jogo" @change="load"></v-select
-    ></v-col>
+  <v-row dense class="ma-4">
     <v-col cols="8"><v-btn @click="$emit('new-game')">Novo jogo</v-btn></v-col>
   </v-row>
 </template>
