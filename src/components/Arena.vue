@@ -127,7 +127,9 @@
     </div>
     <div class="bar">
       <img
-        @click="restoreAll('player')"
+        @click="
+          restoreAll('player'), (selectedPlayer = {}), (activePokemon = {})
+        "
         src="../assets/sprites/trainer.png"
         class="player"
       />
