@@ -26,7 +26,13 @@
           <v-btn icon @click="screen = 'data'">
             <img width="25px" height="25px" src="./assets/pokeball.svg" />
           </v-btn>
-          <v-btn icon @click="screen = 'arena'">
+          <v-btn
+            icon
+            @click="
+              screen = 'arena';
+              removePlayer;
+            "
+          >
             <img width="25px" height="25px" src="./assets/d6.svg" />
           </v-btn>
         </v-app-bar>
@@ -59,7 +65,7 @@
             <Enemy ref="enemies" :colors="colors" />
           </v-container>
           <v-container v-show="screen === 'arena'" class="pa-0">
-            <arena :colors="colors" :screen="screen"></arena>
+            <arena :colors="colors" :screen="screen" ref="arena"></arena>
           </v-container>
           <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
             <TypesCompare :colors="colors" />
@@ -228,6 +234,9 @@ export default {
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
       // this.searchPokemon(selected.url);
+    },
+    removePlayer() {
+      this.$refs.arena.selectedPlayer = {};
     },
     setDiceDifficult() {
       this.simpleChance = true;
