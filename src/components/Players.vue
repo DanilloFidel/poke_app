@@ -420,7 +420,13 @@ export default {
     closeAndAdd(name) {
       this.addMenu = false;
       Http.get(`pokemon/${name}`).then((resp) => {
-        this.ADD_POKE_TO_PLAYER({ poke: resp.data, playerIdx: this.tab });
+        const poke = resp.data;
+        delete poke.abilities;
+        delete poke.forms;
+        delete poke.species;
+        delete poke.stats;
+        delete poke.moves;
+        this.ADD_POKE_TO_PLAYER({ poke, playerIdx: this.tab });
       });
     },
     cureAll() {

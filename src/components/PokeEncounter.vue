@@ -101,11 +101,11 @@
 </template>
 
 <script>
-import Http from '../plugins/http'
-import { mdiAccountCheckOutline } from '@mdi/js'
-import { mapActions } from 'vuex'
+import Http from "../plugins/http";
+import { mdiAccountCheckOutline } from "@mdi/js";
+import { mapActions } from "vuex";
 export default {
-  name: 'PokeEncounter',
+  name: "PokeEncounter",
   data: () => ({
     joinTeamIcon: mdiAccountCheckOutline,
     fab: false,
@@ -114,110 +114,115 @@ export default {
     btnLoading: false,
     habitats: [
       {
-        name: 'random all',
-        url: 'https://pokeapi.co/api/v2/pokemon?limit=1118',
+        name: "random all",
+        url: "https://pokeapi.co/api/v2/pokemon?limit=1118",
       },
     ],
     selectedPokemon: {},
-    selectedHabitat: '',
+    selectedHabitat: "",
     diceValue: 1,
     diceValue2: 1,
     simpleChance: true,
-    diceType: 'single_d6',
+    diceType: "single_d6",
     showSecondDice: true,
   }),
 
   computed: {
     diceImg() {
-      return require(`../assets/${this.diceType}.svg`)
+      return require(`../assets/${this.diceType}.svg`);
     },
   },
 
-  props: ['colors'],
+  props: ["colors"],
 
   created() {
-    this.fecthHabitats()
+    this.fecthHabitats();
   },
 
   methods: {
     ...mapActions(["JOIN_TEAM"]),
     fecthHabitats() {
-      this.btnLoading = true
-      Http.get('/pokemon-habitat')
+      this.btnLoading = true;
+      Http.get("/pokemon-habitat")
         .then((resp) => {
-          this.habitats = [...this.habitats, ...resp.data.results]
+          this.habitats = [...this.habitats, ...resp.data.results];
         })
-        .finally(() => (this.btnLoading = false))
+        .finally(() => (this.btnLoading = false));
     },
     changeHabitat(url) {
-      this.btnLoading = true
+      this.btnLoading = true;
       fetch(url)
         .then((resp) => resp.json())
         .then((data) => {
           this.pokemons = data.pokemon_species
             ? data.pokemon_species
-            : data.results
-          this.sortPokemon()
+            : data.results;
+          this.sortPokemon();
         })
-        .finally(() => (this.btnLoading = false))
+        .finally(() => (this.btnLoading = false));
     },
     getSprite(type) {
-      return this.selectedPokemon.sprites[type]
+      return this.selectedPokemon.sprites[type];
     },
     sortDices() {
-      const t = this.diceType.split('d')
-      const range = t[1]
-      this.diceValue = Math.floor(Math.random() * range) + 1
-      this.diceValue2 = Math.floor(Math.random() * range) + 1
+      const t = this.diceType.split("d");
+      const range = t[1];
+      this.diceValue = Math.floor(Math.random() * range) + 1;
+      this.diceValue2 = Math.floor(Math.random() * range) + 1;
     },
     async sortPokemon() {
-      this.loading = true
-      const idx = Math.floor(Math.random() * this.pokemons.length)
-      const selected = this.pokemons[idx]
+      this.loading = true;
+      const idx = Math.floor(Math.random() * this.pokemons.length);
+      const selected = this.pokemons[idx];
 
       try {
         let pokemonInfo = await Http.get(
           `/pokemon-species/${selected.name}`
-        ).then((resp) => resp.data)
+        ).then((resp) => resp.data);
         let pokemonInfo2 = await Http.get(`/pokemon/${selected.name}`).then(
           (resp) => resp.data
-        )
+        );
 
         setTimeout(() => {
-          this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 }
+          this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 };
           if (
             this.selectedPokemon.sprites &&
             !this.selectedPokemon.sprites.front_default
           ) {
-            this.sortPokemon()
+            this.sortPokemon();
           } else {
-            this.setDiceDifficult()
-            this.loading = false
+            this.setDiceDifficult();
+            this.loading = false;
           }
-        }, 1500)
+        }, 1500);
       } catch (error) {
-        this.loading = false
-        alert('Ocorreu um erro ao carregar o Pokemon')
+        this.loading = false;
+        alert("Ocorreu um erro ao carregar o Pokemon");
       }
     },
-    joinTeam(){
-      this.JOIN_TEAM(this.selectedPokemon)
+    joinTeam() {
+      delete this.selectedPokemon.abilities;
+      delete this.selectedPokemon.forms;
+      delete this.selectedPokemon.species;
+      delete this.selectedPokemon.stats;
+      delete this.selectedPokemon.moves;
+      this.JOIN_TEAM(this.selectedPokemon);
     },
     setDiceDifficult() {
-      this.diceType = 'd6'
+      this.diceType = "d6";
       if (this.selectedPokemon.base_experience >= 120) {
-        this.diceType = 'd8'
+        this.diceType = "d8";
       }
       if (this.selectedPokemon.base_experience >= 170) {
-        this.diceType = 'd8'
+        this.diceType = "d8";
       }
       if (this.selectedPokemon.base_experience >= 200) {
-        this.diceType = 'd20'
+        this.diceType = "d20";
       }
-      this.sortDices()
+      this.sortDices();
     },
   },
-}
+};
 </script>
 
 <style scoped>

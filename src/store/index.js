@@ -43,6 +43,13 @@ export default new Vuex.Store({
   },
   mutations: {
     setActiveFighter(state, data) {
+      data.pokemons.forEach(poke => {
+        delete poke.abilities;
+        delete poke.forms;
+        delete poke.species;
+        delete poke.stats;
+        delete poke.moves;
+      })
       state.activeFighter = data
     },
     setActivePlayer(state, data) {

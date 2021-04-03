@@ -114,9 +114,7 @@
         <div v-else-if="selectedPlayer.pokemons">
           <v-select
             :items="
-              selectedPlayer.pokemons
-                .filter((p) => !p.isDefeated)
-                .filter((p, i) => i <= 5)
+              selectedPlayer.pokemons.filter((p) => !p.isDefeated && p.onTeam)
             "
             item-text="name"
             return-object
@@ -136,13 +134,22 @@
       <b v-if="selectedPlayer.name" class="player-name">{{
         selectedPlayer.name
       }}</b>
-      <v-select
+      <div
         v-else
-        v-model="selectedPlayer"
-        :items="players"
-        item-text="name"
-        return-object
-      ></v-select>
+        style="position: absolute; right: -20px; transform: scale(0.8)"
+      >
+        <v-chip
+          small
+          outlined
+          @click="selectedPlayer = player"
+          label
+          v-for="(player, idx) in players"
+          :key="`player_option_${idx}`"
+          class="mt-2 mr-2 overline elevation-3"
+          >{{ player.name }}</v-chip
+        >
+      </div>
+
       <div class="player-pokeballs" v-if="selectedPlayer.pokemons">
         <img
           class="mx-2"
