@@ -52,11 +52,11 @@ export default new Vuex.Store({
       state.players = data
     },
     updatePlayer(state, pokes) {
-      debugger
+
       state.activePlayer.pokemons = pokes;
     },
     updateEnemy(state, pokes) {
-      debugger
+
       state.activeFighter.pokemons = pokes;
     },
     saveState(state, data) {
@@ -119,7 +119,7 @@ export default new Vuex.Store({
       commit('removePlayersPoke', { idx, playerIdx })
     },
     UPDATE_ENEMY({ commit, state }, data) {
-      debugger
+
       let pokes = state.activeFighter.pokemons
       try {
         const idx = pokes.findIndex(p => p.name === data.pokemon.name);

@@ -61,24 +61,8 @@ export default {
   data: () => ({
     types: [],
   }),
-  created() {
-    Http.get(`/type`)
-      .then((resp) => resp.data.results.map((r) => r))
-      .then((types) => {
-        const calls = types.map((type) => Http.get(`/type/${type.name}`));
-        Promise.all(calls)
-          .then((resp) => resp.map((r) => r.data))
-          .then((datas) => {
-            this.types = datas.filter(
-              (t) => !["unknown", "shadow"].includes(t.name)
-            );
-            this.SET_TYPES(this.types);
-          });
-      });
-  },
-  methods: {
-    ...mapActions(["SET_TYPES"]),
-  },
+  created() {},
+  methods: {},
 };
 </script>
 

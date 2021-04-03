@@ -31,7 +31,7 @@
           v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"
           class="pokemon"
           v-ripple
-          @click="playerHit < 3 && rollDice('player')"
+          @click="checkPlayerHit() && rollDice('player')"
         >
           <img
             :style="{ opacity: playerDice > enemyDice ? 0.4 : 1 }"
@@ -72,7 +72,8 @@
             )[0].types"
             :key="idx"
             :color="colors[item.type.name]"
-            >{{ item.type.name }} - {{ getTypeBattle(item.type.name) }}</v-chip
+            >{{ item.type.name }} -
+            {{ getTypeBattle(item, item.type.name, "activeFighter") }}</v-chip
           >
         </div>
       </div>
@@ -88,14 +89,15 @@
             v-for="(item, idx) in activePokemon.types"
             :key="idx"
             :color="colors[item.type.name]"
-            >{{ item.type.name }} - {{ getTypeBattle(item.type.name) }}</v-chip
+            >{{ item.type.name }} -
+            {{ getTypeBattle(item, item.type.name, "activePokemon") }}</v-chip
           >
         </div>
         <div
           v-if="activePokemon.name"
           class="pokemon pokemon-player"
           v-ripple
-          @click="enemyHit < 3 && rollDice('enemy')"
+          @click="checkEnemyHit() && rollDice('enemy')"
         >
           <span>{{ playerDice }}</span>
           <img
@@ -152,7 +154,7 @@
 </template>
 
 <script>
-// import Http from "../plugins/http";
+import Http from "../plugins/http";
 // import Vue from "vue";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState } from "vuex";
@@ -161,9 +163,10 @@ export default {
   name: "ArenaComponent",
   data: () => ({
     activePokemon: {},
-    totalHits: 6,
     enemyHit: 0,
     playerHit: 0,
+    enemyHits: 0,
+    playerHits: 0,
     enemyDice: 0,
     playerDice: 0,
     loading: false,
@@ -181,17 +184,31 @@ export default {
         Math.floor(Math.random() * this.activeFighter.pokemons.length)
       ];
     },
+    totalHits() {
+      return this.enemyHits + this.playerHits;
+    },
   },
   created() {
     console.log(this.$store.state);
+    Http.get(`/type`)
+      .then((resp) => resp.data.results.map((r) => r))
+      .then((types) => {
+        const calls = types.map((type) => Http.get(`/type/${type.name}`));
+        Promise.all(calls)
+          .then((resp) => resp.map((r) => r.data))
+          .then((datas) => {
+            const types = datas.filter(
+              (t) => !["unknown", "shadow"].includes(t.name)
+            );
+            this.SET_TYPES(types);
+          });
+      });
   },
   watch: {
     playerHit() {
-      console.log(this.enemyHit + this.playerHit);
       if (this.enemyHit + this.playerHit >= this.totalHits) this.finishBattle();
     },
     enemyHit() {
-      console.log(this.enemyHit + this.playerHit);
       if (this.enemyHit + this.playerHit >= this.totalHits) this.finishBattle();
     },
     screen(name) {
@@ -205,7 +222,12 @@ export default {
   },
   props: ["colors", "screen"],
   methods: {
-    ...mapActions(["UPDATE_ENEMY", "CURE_ALL", "UPDATE_ON_END_BATTLE"]),
+    ...mapActions([
+      "UPDATE_ENEMY",
+      "CURE_ALL",
+      "UPDATE_ON_END_BATTLE",
+      "SET_TYPES",
+    ]),
     getDiceType(xp) {
       let diceType = 6;
       if (xp >= 120) {
@@ -219,8 +241,15 @@ export default {
       }
       return diceType;
     },
-    filteredEnemyPokes() {
+    checkPlayerHit() {
       debugger;
+      return this.playerHit < this.playerHits;
+    },
+    checkEnemyHit() {
+      debugger;
+      return this.enemyHit < this.enemyHits;
+    },
+    filteredEnemyPokes() {
       if (!this.selectedPlayer.pokemons || !this.activeFighter.pokemons) {
         return this.activeFighter.pokemons
           ? [...this.activeFighter.pokemons]
@@ -241,7 +270,6 @@ export default {
       return pokemons.splice(0, qtd);
     },
     restoreAll(name) {
-      debugger;
       const isPlayer = name === "player";
       const pks = isPlayer
         ? this.selectedPlayer.pokemons
@@ -278,37 +306,48 @@ export default {
       }
       this.resetScores();
     },
-    getTypeBattle(type_player_poke) {
-      if (!this.activeFighter.name) return "N/A";
+    getTypeBattle(poke, type_player_poke, active) {
+      const hitName = active === "activeFighter" ? "enemyHits" : "playerHits";
+      if (!this.activePokemon.types || !this.activeFighter.activePokemon)
+        return "N/A";
 
-      const enemyTypes = this.activeFighter.activePokemon.types.map(
-        (t) => t.type.name
-      );
-      const enemyTypesInfo = this.types.filter((t) =>
-        enemyTypes.includes(t.name)
-      );
-      const enemyTypesWins = enemyTypesInfo.map((t) =>
+      const isFromEnemy = active === "activeFighter";
+      let adversaryTypes = [];
+
+      if (isFromEnemy) {
+        adversaryTypes = this.activePokemon.types.map((t) => t.type.name);
+      } else {
+        adversaryTypes = this.activeFighter.activePokemon.types.map(
+          (t) => t.type.name
+        );
+      }
+
+      let typesInfo = this.types.filter((t) => adversaryTypes.includes(t.name));
+      let typesWins = typesInfo.map((t) =>
         t.damage_relations.double_damage_to.map((x) => x.name)
       );
 
-      const enemyTypesLoses = enemyTypesInfo.map((t) =>
+      let typesLoses = typesInfo.map((t) =>
         t.damage_relations.double_damage_from.map((x) => x.name)
       );
 
       if (
-        enemyTypesLoses.flat().includes(type_player_poke) &&
-        !enemyTypesWins.flat().includes(type_player_poke)
+        typesLoses.flat().includes(type_player_poke) &&
+        !typesWins.flat().includes(type_player_poke)
       ) {
+        this[hitName] = 3;
         return "W";
       } else if (
-        !enemyTypesLoses.flat().includes(type_player_poke) &&
-        !enemyTypesWins.flat().includes(type_player_poke)
+        !typesLoses.flat().includes(type_player_poke) &&
+        !typesWins.flat().includes(type_player_poke)
       ) {
+        this[hitName] = 3;
         return "E";
       } else if (
-        !enemyTypesLoses.flat().includes(type_player_poke) &&
-        enemyTypesWins.flat().includes(type_player_poke)
+        !typesLoses.flat().includes(type_player_poke) &&
+        typesWins.flat().includes(type_player_poke)
       ) {
+        this[hitName] = 2;
         return "L";
       }
     },
