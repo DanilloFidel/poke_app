@@ -42,13 +42,12 @@
             alt=""
             class="img"
           />
-          <span>{{ enemyDice }}</span>
         </div>
         <div v-else>
           {{ giftPokemon.name }}
         </div>
         <div
-          class="info-box"
+          class="info-box ml-5"
           v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"
         >
           <p class="overline pokemon-name">
@@ -61,37 +60,44 @@
                   .base_experience
               )
             }}
+            / valor: <b>{{ enemyDice }}</b>
           </p>
-          <v-chip
-            x-small
-            outlined
-            label
-            class="mt-2 mr-2 overline elevation-3"
+          <div
             v-for="(item, idx) in filteredEnemyPokes().filter(
               (p) => !p.isDefeated
             )[0].types"
             :key="idx"
-            :color="colors[item.type.name]"
-            >{{ item.type.name }} -
-            {{ getTypeBattle(item, item.type.name, "activeFighter") }}</v-chip
           >
+            <v-chip
+              x-small
+              outlined
+              label
+              class="mt-2 mr-2 overline elevation-3"
+              :color="colors[item.type.name]"
+              >{{ item.type.name }} -
+              {{ getTypeBattle(item, item.type.name, "activeFighter") }}</v-chip
+            ><br />
+          </div>
         </div>
       </div>
       <div class="player-side side">
-        <div class="info-box info-box--player">
+        <div class="info-box info-box--player mr-5">
           <p class="overline pokemon-name">{{ activePokemon.name }}</p>
-          <p>Dado: D{{ getDiceType(activePokemon.base_experience) }}</p>
-          <v-chip
-            x-small
-            outlined
-            label
-            class="mt-2 mr-2 overline elevation-3"
-            v-for="(item, idx) in activePokemon.types"
-            :key="idx"
-            :color="colors[item.type.name]"
-            >{{ item.type.name }} -
-            {{ getTypeBattle(item, item.type.name, "activePokemon") }}</v-chip
-          >
+          <p>
+            Dado: D{{ getDiceType(activePokemon.base_experience) }} / valor:
+            <b>{{ playerDice }}</b>
+          </p>
+          <div v-for="(item, idx) in activePokemon.types" :key="idx">
+            <v-chip
+              x-small
+              outlined
+              label
+              class="mt-2 mr-2 overline elevation-3"
+              :color="colors[item.type.name]"
+              >{{ item.type.name }} -
+              {{ getTypeBattle(item, item.type.name, "activePokemon") }}</v-chip
+            ><br />
+          </div>
         </div>
         <div
           v-if="activePokemon.name"
@@ -99,7 +105,6 @@
           v-ripple
           @click="checkEnemyHit() && rollDice('enemy')"
         >
-          <span>{{ playerDice }}</span>
           <img
             :style="{ opacity: playerDice < enemyDice ? 0.4 : 1 }"
             :src="activePokemon.sprites.back_default"
