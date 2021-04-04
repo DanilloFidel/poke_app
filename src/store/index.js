@@ -110,9 +110,16 @@ export default new Vuex.Store({
     CURE_ALL({ commit }, { pks }) {
       commit('updateEnemy', pks);
     },
-    UPDATE_PLAYER({ commit, state }, { name, pokemon }) {
+    UPDATE_PLAYER({ commit, state }, { name, pokemon, isEvolve, oldPokemon }) {
       const playerIdx = state.players.findIndex(p => p.name === name);
-      const idx = state.players[playerIdx].pokemons.findIndex(p => p.id === pokemon.id)
+      let idx = -1;
+      if (isEvolve) {
+        idx = state.players[playerIdx].pokemons.findIndex(p => p.id === oldPokemon.id)
+
+      } else {
+
+        idx = state.players[playerIdx].pokemons.findIndex(p => p.id === pokemon.id)
+      }
       commit('updatePlayersPoke', { idx, poke: pokemon, playerIdx })
     },
     ADD_POKE_TO_PLAYER({ commit }, { poke, playerIdx }) {

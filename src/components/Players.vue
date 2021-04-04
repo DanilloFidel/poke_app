@@ -365,11 +365,8 @@ export default {
     },
     evolvePokemon(pokemon) {
       if (pokemon.name === "eevee") return;
-      const idx = this.activePlayer.pokemons.findIndex(
-        (p) => p.name === pokemon.name
-      );
 
-      this.setEvolveEffect(idx, pokemon, true);
+      this.setEvolveEffect(pokemon, true);
 
       try {
         Http.get(`/pokemon-species/${pokemon.name}`)
@@ -397,7 +394,7 @@ export default {
                   Http.get(evol.species.url).then((resp) => {
                     Http.get(`pokemon/${resp.data.name}`)
                       .then((resp) => {
-                        this.replaceEvoluted(resp.data, idx, pokemon);
+                        this.replaceEvoluted(resp.data, pokemon);
                       })
                       .finally(() => (this.isEvolving = false));
                   });
@@ -405,14 +402,20 @@ export default {
               });
           });
       } catch (error) {
-        this.setEvolveEffect(idx, pokemon, false);
+        this.setEvolveEffect(pokemon, false);
       }
     },
-    replaceEvoluted(pokemon, idx, oldPokemon) {
+    replaceEvoluted(pokemon, oldPokemon) {
+      debugger;
       pokemon["onTeam"] = oldPokemon.onTeam;
       pokemon["wins"] = oldPokemon.wins;
       pokemon["defeated"] = oldPokemon.defeated;
-      this.UPDATE_PLAYER({ idx, poke: pokemon, playerIdx: this.tab });
+      this.UPDATE_PLAYER({
+        pokemon,
+        name: this.activePlayer.name,
+        isEvolve: true,
+        oldPokemon,
+      });
     },
     openAddModal() {
       this.addMenu = !this.addMenu;

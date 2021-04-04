@@ -153,7 +153,7 @@
       <div class="player-pokeballs" v-if="selectedPlayer.pokemons">
         <img
           class="mx-2"
-          v-for="(n, idx) in selectedPlayer.pokemons.filter((p, i) => i <= 5)"
+          v-for="(n, idx) in selectedPlayer.pokemons.filter((p) => p.onTeam)"
           :key="`player-ball-${idx}`"
           width="20px"
           :style="{
