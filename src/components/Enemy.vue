@@ -320,7 +320,9 @@ export default {
               leader.pokemons[4] = p3.pokemon.url;
 
               let calls = leader.pokemons.map((p) =>
-                Http.get(p.length ? p : `/pokemon/${p}`)
+                p.length && p.includes("http")
+                  ? Http.get(p)
+                  : Http.get(`/pokemon/${p}`)
               );
               Promise.allSettled(calls)
                 .then((resp) => {

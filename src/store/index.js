@@ -126,6 +126,7 @@ export default new Vuex.Store({
       commit('addPlayersPoke', { poke, playerIdx })
     },
     UPDATE_ON_END_BATTLE({ commit, state }, { name, pokemons }) {
+      debugger
       const playerIdx = state.players.findIndex(p => p.name === name);
       commit('updateFinishedBattle', { poke: pokemons, playerIdx })
     },

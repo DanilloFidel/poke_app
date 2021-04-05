@@ -406,7 +406,6 @@ export default {
       }
     },
     replaceEvoluted(pokemon, oldPokemon) {
-      debugger;
       pokemon["onTeam"] = oldPokemon.onTeam;
       pokemon["wins"] = oldPokemon.wins;
       pokemon["defeated"] = oldPokemon.defeated;

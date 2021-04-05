@@ -182,8 +182,8 @@
         {
             "name": "Erika",
             "pokemons": [
-                "tangela",
-                "weepinbell"
+                114,
+                70
             ],
             "dice": 12,
             "type": "grass",
@@ -193,8 +193,8 @@
         {
             "name": "Morty",
             "pokemons": [
-                "gengar",
-                "gastly"
+                94,
+                32
             ],
             "dice": 12,
             "type": "ghost",
@@ -204,8 +204,8 @@
         {
             "name": "Falkner",
             "pokemons": [
-                "hoothoot",
-                "dodrio"
+                163,
+                85
             ],
             "dice": 10,
             "type": "flying",

@@ -31,7 +31,7 @@
           v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"
           class="pokemon"
           v-ripple
-          @click="checkPlayerHit() && rollDice('player')"
+          @click="activePokemon.id && checkPlayerHit() && rollDice('player')"
         >
           <img
             :style="{ opacity: playerDice > enemyDice ? 0.4 : 1 }"
@@ -107,7 +107,10 @@
         >
           <img
             :style="{ opacity: playerDice < enemyDice ? 0.4 : 1 }"
-            :src="activePokemon.sprites.back_default"
+            :src="
+              activePokemon.sprites.back_default ||
+              activePokemon.sprites.front_default
+            "
             class="img"
           />
         </div>
@@ -230,8 +233,10 @@ export default {
         this.resetScores();
       }
     },
-    activePokemon(val) {
-      console.log(val);
+    activePokemon: {
+      handler: function (val) {
+        !val && (this.playerDice = this.enemyDice = 0);
+      },
     },
   },
   props: ["colors", "screen"],
@@ -256,11 +261,9 @@ export default {
       return diceType;
     },
     checkPlayerHit() {
-      debugger;
       return this.playerHit < this.playerHits;
     },
     checkEnemyHit() {
-      debugger;
       return this.enemyHit < this.enemyHits;
     },
     filteredEnemyPokes() {
@@ -307,11 +310,6 @@ export default {
         )[0];
         firstPoke.isDefeated = true;
         this.UPDATE_ENEMY({ pokemon: firstPoke });
-        if (this.activeFighter.pokemons.every((p) => p.isDefeated))
-          this.UPDATE_ON_END_BATTLE({
-            name: this.selectedPlayer.name,
-            pokemons: this.selectedPlayer.pokemons,
-          });
       } else {
         this.activePokemon.isDefeated = true;
         this.activePokemon = {};
