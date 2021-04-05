@@ -5,119 +5,128 @@
             "dice": 8,
             "pokemons": [],
             "xp": 200,
-            "img": "james.png"
+            "img": "james.png",
+            "sprite": ""
         },
         {
             "name": "Jessie",
             "dice": 10,
             "pokemons": [],
             "xp": 300,
-            "img": "jessie.png"
+            "img": "jessie.png",
+            "sprite": "jesse_sprite.png"
         },
         {
             "name": "Serena",
             "dice": 6,
             "pokemons": [],
             "xp": 150,
-            "img": "serena.png"
-        },
-        {
-            "isPlayer": true,
-            "dice": 6,
-            "pokemons": [],
-            "xp": 150,
-            "img": "player.png"
+            "img": "serena.png",
+            "sprite": "serena_sprite.png"
         },
         {
             "name": "Tracey",
             "dice": 12,
             "pokemons": [],
             "xp": 230,
-            "img": "tracey.png"
+            "img": "tracey.png",
+            "sprite": "tracey_sprite.png"
         },
         {
             "name": "Bonnie",
             "dice": 10,
             "pokemons": [],
             "xp": 320,
-            "img": "bonnie.png"
+            "img": "bonnie.png",
+            "sprite": ""
         },
         {
             "name": "Avery",
             "dice": 20,
             "pokemons": [],
             "xp": 400,
-            "img": "avery.png"
+            "img": "avery.png",
+            "sprite": "avery_sprite.png"
         },
         {
             "name": "Klara",
             "dice": 10,
             "pokemons": [],
             "xp": 340,
-            "img": "klara.png"
+            "img": "klara.png",
+            "sprite": ""
         },
         {
             "name": "Peony",
             "dice": 10,
             "pokemons": [],
             "xp": 310,
-            "img": "peony.png"
+            "img": "peony.png",
+            "sprite": ""
         },
         {
             "name": "Clemont",
             "dice": 20,
             "pokemons": [],
             "xp": 300,
-            "img": "clemont.png"
+            "img": "clemont.png",
+            "sprite": "clemont_sprite.png"
         },
         {
             "name": "Gary",
             "dice": 10,
             "pokemons": [],
             "xp": 350,
-            "img": "gary.png"
+            "img": "gary.png",
+            "sprite": "gary_sprite.gif"
         },
         {
             "name": "May",
             "dice": 10,
             "pokemons": [],
             "xp": 270,
-            "img": "may.png"
+            "img": "may.png",
+            "sprite": "may_sprite.png"
         },
         {
-            "name": "Zoey",
+            "name": "Alan",
             "dice": 6,
             "pokemons": [],
             "xp": 180,
-            "img": "zoey.png"
+            "img": "zoey.png",
+            "sprite": "alan_sprite.png"
         },
         {
             "name": "Íris",
             "dice": 10,
             "pokemons": [],
             "xp": 330,
-            "img": "iris.png"
+            "img": "iris.png",
+            "sprite": "iris_sprite.png"
         },
         {
             "name": "Sanpei",
             "dice": 20,
             "pokemons": [],
             "xp": 180,
-            "img": "sanpei.jpg"
+            "img": "sanpei.jpg",
+            "sprite": ""
         },
         {
             "name": "Harriet",
             "dice": 6,
             "pokemons": [],
             "xp": 170,
-            "img": "harriet.png"
+            "img": "harriet.png",
+            "sprite": ""
         },
         {
             "name": "Callahan",
             "dice": 6,
             "pokemons": [],
             "xp": 190,
-            "img": "callahan.png"
+            "img": "callahan.png",
+            "sprite": ""
         },
         {
             "name": "Toren",
@@ -131,7 +140,8 @@
             "dice": 12,
             "pokemons": [],
             "xp": 340,
-            "img": "sophocles.png"
+            "img": "sophocles.png",
+            "sprite": ""
         }
     ],
     "leaders": [
@@ -144,7 +154,8 @@
             ],
             "type": "rock",
             "bagde": "da Rocha",
-            "img": "brock.png"
+            "img": "brock.png",
+            "sprite": "brok_sprite.png"
         },
         {
             "name": "Misty",
@@ -155,7 +166,8 @@
             ],
             "type": "water",
             "bagde": "da Cascata",
-            "img": "misty.png"
+            "img": "misty.png",
+            "sprite": "misty_sprite.png"
         },
         {
             "name": "Chuck",
@@ -166,7 +178,8 @@
             "dice": 8,
             "type": "fighting",
             "bagde": "da Tempestade",
-            "img": "chuck.png"
+            "img": "chuck.png",
+            "sprite": "chuck_sprite.gif"
         },
         {
             "name": "Clair",
@@ -177,7 +190,8 @@
             "dice": 10,
             "type": "dragon",
             "bagde": "da Ascensão",
-            "img": "clair.png"
+            "img": "clair.png",
+            "sprite": ""
         },
         {
             "name": "Erika",
@@ -188,7 +202,8 @@
             "dice": 12,
             "type": "grass",
             "bagde": "do Arco-Íris",
-            "img": "erika.png"
+            "img": "erika.png",
+            "sprite": "sabrina_sprite.gif"
         },
         {
             "name": "Morty",
@@ -199,7 +214,8 @@
             "dice": 12,
             "type": "ghost",
             "bagde": "da Névoa",
-            "img": "morty.jpg"
+            "img": "morty.jpg",
+            "sprite": ""
         },
         {
             "name": "Falkner",
@@ -210,7 +226,8 @@
             "dice": 10,
             "type": "flying",
             "bagde": "do Zéfiro",
-            "img": "falkner.jpg"
+            "img": "falkner.jpg",
+            "sprite": "falkner_sprite.gif"
         },
         {
             "name": "Flannery",
@@ -221,7 +238,8 @@
             "dice": 10,
             "type": "fire",
             "bagde": "do Calor",
-            "img": "flanery.png"
+            "img": "flanery.png",
+            "sprite": "flannery_sprite.gif"
         },
         {
             "name": "Giovanni",
@@ -232,7 +250,8 @@
             "dice": 20,
             "type": "ground",
             "bagde": "da Terra",
-            "img": "giovanni.png"
+            "img": "giovanni.png",
+            "sprite": "giovanny_sprite.png"
         },
         {
             "name": "Pryce",
@@ -243,7 +262,8 @@
             "dice": 20,
             "type": "ice",
             "bagde": "da Geleira",
-            "img": "pryce.png"
+            "img": "pryce.png",
+            "sprite": "pryce_sprite.gif"
         },
         {
             "name": "Sargento Surge",
@@ -254,7 +274,8 @@
             "dice": 20,
             "type": "electric",
             "bagde": "do Trovão",
-            "img": "st_surge.png"
+            "img": "st_surge.png",
+            "sprite": "surge_sprite.gif"
         },
         {
             "name": "Tate e Liza",
@@ -265,7 +286,8 @@
             "dice": 12,
             "type": "psychic",
             "bagde": "da Mente",
-            "img": "tate_and_liza.png"
+            "img": "tate_and_liza.png",
+            "sprite": "tate_and_liza_sprite.gif"
         }
     ]
 }

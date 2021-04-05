@@ -1,11 +1,7 @@
 <template>
   <div class="area">
     <div class="bar">
-      <img
-        @click="restoreAll('enemy')"
-        src="../assets/sprites/gary.png"
-        class="enemy"
-      />
+      <img @click="restoreAll('enemy')" :src="getEnemySprite" class="enemy" />
       <b class="player-name" v-if="activeFighter.name">{{
         activeFighter.name
       }}</b>
@@ -131,7 +127,7 @@
         @click="
           restoreAll('player'), (selectedPlayer = {}), (activePokemon = {})
         "
-        src="../assets/sprites/trainer.png"
+        :src="getPlayerSprite()"
         class="player"
       />
       <b v-if="selectedPlayer.name" class="player-name">{{
@@ -201,6 +197,12 @@ export default {
         Math.floor(Math.random() * this.activeFighter.pokemons.length)
       ];
     },
+    getEnemySprite() {
+      return this.activeFighter.sprite.length
+        ? require(`../assets/sprites/${this.activeFighter.sprite}`)
+        : require(`../assets/enemies/${this.activeFighter.img}`);
+    },
+
     totalHits() {
       return this.enemyHits + this.playerHits;
     },
@@ -259,6 +261,13 @@ export default {
         diceType = 12;
       }
       return diceType;
+    },
+    getPlayerSprite() {
+      const name =
+        this.selectedPlayer.name === "Danillo"
+          ? "player_2_sprite.gif"
+          : "player_sprite.gif";
+      return require(`../assets/sprites/${name}`);
     },
     checkPlayerHit() {
       return this.playerHit < this.playerHits;
@@ -453,6 +462,7 @@ export default {
 }
 
 .player {
+  left: 25px;
   height: 140px;
   position: absolute;
   bottom: 10px;

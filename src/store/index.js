@@ -59,11 +59,11 @@ export default new Vuex.Store({
       state.players = data
     },
     updatePlayer(state, pokes) {
-
+      if (!pokes || !pokes.length) return
       state.activePlayer.pokemons = pokes;
     },
     updateEnemy(state, pokes) {
-
+      if (!pokes || !pokes.length) return
       state.activeFighter.pokemons = pokes;
     },
     saveState(state, data) {
@@ -80,9 +80,11 @@ export default new Vuex.Store({
       Vue.set(state.players[playerIdx].pokemons, idx, poke)
     },
     updateFinishedBattle(state, { pks, playerIdx }) {
-      const p = state.players[playerIdx];
-      p.pokemons = pks;
-      Vue.set(state.players, playerIdx, p)
+      if (pks && pks.length) {
+        const p = state.players[playerIdx];
+        p.pokemons = pks;
+        Vue.set(state.players, playerIdx, p)
+      }
     },
     removePlayersPoke(state, { idx, playerIdx }) {
       Vue.delete(state.players[playerIdx].pokemons, idx)
@@ -100,6 +102,7 @@ export default new Vuex.Store({
       state.types = data
     },
     joinTeam(state, data) {
+      if (!data || !data.name) return
       state.pokemonToTeam = data
     },
   },
