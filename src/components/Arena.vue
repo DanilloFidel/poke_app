@@ -71,7 +71,7 @@
               class="mt-2 mr-2 overline elevation-3"
               :color="colors[item.type.name]"
               >{{ item.type.name }} -
-              {{ getTypeBattle(item, item.type.name, "activeFighter") }}</v-chip
+              {{ getTypeBattle(item.type.name, "activeFighter") }}</v-chip
             ><br />
           </div>
         </div>
@@ -91,7 +91,7 @@
               class="mt-2 mr-2 overline elevation-3"
               :color="colors[item.type.name]"
               >{{ item.type.name }} -
-              {{ getTypeBattle(item, item.type.name, "activePokemon") }}</v-chip
+              {{ getTypeBattle(item.type.name, "activePokemon") }}</v-chip
             ><br />
           </div>
         </div>
@@ -118,7 +118,24 @@
             item-text="name"
             return-object
             v-model="activePokemon"
-          ></v-select>
+          >
+            <template v-slot:item="{ item }">
+              <b class="mr-3">{{ item.name }}</b
+              ><span v-for="(type, idx) in item.types" :key="`t_${idx}`">
+                <v-chip
+                  x-small
+                  outlined
+                  label
+                  class="mt-2 mr-2 overline elevation-3"
+                  :color="colors[type.type.name]"
+                  >{{ type.type.name }} -
+                  {{
+                    getTypeBattle(type.type.name, "activePokemon", item)
+                  }}</v-chip
+                >
+              </span>
+            </template></v-select
+          >
         </div>
       </div>
     </div>
@@ -327,16 +344,15 @@ export default {
       }
       this.resetScores();
     },
-    getTypeBattle(poke, type_player_poke, active) {
+    getTypeBattle(type_player_poke, active, poke = this.activePokemon) {
       const hitName = active === "activeFighter" ? "enemyHits" : "playerHits";
-      if (!this.activePokemon.types || !this.activeFighter.activePokemon)
-        return "N/A";
+      if (!poke.types || !this.activeFighter.activePokemon) return "N/A";
 
       const isFromEnemy = active === "activeFighter";
       let adversaryTypes = [];
 
       if (isFromEnemy) {
-        adversaryTypes = this.activePokemon.types.map((t) => t.type.name);
+        adversaryTypes = poke.types.map((t) => t.type.name);
       } else {
         adversaryTypes = this.activeFighter.activePokemon.types.map(
           (t) => t.type.name
