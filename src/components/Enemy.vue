@@ -52,104 +52,90 @@
       <v-col cols="3" class="text-center">
         <h3>{{ sortedEnemy.name }}</h3></v-col
       >
-      <v-col
-        style="
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          align-items: center;
-        "
-      >
-        <vue-flip active-click height="300px" width="300px">
-          <template v-slot:front>
-            <div
-              class="card d-flex justify-center elevation-4 align-center px-2"
-              v-ripple
-            >
-              <img
-                :src="require(`../assets/enemies/${sortedEnemy.img}`)"
-                width="inherit"
-                height="250px"
-                alt=""
-              />
-            </div>
-          </template>
-          <template v-slot:back>
-            <div
-              class="card d-flex justify-center elevation-4 align-center px-2"
-              v-ripple
-            >
-              <v-row dense>
-                <v-col class="d-flex align-center justify-center">
-                  <img
-                    height="150px"
-                    width="150px"
-                    :src="
-                      sortedEnemy.activePokemon.sprites.other[
-                        'official-artwork'
-                      ].front_default
-                    "
-                  />
-                  <div class="mr-3">
-                    <span class="overline">{{
-                      sortedEnemy.activePokemon.name
-                    }}</span>
-                    <div>
-                      <v-chip
-                        class="chip overline"
-                        x-small
-                        v-for="(item, idx) in sortedEnemy.activePokemon.types"
-                        :key="`type-${idx}`"
-                        :color="colors[item.type.name]"
-                        >{{ item.type.name }}</v-chip
-                      >
-                      <p>
-                        {{ diceUse(sortedEnemy.activePokemon.base_experience) }}
-                      </p>
-                    </div>
-                  </div></v-col
-                >
-              </v-row>
-            </div>
-          </template>
-        </vue-flip>
-        <v-row
-          v-if="sortedEnemy.name && sortedEnemy.pokemons.some((p) => p.name)"
-          justify="center"
-          class="mt-2"
-          dense
+
+      <div class="row d-flex align-center justify-center mt-5">
+        <div
+          class="card d-flex justify-center elevation-4 align-center px-2"
+          v-ripple
         >
-          <v-col cols="8" class="d-flex justify-center">
-            <img
-              v-for="(pokemon, i) in sortedEnemy.pokemons"
-              @click="previouslyIsDefeated(i) && setPokemonStatus(pokemon, i)"
-              :key="`ball-${i}`"
-              width="25px"
-              :style="{
-                opacity: pokemon.defeated ? '0.3' : '1',
-              }"
-              class="mx-2"
-              height="25px"
-              src="../assets/pokeball.svg"
-              alt=""
-            />
-          </v-col>
-        </v-row>
-        <!-- <v-row class="mx-2">
+          <img
+            :src="require(`../assets/enemies/${sortedEnemy.img}`)"
+            width="inherit"
+            height="250px"
+            alt=""
+          />
+        </div>
+
+        <div
+          class="card d-flex justify-center elevation-4 align-center px-2"
+          v-ripple
+        >
+          <v-row dense>
+            <v-col class="d-flex align-center justify-center">
+              <img
+                height="150px"
+                width="150px"
+                :src="
+                  sortedEnemy.activePokemon.sprites.other['official-artwork']
+                    .front_default
+                "
+              />
+              <div class="mr-3">
+                <span class="overline">{{
+                  sortedEnemy.activePokemon.name
+                }}</span>
+                <div>
+                  <v-chip
+                    class="chip overline"
+                    x-small
+                    v-for="(item, idx) in sortedEnemy.activePokemon.types"
+                    :key="`type-${idx}`"
+                    :color="colors[item.type.name]"
+                    >{{ item.type.name }}</v-chip
+                  >
+                  <p>
+                    {{ diceUse(sortedEnemy.activePokemon.base_experience) }}
+                  </p>
+                </div>
+              </div></v-col
+            >
+          </v-row>
+        </div>
+      </div>
+
+      <v-row
+        v-if="sortedEnemy.name && sortedEnemy.pokemons.some((p) => p.name)"
+        justify="center"
+        class="mt-5"
+        dense
+      >
+        <v-col cols="8" class="d-flex justify-center">
+          <img
+            v-for="(pokemon, i) in sortedEnemy.pokemons"
+            @click="previouslyIsDefeated(i) && setPokemonStatus(pokemon, i)"
+            :key="`ball-${i}`"
+            width="25px"
+            :style="{
+              opacity: pokemon.defeated ? '0.3' : '1',
+            }"
+            class="mx-2"
+            height="25px"
+            src="../assets/pokeball.svg"
+            alt=""
+          />
+        </v-col>
+      </v-row>
+      <!-- <v-row class="mx-2">
           <span>{{
             `${sortedEnemy.name} batalha com um dados de ${sortedEnemy.dice} lados`
           }}</span>
         </v-row> -->
-        <v-row
-          class="mx-2"
-          v-if="!sortedEnemy.pokemons.some((p) => !p.defeated)"
+      <v-row class="mx-2" v-if="!sortedEnemy.pokemons.some((p) => !p.defeated)">
+        <span
+          >{{ `${sortedEnemy.name} te presenteou com: `
+          }}<b>{{ giftPokemon.name }}</b></span
         >
-          <span
-            >{{ `${sortedEnemy.name} te presenteou com: `
-            }}<b>{{ giftPokemon.name }}</b></span
-          >
-        </v-row>
-      </v-col>
+      </v-row>
     </v-row>
     <v-row dense justify="center" style="height: 300px" v-else
       ><v-col cols="6" class="d-flex justify-center align-center">
@@ -162,7 +148,6 @@
 </template>
 
 <script>
-import VueFlip from "vue-flip";
 import Http from "../plugins/http";
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
@@ -201,9 +186,6 @@ export default {
     this.gymLeaders = enemies.leaders;
   },
   props: ["colors"],
-  components: {
-    VueFlip,
-  },
   methods: {
     ...mapActions(["ADD_ACTIVE_FIGHTER"]),
     diceUse(xp) {
