@@ -1,0 +1,101 @@
+{
+    "legendaries": {
+        "1": [
+            "articuno",
+            "zapdos",
+            "moltres",
+            "mew",
+            "mewtwo"
+        ],
+        "2": [
+            "raikou",
+            "entei",
+            "suicune",
+            "ho-oh",
+            "lugia",
+            "celebi"
+        ],
+        "3": [
+            "regirock",
+            "regice",
+            "registeel",
+            "latios",
+            "latias",
+            "kyogre",
+            "groundon",
+            "rayquaza",
+            "jirachi",
+            "deoxys"
+        ],
+        "4": [
+            "uxie",
+            "mesprit",
+            "azelf",
+            "dialga",
+            "palkia",
+            "giratina",
+            "cresselia",
+            "darkrai",
+            "Manaph",
+            "Phione",
+            "Regigigas",
+            "Heatran",
+            "Shaymin",
+            "Arceus"
+        ],
+        "5": [
+            "Reshiram",
+            "Victini",
+            "Zekrom",
+            "Kyurem",
+            "Cobalion",
+            "Terrakion",
+            "Virizion",
+            "Keldeo",
+            "Tornadus",
+            "Thundurus",
+            "Landorus",
+            "Meloetta",
+            "Genesect"
+        ],
+        "6": [
+            "xerneas",
+            "yveltal",
+            "zygarde",
+            "diancie",
+            "hoopa",
+            "volcanion"
+        ],
+        "7": [
+            "magearna",
+            "marshadow",
+            "zeraora",
+            "meltan",
+            "melmetal",
+            "silvally",
+            "tapu-koko",
+            "tapu-lele",
+            "tapu-bulu",
+            "tapu-fini",
+            "cosmog",
+            "solgaleo",
+            "necrozma"
+        ],
+        "8": [
+            "zarude",
+            "zacian",
+            "zamazenta",
+            "Eternatus",
+            "kubfu",
+            "Urshifu",
+            "Regieleki",
+            "Regidrago",
+            "glastrier",
+            "spectrier",
+            "Calyrex",
+            "articuno-galar",
+            "moltres-galar",
+            "zapdos-galar"
+        ]
+    }
+}
