@@ -444,7 +444,7 @@ export default {
 ::v-deep .v-data-table__wrapper {
   height: 147px;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 .evolving {

@@ -25,7 +25,9 @@
             "groundon",
             "rayquaza",
             "jirachi",
-            "deoxys"
+            "deoxys-normal",
+            "deoxys-speed",
+            "deoxys-attack"
         ],
         "4": [
             "uxie",

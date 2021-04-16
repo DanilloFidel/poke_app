@@ -27,28 +27,21 @@
       <v-col cols="6" class="pl-5">
         <v-checkbox label="lendário" v-model="legendaryFilter"></v-checkbox>
       </v-col>
-      <v-col cols="6" class="pr-5" @click="findPokemon"
-        ><v-btn>buscar</v-btn></v-col
+      <v-col cols="6" class="pr-5 mb-5" @click="findPokemon"
+        ><v-btn :loading="genLoading || loading">buscar</v-btn></v-col
       >
       <v-container v-if="!loading" fluid fill-height>
         <v-row
           dense
           justify="center"
-          @click="catchPokemon"
+          @click="hitPokemon"
           v-if="selectedPokemon.name && !isCatching && !captured"
         >
-          <v-col cols="6" class="d-flex justify-center">
+          <v-col cols="12" class="d-flex justify-center">
             <img
               height="100px"
               width="100px"
               :src="getSprite('front_default')"
-            />
-          </v-col>
-          <v-col cols="6" class="d-flex justify-center">
-            <img
-              height="100px"
-              width="100px"
-              :src="getSprite('back_default')"
             />
           </v-col>
 
@@ -77,7 +70,7 @@
           <img src="../assets/captured.gif" height="100px" width="100px" />
         </v-row>
       </v-container>
-      <v-container fill-height fluid v-else style="height: 430px">
+      <v-container fill-height fluid v-else>
         <v-row dense justify="center" class="px-4">
           <v-col class="d-flex justify-center">
             <v-img
@@ -91,6 +84,31 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-container fill-height fluid>
+        <v-row
+          dense
+          justify="center"
+          class="px-4"
+          style="position: absolute; bottom: 10px"
+        >
+          <v-col
+            class="d-flex justify-center mx-1"
+            v-for="(pokeball, idx) in pokeballTypes"
+            :key="`pokeball_${idx}`"
+          >
+            <img
+              @click="catchPokemon(pokeball)"
+              class="loading-logo"
+              :src="getImg(pokeball.img)"
+              eager
+              contain
+              height="30px"
+              width="30px"
+            />
+            <span class="ml-2">{{ 0 }}</span>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-row>
   </div>
 </template>
@@ -98,7 +116,7 @@
 <script>
 import Http from "../plugins/http";
 import { mdiAccountCheckOutline } from "@mdi/js";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "PokeEncounter",
   data: () => ({
@@ -125,10 +143,13 @@ export default {
     isCatching: false,
     captured: false,
     hitCounter: 0,
+    selectedBall: {},
     damageValue: 0,
+    genLoading: false,
   }),
 
   computed: {
+    ...mapState(["activePlayer", "pokeballTypes"]),
     diceImg() {
       return require(`../assets/${this.diceType}.svg`);
     },
@@ -146,11 +167,14 @@ export default {
     ...mapActions(["JOIN_TEAM"]),
     filterPokemons(value) {
       console.log(value);
-      Http.get(`/generation/${value}`).then((resp) => {
-        this.avaliables = resp.data.pokemon_species;
-        this.types = resp.data.types;
-        this.genName = resp.data.name;
-      });
+      this.genLoading = true;
+      Http.get(`/generation/${value}`)
+        .then((resp) => {
+          this.avaliables = resp.data.pokemon_species;
+          this.types = resp.data.types;
+          this.genName = resp.data.name;
+        })
+        .finally(() => (this.genLoading = false));
     },
     fecthHabitats() {
       const t = {
@@ -170,8 +194,11 @@ export default {
         });
       });
     },
+    getImg(name) {
+      return require(`../assets/items/${name}.png`);
+    },
     findPokemon() {
-      this.btnLoading = true;
+      this.loading = true;
       let idx = 0;
       let pokemon = "";
       if (this.legendaryFilter) {
@@ -185,33 +212,19 @@ export default {
       if (!pokemon) return;
       const getMethod = !this.legendaryFilter ? this.getByUrl : this.getByName;
       getMethod(!this.legendaryFilter ? pokemon.url : pokemon).then((resp) => {
-        debugger;
-
         if (
           resp.data.generation.name === this.genName &&
           (this.legendaryFilter ||
-            resp.data.habitat.name === this.selectedHabitat)
+            !resp.data.habitat ||
+            (resp.data.habitat &&
+              resp.data.habitat.name === this.selectedHabitat)) &&
+          !resp.data.is_legendary
         ) {
           this.sortPokemon(resp.data);
         } else {
           this.findPokemon();
         }
       });
-      // Http.get(`/type`)
-      //   .then((resp) => resp.data.results.map((r) => r))
-      //   .then((types) => {
-      //     this.types = types;
-      //   });
-
-      // fetch(url)
-      //   .then((resp) => resp.json())
-      //   .then((data) => {
-      //     this.pokemons = data.pokemon_species
-      //       ? data.pokemon_species
-      //       : data.results;
-      //     this.sortPokemon();
-      //   })
-      //   .finally(() => (this.btnLoading = false));
     },
     getByUrl(url) {
       return Http.get(url);
@@ -220,53 +233,71 @@ export default {
       return Http.get(`/pokemon-species/${name}`);
     },
     getSprite(type) {
-      return this.selectedPokemon.sprites[type];
+      return this.selectedPokemon.sprites.other["official-artwork"][type];
     },
-    catchPokemon() {
-      this.hitCounter++;
-      if (this.hitCounter === 4) {
-        this.isCatching = true;
-        setTimeout(() => {
-          this.isCatching = false;
-          if (this.selectedPokemon.capture_rate == 255) {
-            this.captured = true;
-            this.joinTeam();
-          } else {
-            const final = Math.floor(Math.random() * 255) + 1;
-
-            if (final <= this.selectedPokemon.capture_rate + this.damageValue) {
-              this.captured = true;
-              this.joinTeam();
-            } else {
-              this.hitCounter = 0;
-              this.damageValue = 0;
-              this.selectedPokemon = {
-                ...this.selectedPokemon,
-                hp: this.selectedPokemon.stats[0].base_stat,
-              };
-              const speed = this.selectedPokemon.stats[5].base_stat;
-              const final = Math.floor(Math.random() * 200) + 1;
-              debugger;
-              if (speed <= final.toFixed(0)) {
-                alert(`${this.selectedPokemon.name} fugiu!`);
-                this.selectedPokemon = {};
-              }
-            }
-          }
-        }, 3000);
-      } else {
-        const val = Math.floor(Math.random() * 20) + 1;
+    hitPokemon() {
+      if (this.hitCounter <= 2) {
+        this.hitCounter++;
+        const val =
+          Math.floor(
+            (Math.random() * this.selectedPokemon.stats[0].base_stat) / 2
+          ) + 1;
         this.damageValue += val;
-        debugger;
         const hp = this.selectedPokemon.hp - val;
+        if (hp < 1) {
+          alert(`Voce derrotou o Pokemon!`);
+          this.damageValue = 0;
+          this.hitCounter = 0;
+          this.selectedPokemon = {};
+        }
         this.selectedPokemon = { ...this.selectedPokemon, hp };
       }
     },
-    sortDices() {
-      const t = this.diceType.split("d");
-      const range = t[1];
-      this.diceValue = Math.floor(Math.random() * range) + 1;
-      this.diceValue2 = Math.floor(Math.random() * range) + 1;
+    removePokeball(pokeball) {
+      console.log("remover", pokeball);
+    },
+    catchPokemon(pokeball) {
+      console.log(pokeball);
+      if (!this.selectedPokemon.name) return;
+      this.removePokeball(pokeball);
+
+      this.isCatching = true;
+      setTimeout(() => {
+        this.isCatching = false;
+        if (this.selectedPokemon.capture_rate == 255 || pokeball.isMaster) {
+          this.captured = true;
+          this.joinTeam();
+        } else {
+          let shake = 0;
+          while (shake < 3) {
+            console.count();
+            const a =
+              3 * this.selectedPokemon.stats[0].base_stat -
+              2 * this.selectedPokemon.hp;
+            const b =
+              a * this.selectedPokemon.capture_rate * pokeball.captureBonus;
+            const c = (b / 3) * this.selectedPokemon.stats[0].base_stat;
+            const b1 = (65536 / (255 / c)) ^ 0.1875;
+            const n = Math.floor(Math.random() * 65535);
+            shake++;
+            if (shake === 3) {
+              if (n >= b1) {
+                this.hitCounter = 0;
+                this.damageValue = 0;
+                const speed = this.selectedPokemon.stats[5].base_stat;
+                const final = Math.floor(Math.random() * 200) + 1;
+                if (speed <= final.toFixed(0)) {
+                  alert(`${this.selectedPokemon.name} fugiu!`);
+                  this.selectedPokemon = {};
+                }
+              } else {
+                this.captured = true;
+                this.joinTeam();
+              }
+            }
+          }
+        }
+      }, 3000);
     },
     async sortPokemon(selected) {
       this.hitCounter = 0;
@@ -293,7 +324,6 @@ export default {
           ) {
             this.sortPokemon();
           } else {
-            this.setDiceDifficult();
             this.loading = false;
           }
         }, 1500);
@@ -314,19 +344,6 @@ export default {
         this.captured = false;
         this.selectedPokemon = {};
       }, 1500);
-    },
-    setDiceDifficult() {
-      this.diceType = "d6";
-      if (this.selectedPokemon.base_experience >= 120) {
-        this.diceType = "d8";
-      }
-      if (this.selectedPokemon.base_experience >= 170) {
-        this.diceType = "d8";
-      }
-      if (this.selectedPokemon.base_experience >= 200) {
-        this.diceType = "d20";
-      }
-      this.sortDices();
     },
   },
 };

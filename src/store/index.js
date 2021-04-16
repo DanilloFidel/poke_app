@@ -2,31 +2,27 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
-
+import Player from "../models/player";
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     activeFighter: {},
     activePlayer: {},
+    pokeballTypes: [
+      { name: "pokeball", captureBonus: 255, img: "poke_ball" },
+      { name: "greatball", captureBonus: 200, img: "great_ball" },
+      { name: "ultraball", captureBonus: 150, img: "ultra_ball" },
+      { name: "masterball", isMaster: true, img: "master_ball" }
+    ],
     types: [],
     savedPlayers: [],
     applyXp: {},
-    players: [{
-      name: "Danillo",
-      xp: 0,
-      pokemons: [],
-    },
-    {
-      name: "Eduardo",
-      xp: 0,
-      pokemons: [],
-    },
-    {
-      name: "Matheus",
-      xp: 0,
-      pokemons: [],
-    },],
+    players: [
+      new Player({ name: "Danillo" }),
+      new Player({ name: "Eduardo" }),
+      new Player({ name: "Matheus" })
+    ],
     pokemonToTeam: {},
     diceBattle: {
       player: {
@@ -56,7 +52,7 @@ export default new Vuex.Store({
       state.activePlayer = data
     },
     setPlayers(state, data) {
-      state.players = data
+      state.players = data.map(p => new Player(p))
     },
     updatePlayer(state, pokes) {
       if (!pokes || !pokes.length) return
