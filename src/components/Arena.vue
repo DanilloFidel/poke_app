@@ -49,15 +49,18 @@
           <p class="overline pokemon-name">
             {{ filteredEnemyPokes().filter((p) => !p.isDefeated)[0].name }}
           </p>
-          <p>
-            Dado: D{{
-              getDiceType(
-                filteredEnemyPokes().filter((p) => !p.isDefeated)[0]
-                  .base_experience
-              )
-            }}
-            / valor: <b>{{ enemyDice }}</b>
-          </p>
+          <div class="hp-bar">
+            <div
+              class="hp-bar-filler"
+              :style="{
+                width: `${
+                  (activeEnemyPokemon.hp /
+                    activeEnemyPokemon.stats[0].base_stat) *
+                  100
+                }%`,
+              }"
+            ></div>
+          </div>
           <div
             v-for="(item, idx) in filteredEnemyPokes().filter(
               (p) => !p.isDefeated
@@ -203,6 +206,7 @@ export default {
     diceType: 6,
     enemyPokeIdx: 0,
     selectedPlayer: {},
+    activeEnemyPokemon: {},
   }),
   computed: {
     activeFighter() {
@@ -251,6 +255,19 @@ export default {
       if (name === "arena") {
         this.resetScores();
       }
+    },
+    activeFighter: {
+      handler: function (val) {
+        console.log(val);
+        if (val && val.pokemons && val.pokemons.length) {
+          this.activeEnemyPokemon = val.pokemons.filter(
+            (p) => !p.isDefeated
+          )[0];
+          this.activeEnemyPokemon.hp = this.activeEnemyPokemon.stats[0].base_stat;
+        }
+      },
+      deep: true,
+      immediate: true,
     },
     activePokemon: {
       handler: function (val) {
@@ -436,6 +453,19 @@ export default {
   display: flex;
   align-items: center;
   height: 50%;
+}
+
+.hp-bar {
+  width: 150px;
+  height: 10px;
+  background-color: grey;
+  border-radius: 5px;
+}
+
+.hp-bar-filler {
+  height: 10px;
+  background-color: green;
+  border-radius: 5px;
 }
 
 .pokemon {

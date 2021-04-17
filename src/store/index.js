@@ -43,7 +43,6 @@ export default new Vuex.Store({
         delete poke.abilities;
         delete poke.forms;
         delete poke.species;
-        delete poke.stats;
         delete poke.moves;
       })
       state.activeFighter = data
@@ -71,7 +70,6 @@ export default new Vuex.Store({
       delete poke.abilities;
       delete poke.forms;
       delete poke.species;
-      delete poke.stats;
       delete poke.moves;
       Vue.set(state.players[playerIdx].pokemons, idx, poke)
     },
@@ -158,7 +156,6 @@ export default new Vuex.Store({
           delete poke.abilities;
           delete poke.forms;
           delete poke.species;
-          delete poke.stats;
           delete poke.moves;
         })
       })

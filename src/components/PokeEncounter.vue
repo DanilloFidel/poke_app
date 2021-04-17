@@ -17,10 +17,10 @@
       <v-col cols="6" class="pl-5">
         <span>Habitat</span>
         <v-select
-          :items="habitats"
-          item-text="pt"
-          item-value="name"
-          v-model="selectedHabitat"
+          :items="areas"
+          item-text="nome"
+          item-value="tipos"
+          v-model="selectedArea"
           color="red"
         ></v-select>
       </v-col>
@@ -32,9 +32,25 @@
           v-model="legendaryFilter"
         ></v-checkbox>
       </v-col>
-      <v-col cols="6" class="pr-5" @click="findPokemon"
-        ><v-btn :loading="genLoading || loading">buscar</v-btn></v-col
-      >
+      <v-row dense>
+        <v-col class="d-flex justify-center" cols="6" @click="findPokemon(true)"
+          ><v-btn
+            x-small
+            :loading="genLoading || loading"
+            :disabled="!selectedArea"
+            >buscar</v-btn
+          ></v-col
+        >
+        <v-col cols="6" class="d-flex justify-center"
+          ><v-btn
+            @click="
+              (selectedArea = []), (loading = false), (selectedPokemon = {})
+            "
+            x-small
+            >cancelar</v-btn
+          ></v-col
+        >
+      </v-row>
       <v-container v-if="!loading" fluid fill-height>
         <v-row
           dense
@@ -121,6 +137,7 @@
 
 <script>
 import Http from "../plugins/http";
+import Vue from "vue";
 import { mdiAccountCheckOutline } from "@mdi/js";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -134,11 +151,10 @@ export default {
     legendaryFilter: false,
     loading: false,
     btnLoading: false,
-    habitats: [],
     genName: "generation-i",
     generation: "1",
     selectedPokemon: {},
-    selectedHabitat: "grassland",
+    selectedArea: [],
     selectedType: "",
     diceValue: 1,
     diceValue2: 1,
@@ -152,6 +168,7 @@ export default {
     selectedBall: {},
     damageValue: 0,
     genLoading: false,
+    areas: [],
   }),
 
   computed: {
@@ -164,17 +181,18 @@ export default {
   props: ["colors"],
 
   created() {
-    this.fecthHabitats();
     this.legendaries = require("../data/pokemons.json").legendaries;
+    this.areas = require("../data/areas.json").areas;
+    console.log(this.areas);
     this.filterPokemons(1);
   },
 
   methods: {
     ...mapActions(["JOIN_TEAM"]),
-    filterPokemons(value) {
+    async filterPokemons(value) {
       console.log(value);
       this.genLoading = true;
-      Http.get(`/generation/${value}`)
+      await Http.get(`/generation/${value}`)
         .then((resp) => {
           this.avaliables = resp.data.pokemon_species;
           this.types = resp.data.types;
@@ -182,28 +200,21 @@ export default {
         })
         .finally(() => (this.genLoading = false));
     },
-    fecthHabitats() {
-      const t = {
-        cave: "Caverna",
-        forest: "Floresta",
-        grassland: "Campo",
-        mountain: "Montanha",
-        "rough-terrain": "Terreno acidentado",
-        rare: "Raro",
-        sea: "Mar",
-        urban: "Urbano",
-        "waters-edge": "Beira d'água",
-      };
-      Http.get("/pokemon-habitat").then((resp) => {
-        this.habitats = resp.data.results.map((h) => {
-          return { pt: t[h.name], name: h.name };
-        });
-      });
-    },
     getImg(name) {
       return require(`../assets/items/${name}.png`);
     },
-    findPokemon() {
+    findPokemon(restore) {
+      if (!this.legendaryFilter && !this.selectedArea.length) {
+        alert("escolha uma regiao!");
+        return;
+      }
+      restore &&
+        this.filterPokemons(this.generation).then(() => {
+          this.fetchPoke();
+        });
+      !restore && this.fetchPoke();
+    },
+    fetchPoke() {
       this.loading = true;
       let idx = 0;
       let pokemon = "";
@@ -225,9 +236,7 @@ export default {
           if (
             (resp.data.generation.name === this.genName &&
               !resp.data.habitat) ||
-            (resp.data.habitat &&
-              resp.data.habitat.name === this.selectedHabitat &&
-              !resp.data.is_legendary)
+            !resp.data.is_legendary
           ) {
             this.sortPokemon(resp.data);
           } else {
@@ -320,23 +329,43 @@ export default {
         );
 
         setTimeout(() => {
-          this.selectedPokemon = { ...pokemonInfo, ...pokemonInfo2 };
-          this.selectedPokemon.hp = this.selectedPokemon.stats[0].base_stat;
-          console.log("pokemon: ", this.selectedPokemon);
+          const pk = { ...pokemonInfo, ...pokemonInfo2 };
+          if (this.typeMatch(pk.types)) {
+            this.selectedPokemon = pk;
+            this.selectedPokemon.hp = this.selectedPokemon.stats[0].base_stat;
+            console.log("pokemon: ", this.selectedPokemon);
 
-          if (
-            this.selectedPokemon.sprites &&
-            !this.selectedPokemon.sprites.front_default
-          ) {
-            this.sortPokemon();
+            if (
+              this.selectedPokemon.sprites &&
+              !this.selectedPokemon.sprites.front_default
+            ) {
+              this.sortPokemon();
+            } else {
+              this.loading = false;
+            }
           } else {
-            this.loading = false;
+            const idx = this.avaliables.findIndex((p) => p.name === pk.name);
+            Vue.delete(this.avaliables, idx);
+            this.findPokemon();
           }
         }, 1500);
       } catch (error) {
         this.loading = false;
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
+    },
+    typeMatch(types = []) {
+      let t = [];
+      types.forEach((type) => {
+        t.push(type.type.name);
+      });
+      let t2 = t.join("-");
+      let t1 = t.reverse().join("-");
+      console.log(this.selectedArea);
+      console.log(t1);
+      console.log(t2);
+      console.log(this.avaliables.length);
+      return this.selectedArea.includes(t1) || this.selectedArea.includes(t2);
     },
     joinTeam() {
       console.log("juntou ao time");
