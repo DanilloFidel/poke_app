@@ -25,9 +25,14 @@
         ></v-select>
       </v-col>
       <v-col cols="6" class="pl-5">
-        <v-checkbox label="lendário" v-model="legendaryFilter"></v-checkbox>
+        <v-checkbox
+          @change="findPokemon"
+          :disabled="genLoading || loading"
+          label="lendário"
+          v-model="legendaryFilter"
+        ></v-checkbox>
       </v-col>
-      <v-col cols="6" class="pr-5 mb-5" @click="findPokemon"
+      <v-col cols="6" class="pr-5" @click="findPokemon"
         ><v-btn :loading="genLoading || loading">buscar</v-btn></v-col
       >
       <v-container v-if="!loading" fluid fill-height>
@@ -39,8 +44,8 @@
         >
           <v-col cols="12" class="d-flex justify-center">
             <img
-              height="100px"
-              width="100px"
+              height="130px"
+              width="130px"
               :src="getSprite('front_default')"
             />
           </v-col>
@@ -48,7 +53,8 @@
           <v-col cols="12">
             <h3 class="overline text-center text-capitalize">
               {{ selectedPokemon.name }} #{{ selectedPokemon.order }} HP
-              {{ selectedPokemon.hp }}
+              {{ selectedPokemon.hp }} SPEED
+              {{ selectedPokemon.stats[5].base_stat }}
             </h3>
           </v-col>
 
@@ -212,17 +218,21 @@ export default {
       if (!pokemon) return;
       const getMethod = !this.legendaryFilter ? this.getByUrl : this.getByName;
       getMethod(!this.legendaryFilter ? pokemon.url : pokemon).then((resp) => {
-        if (
-          resp.data.generation.name === this.genName &&
-          (this.legendaryFilter ||
-            !resp.data.habitat ||
-            (resp.data.habitat &&
-              resp.data.habitat.name === this.selectedHabitat)) &&
-          !resp.data.is_legendary
-        ) {
+        debugger;
+        if (this.legendaryFilter) {
           this.sortPokemon(resp.data);
         } else {
-          this.findPokemon();
+          if (
+            (resp.data.generation.name === this.genName &&
+              !resp.data.habitat) ||
+            (resp.data.habitat &&
+              resp.data.habitat.name === this.selectedHabitat &&
+              !resp.data.is_legendary)
+          ) {
+            this.sortPokemon(resp.data);
+          } else {
+            this.findPokemon();
+          }
         }
       });
     },
@@ -233,7 +243,7 @@ export default {
       return Http.get(`/pokemon-species/${name}`);
     },
     getSprite(type) {
-      return this.selectedPokemon.sprites.other["official-artwork"][type];
+      return this.selectedPokemon.sprites[type];
     },
     hitPokemon() {
       if (this.hitCounter <= 2) {
@@ -257,7 +267,6 @@ export default {
       console.log("remover", pokeball);
     },
     catchPokemon(pokeball) {
-      console.log(pokeball);
       if (!this.selectedPokemon.name) return;
       this.removePokeball(pokeball);
 
@@ -268,36 +277,33 @@ export default {
           this.captured = true;
           this.joinTeam();
         } else {
-          let shake = 0;
-          while (shake < 3) {
-            console.count();
-            const a =
-              3 * this.selectedPokemon.stats[0].base_stat -
-              2 * this.selectedPokemon.hp;
-            const b =
-              a * this.selectedPokemon.capture_rate * pokeball.captureBonus;
-            const c = (b / 3) * this.selectedPokemon.stats[0].base_stat;
-            const b1 = (65536 / (255 / c)) ^ 0.1875;
-            const n = Math.floor(Math.random() * 65535);
-            shake++;
-            if (shake === 3) {
-              if (n >= b1) {
-                this.hitCounter = 0;
-                this.damageValue = 0;
-                const speed = this.selectedPokemon.stats[5].base_stat;
-                const final = Math.floor(Math.random() * 200) + 1;
-                if (speed <= final.toFixed(0)) {
-                  alert(`${this.selectedPokemon.name} fugiu!`);
-                  this.selectedPokemon = {};
-                }
-              } else {
-                this.captured = true;
-                this.joinTeam();
-              }
+          const ballN = Math.floor(Math.random() * pokeball.captureBonus);
+          if (ballN < this.selectedPokemon.capture_rate) {
+            this.restartOrScape();
+          } else {
+            const m = Math.floor(Math.random() * 255);
+            const f =
+              (this.selectedPokemon.stats[0].base_stat * 255 * 4) /
+              (this.selectedPokemon.hp * pokeball.captureBonus);
+            if (f >= m) {
+              this.captured = true;
+              this.joinTeam();
+            } else {
+              this.restartOrScape();
             }
           }
         }
       }, 3000);
+    },
+    restartOrScape() {
+      this.hitCounter = 0;
+      this.damageValue = 0;
+      const speed = this.selectedPokemon.stats[5].base_stat;
+      const final = Math.floor(Math.random() * 200) + 1;
+      if (speed >= final.toFixed(0)) {
+        alert(`${this.selectedPokemon.name} fugiu!`);
+        this.selectedPokemon = {};
+      }
     },
     async sortPokemon(selected) {
       this.hitCounter = 0;

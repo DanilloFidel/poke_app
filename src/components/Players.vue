@@ -101,7 +101,7 @@
             </v-col>
           </v-row>
           <v-card-title class="py-1">Box</v-card-title>
-          <v-simple-table>
+          <v-simple-table @mousedown.stop>
             <template v-slot:default>
               <tbody>
                 <tr
