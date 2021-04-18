@@ -1,0 +1,206 @@
+{
+    "areas": [
+        {
+            "nome": "Montanha",
+            "pokemons": [
+                "diglett",
+                "geodude",
+                "onix",
+                "cubone",
+                "kabuto",
+                "aerodactyl"
+            ]
+        },
+        {
+            "nome": "Floresta",
+            "pokemons": [
+                "caterpie",
+                "metapod",
+                "butterfree",
+                "weedle",
+                "kakuna",
+                "beedrill",
+                "gloom",
+                "vileplume",
+                "pinsir",
+                "venomoth",
+                "mankey"
+            ]
+        },
+        {
+            "nome": "Terreno acidentado",
+            "pokemons": [
+                "sandshrew",
+                "cubone",
+                "sandslash",
+                "rhyhorn"
+            ]
+        },
+        {
+            "nome": "Floresta sombria",
+            "pokemons": [
+                "primeape",
+                "exeggcute"
+            ]
+        },
+        {
+            "nome": "Campo",
+            "pokemons": [
+                "venonat",
+                "taurus",
+                "paras",
+                "tangela",
+                "parasect",
+                "exeggcute",
+                "ponyta",
+                "snorlax",
+                "pidgey",
+                "oddish",
+                "growlithe",
+                "bellsprout",
+                "pidgeotto",
+                "rattata",
+                "scyther",
+                "raticate",
+                "spearow",
+                "fearow",
+                "kangaskhan",
+                "ekans",
+                "doduo",
+                "dodrio",
+                "arbok",
+                "nidoran",
+                "nidorina",
+                "nidorino",
+                "vulpix",
+                "farfetchd"
+            ]
+        },
+        {
+            "nome": "Caverna no gelo",
+            "pokemons": []
+        },
+        {
+            "nome": "Gelo",
+            "pokemons": [
+                "slowpoke",
+                "lapras"
+            ]
+        },
+        {
+            "nome": "Caverna",
+            "pokemons": [
+                "clefairy",
+                "clefable",
+                "zubat",
+                "golbat"
+            ]
+        },
+        {
+            "nome": "Montanha de fogo",
+            "pokemons": [
+                "magmar",
+                "flareon"
+            ]
+        },
+        {
+            "nome": "Agua",
+            "pokemons": [
+                "poliwhirl",
+                "poliwag",
+                "tentacool",
+                "slowpoke",
+                "seel",
+                "shellder",
+                "vaporeon",
+                "krabby",
+                "kingler",
+                "magikarp",
+                "lapras",
+                "horsea",
+                "seadra",
+                "goldeen",
+                "seaking",
+                "staryu"
+            ]
+        },
+        {
+            "nome": "Cidade",
+            "pokemons": [
+                "rattata",
+                "spearow",
+                "pikachu",
+                "wigglytuff",
+                "jigglypuff",
+                "mr-mime",
+                "jolteon",
+                "ditto",
+                "eevee",
+                "meowth",
+                "abra",
+                "machop",
+                "jynx",
+                "electabuzz",
+                "magnemite",
+                "grimer",
+                "porygon",
+                "muk",
+                "drowzee",
+                "voltorb",
+                "electrode",
+                "hitmonlee",
+                "lickitung",
+                "koffing",
+                "chansey"
+            ]
+        },
+        {
+            "nome": "Beira d'agua",
+            "pokemons": [
+                "psyduck",
+                "golduck",
+                "omanyte",
+                "slowpoke"
+            ]
+        },
+        {
+            "nome": "Aguas profundas",
+            "pokemons": []
+        },
+        {
+            "nome": "Aguas geladas",
+            "pokemons": [
+                "dewgong"
+            ]
+        },
+        {
+            "nome": "Caverna na montanha",
+            "pokemons": [
+                "dratini"
+            ]
+        },
+        {
+            "nome": "Cemiterio",
+            "pokemons": [
+                "gastly"
+            ]
+        }
+    ],
+    "legendaries": [
+        {
+            "nome": "Passaros Lendários",
+            "pokemons": [
+                "moltres",
+                "zapdos",
+                "articuno"
+            ]
+        },
+        {
+            "nome": "Caverna do mew",
+            "pokemons": [
+                "mewtwo",
+                "mew"
+            ]
+        }
+    ]
+}

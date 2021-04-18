@@ -1,0 +1,133 @@
+{
+    "areas": [
+        {
+            "nome": "Montanha",
+            "pokemons": [
+                "pancham",
+                "tyrunt",
+                "goomy"
+            ]
+        },
+        {
+            "nome": "Floresta",
+            "pokemons": [
+                "scatterbug"
+            ]
+        },
+        {
+            "nome": "Terreno acidentado",
+            "pokemons": [
+                "bunnelby",
+                "hawlucha"
+            ]
+        },
+        {
+            "nome": "Floresta sombria",
+            "pokemons": [
+                "phantump",
+                "pumpkaboo"
+            ]
+        },
+        {
+            "nome": "Campo",
+            "pokemons": [
+                "fletchling",
+                "skiddo",
+                "furfrou"
+            ]
+        },
+        {
+            "nome": "Caverna no gelo",
+            "pokemons": [
+                "bergmite"
+            ]
+        },
+        {
+            "nome": "Gelo",
+            "pokemons": [
+                "amaura"
+            ]
+        },
+        {
+            "nome": "Caverna",
+            "pokemons": [
+                "espurr",
+                "noibat"
+            ]
+        },
+        {
+            "nome": "Montanha de fogo",
+            "pokemons": [
+                "litleo"
+            ]
+        },
+        {
+            "nome": "Agua",
+            "pokemons": [
+                "clauncher"
+            ]
+        },
+        {
+            "nome": "Cidade",
+            "pokemons": [
+                "floette",
+                "espurr",
+                "spritzee",
+                "helioptile",
+                "sylveon"
+            ]
+        },
+        {
+            "nome": "Beira d'agua",
+            "pokemons": [
+                "binacle",
+                "skrelp"
+            ]
+        },
+        {
+            "nome": "Aguas profundas",
+            "pokemons": [
+                "inkay"
+            ]
+        },
+        {
+            "nome": "Aguas geladas",
+            "pokemons": []
+        },
+        {
+            "nome": "Caverna na montanha",
+            "pokemons": [
+                "tyrunt"
+            ]
+        },
+        {
+            "nome": "Cemiterio",
+            "pokemons": [
+                "honedge",
+                "pumpkaboo"
+            ]
+        }
+    ],
+    "legendaries": [
+        {
+            "nome": "Aura Trio",
+            "pokemons": [
+                "xerneas",
+                "yveltal",
+                "zygarde",
+                "zygarde-10",
+                "zygarde-50",
+                "zygarde-complete"
+            ]
+        },
+        {
+            "nome": "Míticos",
+            "pokemons": [
+                "hoopa",
+                "diance",
+                "volcanion",
+                "hoopa-unbound"
+            ]
+        }
+    ]
+}

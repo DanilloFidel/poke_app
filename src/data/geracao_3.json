@@ -1,0 +1,181 @@
+{
+    "areas": [
+        {
+            "nome": "Montanha",
+            "pokemons": [
+                "aron",
+                "spinda",
+                "trapinch",
+                "vibrava",
+                "altaria",
+                "anorith"
+            ]
+        },
+        {
+            "nome": "Floresta",
+            "pokemons": [
+                "zigzagoon",
+                "wurmple",
+                "silcoon",
+                "cascoon",
+                "surskit",
+                "shroomish",
+                "volbeat",
+                "ilumise",
+                "roselia"
+            ]
+        },
+        {
+            "nome": "Terreno acidentado",
+            "pokemons": [
+                "nosepass",
+                "trapinch",
+                "gulpin",
+                "spinda",
+                "lunatone",
+                "solrock"
+            ]
+        },
+        {
+            "nome": "Floresta sombria",
+            "pokemons": [
+                "poochyena",
+                "slakoth",
+                "nincada",
+                "wishmur",
+                "loudred",
+                "absol",
+                "wynaut",
+                "jirachi",
+                "deoxys-normal",
+                "deoxys-speed",
+                "deoxys-attack"
+            ]
+        },
+        {
+            "nome": "Campo",
+            "pokemons": [
+                "zigzagoon",
+                "seedot",
+                "taillow",
+                "ralts",
+                "electrike",
+                "plusle",
+                "minun",
+                "cacnea"
+            ]
+        },
+        {
+            "nome": "Caverna no gelo",
+            "pokemons": [
+                "glalie",
+                "sealeo",
+                "relicanth"
+            ]
+        },
+        {
+            "nome": "Gelo",
+            "pokemons": [
+                "sealeo",
+                "clamperl"
+            ]
+        },
+        {
+            "nome": "Caverna",
+            "pokemons": [
+                "kecleon",
+                "bagon"
+            ]
+        },
+        {
+            "nome": "Montanha de fogo",
+            "pokemons": [
+                "numel",
+                "torkoal",
+                "spoink"
+            ]
+        },
+        {
+            "nome": "Agua",
+            "pokemons": [
+                "wingull",
+                "pelipper",
+                "whiscash",
+                "barboach",
+                "corphish",
+                "feebas"
+            ]
+        },
+        {
+            "nome": "Cidade",
+            "pokemons": [
+                "skitty",
+                "baltoy",
+                "claydol",
+                "beldum"
+            ]
+        },
+        {
+            "nome": "Beira d'agua",
+            "pokemons": [
+                "lotad",
+                "wingull",
+                "pelipper",
+                "azurill"
+            ]
+        },
+        {
+            "nome": "Aguas profundas",
+            "pokemons": [
+                "carvanha",
+                "sharpedo",
+                "wailmer"
+            ]
+        },
+        {
+            "nome": "Aguas geladas",
+            "pokemons": []
+        },
+        {
+            "nome": "Caverna na montanha",
+            "pokemons": [
+                "mawile",
+                "aggron",
+                "meditite"
+            ]
+        },
+        {
+            "nome": "Cemiterio",
+            "pokemons": [
+                "sableye",
+                "shuppet",
+                "banette"
+            ]
+        }
+    ],
+    "legendaries": [
+        {
+            "nome": "Titãs Lendários",
+            "pokemons": [
+                "regirock",
+                "regice",
+                "registeel"
+            ]
+        },
+        {
+            "nome": "Pássaros Gêmeos",
+            "pokemons": [
+                "latios",
+                "latias"
+            ]
+        },
+        {
+            "nome": "Primals",
+            "pokemons": [
+                "groudon",
+                "rayquaza",
+                "kyogre"
+            ]
+        }
+    ]
+}

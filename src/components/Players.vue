@@ -278,6 +278,7 @@ export default {
           "fennekin",
           "litten",
           "scorbunny",
+          "tepig",
         ],
 
         [
@@ -287,12 +288,14 @@ export default {
           "piplup",
           "froakie",
           "popplio",
+          "oshawott",
           "sobble",
         ],
         [
           "bulbasaur",
           "chikorita",
           "treecko",
+          "snivy",
           "turtwig",
           "chespin",
           "rowlet",

@@ -3,7 +3,11 @@
     <v-row dense style="max-height: 50px" class="justify-space-around pt-3">
       <v-col cols="12" class="pl-5">
         <span>Geração</span>
-        <v-radio-group v-model="generation" row @change="filterPokemons">
+        <v-radio-group
+          v-model="generation"
+          row
+          @change="toggleTypes(false), (selectedPokemon = {}), filterPokemons"
+        >
           <v-radio class="mb-1" label="`1 ª" value="1"></v-radio>
           <v-radio class="mb-1" label="`2 ª" value="2"></v-radio>
           <v-radio class="mb-1" label="`3 ª" value="3"></v-radio>
@@ -19,35 +23,29 @@
         <v-select
           :items="areas"
           item-text="nome"
-          item-value="tipos"
+          return-object
           v-model="selectedArea"
           color="red"
         ></v-select>
       </v-col>
       <v-col cols="6" class="pl-5">
         <v-checkbox
-          @change="findPokemon"
+          @change="toggleTypes"
           :disabled="genLoading || loading"
-          label="lendário"
+          label="lendários"
           v-model="legendaryFilter"
         ></v-checkbox>
       </v-col>
       <v-row dense>
-        <v-col class="d-flex justify-center" cols="6" @click="findPokemon(true)"
+        <v-col
+          class="d-flex justify-center"
+          cols="12"
+          @click="findPokemon(true)"
           ><v-btn
             x-small
             :loading="genLoading || loading"
             :disabled="!selectedArea"
             >buscar</v-btn
-          ></v-col
-        >
-        <v-col cols="6" class="d-flex justify-center"
-          ><v-btn
-            @click="
-              (selectedArea = []), (loading = false), (selectedPokemon = {})
-            "
-            x-small
-            >cancelar</v-btn
           ></v-col
         >
       </v-row>
@@ -58,19 +56,37 @@
           @click="hitPokemon"
           v-if="selectedPokemon.name && !isCatching && !captured"
         >
-          <v-col cols="12" class="d-flex justify-center">
+          <v-col cols="6" class="d-flex justify-center">
             <img
               height="130px"
               width="130px"
               :src="getSprite('front_default')"
             />
+            <div class="hp-bar absolute">
+              <div
+                class="hp-bar-filler"
+                :style="{
+                  width: `${
+                    (selectedPokemon.hp / selectedPokemon.stats[0].base_stat) *
+                    100
+                  }%`,
+                }"
+              ></div>
+            </div>
           </v-col>
 
-          <v-col cols="12">
+          <v-col cols="6">
             <h3 class="overline text-center text-capitalize">
-              {{ selectedPokemon.name }} #{{ selectedPokemon.order }} HP
-              {{ selectedPokemon.hp }} SPEED
+              <b>{{ selectedPokemon.name }}</b>
+              <br />
+              SPEED
               {{ selectedPokemon.stats[5].base_stat }}
+              <br />
+              ATTACK
+              {{ selectedPokemon.stats[1].base_stat }}
+              <br />
+              HP
+              {{ selectedPokemon.stats[0].base_stat }}
             </h3>
           </v-col>
 
@@ -137,7 +153,6 @@
 
 <script>
 import Http from "../plugins/http";
-import Vue from "vue";
 import { mdiAccountCheckOutline } from "@mdi/js";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -154,7 +169,7 @@ export default {
     genName: "generation-i",
     generation: "1",
     selectedPokemon: {},
-    selectedArea: [],
+    selectedArea: {},
     selectedType: "",
     diceValue: 1,
     diceValue2: 1,
@@ -181,69 +196,44 @@ export default {
   props: ["colors"],
 
   created() {
-    this.legendaries = require("../data/pokemons.json").legendaries;
-    this.areas = require("../data/areas.json").areas;
-    console.log(this.areas);
-    this.filterPokemons(1);
+    this.filterPokemons();
   },
 
   methods: {
     ...mapActions(["JOIN_TEAM"]),
-    async filterPokemons(value) {
-      console.log(value);
-      this.genLoading = true;
-      await Http.get(`/generation/${value}`)
-        .then((resp) => {
-          this.avaliables = resp.data.pokemon_species;
-          this.types = resp.data.types;
-          this.genName = resp.data.name;
-        })
-        .finally(() => (this.genLoading = false));
+    filterPokemons() {
+      this.areas = require(`../data/geracao_${this.generation}.json`).areas;
+      this.areas = this.areas.filter((a) => a.pokemons.length);
+      this.legendaries = require(`../data/geracao_${this.generation}.json`).legendaries;
+    },
+    toggleTypes(val) {
+      this.legendaryFilter = val;
+      if (val) {
+        this.areas = this.legendaries;
+      } else {
+        this.filterPokemons();
+      }
     },
     getImg(name) {
       return require(`../assets/items/${name}.png`);
     },
-    findPokemon(restore) {
-      if (!this.legendaryFilter && !this.selectedArea.length) {
+    findPokemon() {
+      if (!this.selectedArea.nome) {
         alert("escolha uma regiao!");
         return;
       }
-      restore &&
-        this.filterPokemons(this.generation).then(() => {
-          this.fetchPoke();
-        });
-      !restore && this.fetchPoke();
+      this.fetchPoke();
     },
     fetchPoke() {
       this.loading = true;
       let idx = 0;
       let pokemon = "";
-      if (this.legendaryFilter) {
-        const legendaries = this.legendaries[this.generation];
-        idx = Math.floor(Math.random() * legendaries.length);
-        pokemon = legendaries[idx];
-      } else {
-        idx = Math.floor(Math.random() * this.avaliables.length);
-        pokemon = this.avaliables[idx];
-      }
+
+      this.avaliables = this.selectedArea.pokemons;
+      idx = Math.floor(Math.random() * this.avaliables.length);
+      pokemon = this.avaliables[idx];
       if (!pokemon) return;
-      const getMethod = !this.legendaryFilter ? this.getByUrl : this.getByName;
-      getMethod(!this.legendaryFilter ? pokemon.url : pokemon).then((resp) => {
-        debugger;
-        if (this.legendaryFilter) {
-          this.sortPokemon(resp.data);
-        } else {
-          if (
-            (resp.data.generation.name === this.genName &&
-              !resp.data.habitat) ||
-            !resp.data.is_legendary
-          ) {
-            this.sortPokemon(resp.data);
-          } else {
-            this.findPokemon();
-          }
-        }
-      });
+      this.sortPokemon(pokemon);
     },
     getByUrl(url) {
       return Http.get(url);
@@ -314,58 +304,29 @@ export default {
         this.selectedPokemon = {};
       }
     },
-    async sortPokemon(selected) {
+    async sortPokemon(pokemon) {
       this.hitCounter = 0;
       this.damageValue = 0;
       // this.loading = true;
       // const idx = Math.floor(Math.random() * this.pokemons.length);
 
       try {
-        let pokemonInfo = await Http.get(
-          `/pokemon-species/${selected.name}`
-        ).then((resp) => resp.data);
-        let pokemonInfo2 = await Http.get(`/pokemon/${selected.name}`).then(
+        let pokemonInfo = await Http.get(`/pokemon-species/${pokemon}`).then(
           (resp) => resp.data
         );
+        let pokemonInfo2 = await Http.get(`/pokemon/${pokemon}`).then(
+          (resp) => resp.data
+        );
+        const pk = { ...pokemonInfo, ...pokemonInfo2 };
 
-        setTimeout(() => {
-          const pk = { ...pokemonInfo, ...pokemonInfo2 };
-          if (this.typeMatch(pk.types)) {
-            this.selectedPokemon = pk;
-            this.selectedPokemon.hp = this.selectedPokemon.stats[0].base_stat;
-            console.log("pokemon: ", this.selectedPokemon);
-
-            if (
-              this.selectedPokemon.sprites &&
-              !this.selectedPokemon.sprites.front_default
-            ) {
-              this.sortPokemon();
-            } else {
-              this.loading = false;
-            }
-          } else {
-            const idx = this.avaliables.findIndex((p) => p.name === pk.name);
-            Vue.delete(this.avaliables, idx);
-            this.findPokemon();
-          }
-        }, 1500);
+        this.selectedPokemon = pk;
+        this.selectedPokemon.hp = this.selectedPokemon.stats[0].base_stat;
+        console.log("pokemon: ", this.selectedPokemon);
+        this.loading = false;
       } catch (error) {
         this.loading = false;
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
-    },
-    typeMatch(types = []) {
-      let t = [];
-      types.forEach((type) => {
-        t.push(type.type.name);
-      });
-      let t2 = t.join("-");
-      let t1 = t.reverse().join("-");
-      console.log(this.selectedArea);
-      console.log(t1);
-      console.log(t2);
-      console.log(this.avaliables.length);
-      return this.selectedArea.includes(t1) || this.selectedArea.includes(t2);
     },
     joinTeam() {
       console.log("juntou ao time");
@@ -391,6 +352,20 @@ export default {
   position: absolute;
   top: 211px;
   left: 35%;
+}
+.hp-bar {
+  width: 150px;
+  height: 10px;
+  bottom: 200px;
+  position: absolute;
+  background-color: grey;
+  border-radius: 5px;
+}
+
+.hp-bar-filler {
+  height: 10px;
+  background-color: green;
+  border-radius: 5px;
 }
 
 html {

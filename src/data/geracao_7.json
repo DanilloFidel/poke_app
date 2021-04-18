@@ -1,0 +1,142 @@
+{
+    "areas": [
+        {
+            "nome": "Montanha",
+            "pokemons": [
+                "crabrawler",
+                "rockruff",
+                "celesteela",
+                "stakataka"
+            ]
+        },
+        {
+            "nome": "Floresta",
+            "pokemons": [
+                "pikpek",
+                "yungoos",
+                "cutiefly",
+                "oranguru",
+                "komala"
+            ]
+        },
+        {
+            "nome": "Terreno acidentado",
+            "pokemons": [
+                "yungoos",
+                "crabrawler",
+                "rockruff",
+                "type-null",
+                "silvally"
+            ]
+        },
+        {
+            "nome": "Floresta sombria",
+            "pokemons": [
+                "jangmo-o",
+                "buzzwole",
+                "pheromosa"
+            ]
+        },
+        {
+            "nome": "Campo",
+            "pokemons": [
+                "grubbin",
+                "crabrawler",
+                "mudbray",
+                "fomantis",
+                "morelull",
+                "bounsweet",
+                "kartana"
+            ]
+        },
+        {
+            "nome": "Caverna no gelo",
+            "pokemons": []
+        },
+        {
+            "nome": "Gelo",
+            "pokemons": []
+        },
+        {
+            "nome": "Caverna",
+            "pokemons": [
+                "salandit",
+                "stufful",
+                "oranguru",
+                "cosmog"
+            ]
+        },
+        {
+            "nome": "Montanha de fogo",
+            "pokemons": [
+                "oricorio",
+                "salandit",
+                "turtonator"
+            ]
+        },
+        {
+            "nome": "Agua",
+            "pokemons": [
+                "wishiwashi",
+                "pyukumuku"
+            ]
+        },
+        {
+            "nome": "Cidade",
+            "pokemons": [
+                "togedemaru",
+                "magearna",
+                "xurkitree",
+                "nihilego",
+                "zeraora",
+                "meltan"
+            ]
+        },
+        {
+            "nome": "Beira d'agua",
+            "pokemons": [
+                "dewpider",
+                "wimpod",
+                "sandygast",
+                "palossand",
+                "drampa"
+            ]
+        },
+        {
+            "nome": "Aguas profundas",
+            "pokemons": [
+                "bruxish"
+            ]
+        },
+        {
+            "nome": "Aguas geladas",
+            "pokemons": []
+        },
+        {
+            "nome": "Caverna na montanha",
+            "pokemons": [
+                "stufful",
+                "guzzlord",
+                "poipole"
+            ]
+        },
+        {
+            "nome": "Cemiterio",
+            "pokemons": [
+                "mimikyu",
+                "marshadow",
+                "blacephalon"
+            ]
+        }
+    ],
+    "legendaries": [
+        {
+            "nome": "Trio da Luz",
+            "pokemons": [
+                "solagleo",
+                "lunala",
+                "necrozma"
+            ]
+        }
+    ]
+}
