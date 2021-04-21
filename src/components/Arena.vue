@@ -1,10 +1,8 @@
 <template>
   <div class="area">
-    <div class="bar">
+    <div class="bar" v-if="activeFighter.name">
       <img @click="restoreAll('enemy')" :src="getEnemySprite" class="enemy" />
-      <b class="player-name" v-if="activeFighter.name">{{
-        activeFighter.name
-      }}</b>
+      <b class="player-name">{{ activeFighter.name }}</b>
 
       <div class="enemy-pokeballs">
         <img
@@ -20,8 +18,9 @@
         />
       </div>
     </div>
+    <div class="bar" v-else>Nenhum adversário definido</div>
 
-    <div class="arena" v-if="filteredEnemyPokes()">
+    <div class="arena" v-if="filteredEnemyPokes() && activeFighter.name">
       <div class="enemy-side side">
         <div
           v-if="filteredEnemyPokes().filter((p) => !p.isDefeated).length"

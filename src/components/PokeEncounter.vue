@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row dense style="max-height: 50px" class="justify-space-around pt-3">
+    <v-row dense class="justify-space-around pt-3">
       <v-col cols="12" class="pl-5">
         <span>Geração</span>
         <v-radio-group
@@ -49,7 +49,7 @@
           ></v-col
         >
       </v-row>
-      <v-container v-if="!loading" fluid fill-height>
+      <v-container v-if="!loading" fluid fill-height style="min-height: 200px">
         <v-row
           dense
           justify="center"
@@ -62,10 +62,21 @@
               width="130px"
               :src="getSprite('front_default')"
             />
-            <div class="hp-bar absolute">
+            <div class="hp-bar">
               <div
                 class="hp-bar-filler"
                 :style="{
+                  backgroundColor:
+                    (selectedPokemon.hp / selectedPokemon.stats[0].base_stat) *
+                      100 >=
+                    60
+                      ? 'green'
+                      : (selectedPokemon.hp /
+                          selectedPokemon.stats[0].base_stat) *
+                          100 >=
+                        20
+                      ? 'yellow'
+                      : 'red',
                   width: `${
                     (selectedPokemon.hp / selectedPokemon.stats[0].base_stat) *
                     100
@@ -108,7 +119,7 @@
           <img src="../assets/captured.gif" height="100px" width="100px" />
         </v-row>
       </v-container>
-      <v-container fill-height fluid v-else>
+      <v-container fill-height fluid v-else style="min-height: 200px">
         <v-row dense justify="center" class="px-4">
           <v-col class="d-flex justify-center">
             <v-img
@@ -123,19 +134,14 @@
         </v-row>
       </v-container>
       <v-container fill-height fluid>
-        <v-row
-          dense
-          justify="center"
-          class="px-4"
-          style="position: absolute; bottom: 10px"
-        >
+        <v-row dense justify="center" class="px-4">
           <v-col
             class="d-flex justify-center mx-1"
-            v-for="(pokeball, idx) in pokeballTypes"
+            v-for="(pokeball, idx) in playerPokeballs"
             :key="`pokeball_${idx}`"
           >
             <img
-              @click="catchPokemon(pokeball)"
+              @click="pokeball.amount && catchPokemon(pokeball)"
               class="loading-logo"
               :src="getImg(pokeball.img)"
               eager
@@ -143,7 +149,7 @@
               height="30px"
               width="30px"
             />
-            <span class="ml-2">{{ 0 }}</span>
+            <span class="ml-2">{{ pokeball.amount }}</span>
           </v-col>
         </v-row>
       </v-container>
@@ -179,7 +185,6 @@ export default {
     legendaries: [],
     isCatching: false,
     captured: false,
-    hitCounter: 0,
     selectedBall: {},
     damageValue: 0,
     genLoading: false,
@@ -191,17 +196,28 @@ export default {
     diceImg() {
       return require(`../assets/${this.diceType}.svg`);
     },
+    playerPokeballs() {
+      return this.activePlayer.bag.filter((item) => !!item.captureBonus);
+    },
   },
 
-  props: ["colors"],
+  props: ["colors", "tab"],
 
   created() {
     this.filterPokemons();
   },
 
+  mounted() {
+    console.log(this.activePlayer);
+    console.log(this.playerPokeballs);
+  },
+
   methods: {
-    ...mapActions(["JOIN_TEAM"]),
+    ...mapActions(["JOIN_TEAM", "REMOVE_PLAYER_ITEM"]),
     filterPokemons() {
+      this.selectedArea = {};
+      this.isCatching = false;
+
       this.areas = require(`../data/geracao_${this.generation}.json`).areas;
       this.areas = this.areas.filter((a) => a.pokemons.length);
       this.legendaries = require(`../data/geracao_${this.generation}.json`).legendaries;
@@ -218,6 +234,7 @@ export default {
       return require(`../assets/items/${name}.png`);
     },
     findPokemon() {
+      this.isCatching = false;
       if (!this.selectedArea.nome) {
         alert("escolha uma regiao!");
         return;
@@ -245,25 +262,22 @@ export default {
       return this.selectedPokemon.sprites[type];
     },
     hitPokemon() {
-      if (this.hitCounter <= 2) {
-        this.hitCounter++;
-        const val =
-          Math.floor(
-            (Math.random() * this.selectedPokemon.stats[0].base_stat) / 2
-          ) + 1;
-        this.damageValue += val;
-        const hp = this.selectedPokemon.hp - val;
-        if (hp < 1) {
-          alert(`Voce derrotou o Pokemon!`);
-          this.damageValue = 0;
-          this.hitCounter = 0;
-          this.selectedPokemon = {};
-        }
-        this.selectedPokemon = { ...this.selectedPokemon, hp };
+      const val =
+        Math.floor(
+          (Math.random() * this.selectedPokemon.stats[0].base_stat) / 2
+        ) + 1;
+      this.damageValue += val;
+      const hp = this.selectedPokemon.hp - val;
+      if (hp < 1) {
+        alert(`Voce derrotou o Pokemon!`);
+        this.damageValue = 0;
+        this.selectedPokemon = {};
       }
+      this.selectedPokemon = { ...this.selectedPokemon, hp };
     },
     removePokeball(pokeball) {
-      console.log("remover", pokeball);
+      debugger;
+      this.REMOVE_PLAYER_ITEM({ pokeball, idx: this.tab });
     },
     catchPokemon(pokeball) {
       if (!this.selectedPokemon.name) return;
@@ -295,7 +309,6 @@ export default {
       }, 3000);
     },
     restartOrScape() {
-      this.hitCounter = 0;
       this.damageValue = 0;
       const speed = this.selectedPokemon.stats[5].base_stat;
       const final = Math.floor(Math.random() * 200) + 1;
@@ -305,23 +318,21 @@ export default {
       }
     },
     async sortPokemon(pokemon) {
-      this.hitCounter = 0;
       this.damageValue = 0;
       // this.loading = true;
       // const idx = Math.floor(Math.random() * this.pokemons.length);
 
       try {
-        let pokemonInfo = await Http.get(`/pokemon-species/${pokemon}`).then(
-          (resp) => resp.data
-        );
         let pokemonInfo2 = await Http.get(`/pokemon/${pokemon}`).then(
           (resp) => resp.data
         );
-        const pk = { ...pokemonInfo, ...pokemonInfo2 };
+        let pokemonInfo = await Http.get(pokemonInfo2.species.url).then(
+          (resp) => resp.data
+        );
+        let pk = { ...pokemonInfo, ...pokemonInfo2 };
 
         this.selectedPokemon = pk;
         this.selectedPokemon.hp = this.selectedPokemon.stats[0].base_stat;
-        console.log("pokemon: ", this.selectedPokemon);
         this.loading = false;
       } catch (error) {
         this.loading = false;
@@ -335,6 +346,7 @@ export default {
       delete this.selectedPokemon.species;
       delete this.selectedPokemon.stats;
       delete this.selectedPokemon.moves;
+      debugger;
       this.JOIN_TEAM(this.selectedPokemon);
       setTimeout(() => {
         this.captured = false;
@@ -356,7 +368,7 @@ export default {
 .hp-bar {
   width: 150px;
   height: 10px;
-  bottom: 200px;
+  bottom: 110px;
   position: absolute;
   background-color: grey;
   border-radius: 5px;

@@ -17,6 +17,18 @@
             "sprite": "jesse_sprite.png"
         },
         {
+            "name": "Jiraya",
+            "dice": 10,
+            "pokemons": [
+                "venusaur",
+                "politoed",
+                "seismitoad",
+                "poliwrath"
+            ],
+            "xp": 300,
+            "sprite": "jiraya_sprite.png"
+        },
+        {
             "name": "Serena",
             "dice": 6,
             "pokemons": [],
@@ -284,10 +296,181 @@
                 "xatu"
             ],
             "dice": 12,
+            "isAkatsuki": false,
             "type": "psychic",
             "bagde": "da Mente",
             "img": "tate_and_liza.png",
             "sprite": "tate_and_liza_sprite.gif"
+        },
+        {
+            "name": "Sasori",
+            "isAkatsuki": true,
+            "pokemons": [
+                "palossand",
+                "mr-mime",
+                "muk",
+                "kabutops",
+                "crobat",
+                "giratina-altered"
+            ],
+            "money": 1600,
+            "dice": 12,
+            "type": "ground",
+            "bagde": "da Areia",
+            "sprite": "sasori_sprite.gif"
+        },
+        {
+            "name": "Itachi",
+            "isAkatsuki": true,
+            "pokemons": [
+                "corviknight",
+                "marshadow",
+                "charizard-mega-y",
+                "moltres-galar",
+                "umbreon",
+                "darkrai"
+            ],
+            "money": 2500,
+            "dice": 12,
+            "type": "dark",
+            "bagde": "Tsukuyomi",
+            "sprite": "itachi_sprite.gif"
+        },
+        {
+            "name": "Hidan",
+            "isAkatsuki": true,
+            "pokemons": [
+                "gengar",
+                "marowak-alola",
+                "dusknoir",
+                "chandelure",
+                "mimikyu",
+                "lunala"
+            ],
+            "money": 2000,
+            "dice": 12,
+            "type": "ghost",
+            "bagde": "do Jachin",
+            "sprite": "hidan_sprite.gif"
+        },
+        {
+            "name": "Deidara",
+            "isAkatsuki": true,
+            "pokemons": [
+                "dugtrio",
+                "golem",
+                "tyranitar",
+                "groudon",
+                "gigalith",
+                "reshiram"
+            ],
+            "money": 2500,
+            "dice": 12,
+            "type": "rock",
+            "bagde": "da Arte",
+            "sprite": "deidara_sprite.gif"
+        },
+        {
+            "name": "Konan",
+            "isAkatsuki": true,
+            "pokemons": [
+                "blastoise",
+                "tentacruel",
+                "gyarados",
+                "lugia",
+                "suicune",
+                "kyogre"
+            ],
+            "money": 1900,
+            "dice": 12,
+            "type": "water",
+            "bagde": "do Origami",
+            "sprite": "konan_sprite.gif"
+        },
+        {
+            "name": "Tobi",
+            "isAkatsuki": true,
+            "pokemons": [
+                "alakazam",
+                "hypno",
+                "articuno-galar",
+                "wobbuffet",
+                "claydol",
+                "cosmoem"
+            ],
+            "money": 3000,
+            "dice": 12,
+            "type": "psychic",
+            "bagde": "da Ilusão",
+            "sprite": "tobi_sprite.gif"
+        },
+        {
+            "name": "Orochimaru",
+            "isAkatsuki": true,
+            "pokemons": [
+                "arbok",
+                "venomoth",
+                "mewtwo",
+                "seviper",
+                "deoxys-speed",
+                "drapion"
+            ],
+            "money": 3500,
+            "dice": 12,
+            "type": "poison",
+            "bagde": "da Maldição",
+            "sprite": "orochi_sprite.gif"
+        },
+        {
+            "name": "Kisame",
+            "isAkatsuki": true,
+            "pokemons": [
+                "sharpedo",
+                "cloyster",
+                "qwilfish",
+                "matine",
+                "palkia",
+                "tapu-fini"
+            ],
+            "money": 1300,
+            "dice": 12,
+            "type": "water",
+            "bagde": "da Névoa",
+            "sprite": "kisame_sprite.gif"
+        },
+        {
+            "name": "Nagato",
+            "isAkatsuki": true,
+            "pokemons": [
+                "",
+                "naganadel",
+                "necrozma",
+                "yveltal",
+                "volcanion",
+                "hydreigon"
+            ],
+            "money": 4500,
+            "dice": 12,
+            "type": "psychic",
+            "bagde": "da Dor",
+            "sprite": "nagato_sprite.gif"
+        },
+        {
+            "name": "Kakuzu",
+            "isAkatsuki": true,
+            "pokemons": [
+                "buzzwole",
+                "xurkitree",
+                "salazzle",
+                "zekrom",
+                "guzzlord",
+                "malamar"
+            ],
+            "money": 8000,
+            "dice": 12,
+            "type": "dark",
+            "bagde": "do Dinheiro",
+            "sprite": "kakuzu_sprite.gif"
         }
     ]
 }

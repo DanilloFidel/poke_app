@@ -1,94 +1,202 @@
 <template>
   <v-app>
     <v-container fluid class="pa-0 main">
-      <v-row dense>
-        <v-app-bar color="white" dense>
-          <v-btn icon @click="screen = 'enemies'">
-            <img
-              width="25px"
-              height="25px"
-              src="./assets/pokemon-trainer.svg"
-            />
-          </v-btn>
+      <v-tabs v-model="tab" centered height="30px" @change="setActivePlayer">
+        <!-- <v-tabs-slider></v-tabs-slider> -->
 
-          <v-btn icon @click="screen = 'pokeEncounter'">
-            <img width="25px" height="25px" src="./assets/pikachu.svg" />
-          </v-btn>
-          <v-btn icon @click="screen = 'players'">
-            <img width="25px" height="25px" src="./assets/treasure-map.svg" />
-          </v-btn>
-          <v-btn icon @click="screen = 'eventCards'">
-            <img width="25px" height="25px" src="./assets/cards.svg" />
-          </v-btn>
-          <v-btn icon @click="screen = 'pokedex'">
-            <img width="25px" height="25px" src="./assets/pokemon-go.svg" />
-          </v-btn>
-          <v-btn icon @click="screen = 'data'">
-            <img width="25px" height="25px" src="./assets/pokeball.svg" />
-          </v-btn>
-          <v-btn icon @click="screen = 'arena'">
-            <img width="25px" height="25px" src="./assets/d6.svg" />
-          </v-btn>
-        </v-app-bar>
+        <v-tab v-for="(player, idx) in players" :key="`player${idx}`">
+          {{ player.name }}
+        </v-tab>
+      </v-tabs>
 
-        <div class="content">
-          <v-container v-show="screen === 'pokedex'" class="pa-0">
-            <Pokedex :colors="colors" />
-          </v-container>
-          <v-container v-show="screen === 'data'" class="pa-0">
-            <DataSetup
-              @update-slot="slot = $event"
-              @load-slot="loadProgress"
-              @new-game="sortInitials"
-            />
-          </v-container>
-          <v-container v-show="screen === 'pokeEncounter'" class="pa-0">
-            <PokeEncounter :colors="colors" />
-          </v-container>
-          <v-container v-show="screen === 'eventCards'" class="pa-0">
-            <EventCards
-              :habitats="
-                habitats.map((h) => h.name).filter((h) => h.name !== 'rare')
-              "
-            />
-          </v-container>
-          <v-container v-show="screen === 'players'" class="pa-0">
-            <Players ref="players" :colors="colors" />
-          </v-container>
-          <v-container v-show="screen === 'enemies'" class="pa-0">
-            <Enemy ref="enemies" :colors="colors" />
-          </v-container>
-          <v-container v-show="screen === 'arena'" class="pa-0">
-            <arena :colors="colors" :screen="screen"></arena>
-          </v-container>
-          <!-- <v-container v-show="screen === 'typesCompare'" class="pa-0">
-            <TypesCompare :colors="colors" />
-          </v-container> -->
-        </div>
-      </v-row>
+      <v-tabs-items v-model="tab">
+        <v-tab-item
+          v-for="(player, idx) in players"
+          :key="`player_content${idx}`"
+        >
+          <v-row dense class="mt-3 mx-3">
+            <v-col>
+              <span
+                >XP: <b>{{ playerXp }}</b></span
+              >
+              <br />
+              <span
+                >$$: <b>{{ player.money }}</b></span
+              >
+            </v-col>
+            <v-col>
+              <v-btn x-small @click="openAddModal">+</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn x-small @click="sortPlayerTurn">sortear</v-btn>
+            </v-col>
+            <v-col>
+              <v-btn x-small @click="screen = 'home'">Home</v-btn>
+            </v-col>
+          </v-row>
+
+          <v-row
+            dense
+            style="overflow-y: auto; max-height: 350px"
+            class="mx-3"
+            v-if="screen === 'home'"
+          >
+            <v-col
+              cols="6"
+              v-for="(pokemon, idx) in onTeam"
+              :key="`team_member${idx}`"
+            >
+              <v-card
+                elevation="3"
+                style="height: 100px"
+                :color="pokemon.defeated ? '#ff00005c' : 'white'"
+                class="pa-2"
+              >
+                <v-row dense justify="space-around" style="height: 100px">
+                  <span style="position: absolute; left: 3px; font-size: 13px"
+                    ><b> lvl:</b> {{ pokemon.wins || 0 }}</span
+                  >
+                  <v-col cols="6" class="mt-1" @click="upPokemon(pokemon)">
+                    <img
+                      height="85px"
+                      width="85px"
+                      :src="pokemon.sprites.front_default"
+                      :class="{ evolving: pokemon.isEvolving }"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="6"
+                    align-self="center"
+                    class="pl-2"
+                    style="font-size: 12px"
+                  >
+                    <span class="text-capitalize"
+                      ><b>{{ pokemon.name }}</b>
+                    </span>
+                    <v-chip
+                      x-small
+                      outlined
+                      label
+                      class="mt-2 mr-2 overline elevation-3"
+                      v-for="(item, idx) in pokemon.types"
+                      :key="idx"
+                      :color="colors[item.type.name]"
+                      >{{ item.type.name }}</v-chip
+                    >
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row
+            dense
+            justify="center"
+            align="center"
+            style="height: 200px"
+            v-if="screen == 'home'"
+          >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="orange" @click="toggleScreen('arena')"
+                >Batalha</v-btn
+              ></v-col
+            >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="green" @click="toggleScreen('capture')"
+                >Captura</v-btn
+              ></v-col
+            >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="grey" @click="toggleScreen('box')"
+                >PC Box</v-btn
+              ></v-col
+            >
+            <v-col
+              cols="6"
+              class="d-flex justify-center"
+              @click="toggleScreen('bag')"
+              ><v-btn width="120" color="brown">Mochila</v-btn></v-col
+            >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="blue" @click="toggleScreen('shop')"
+                >Loja</v-btn
+              ></v-col
+            >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="red">Pokedex</v-btn></v-col
+            >
+          </v-row>
+          <v-row dense justify="center" align="center" v-if="screen == 'box'">
+            <box :activePlayer="activePlayer" :colors="colors" :tab="tab"></box>
+          </v-row>
+          <v-row dense justify="center" align="center" v-if="screen == 'bag'">
+            <bag :activePlayer="activePlayer" :colors="colors" :tab="tab"></bag>
+          </v-row>
+          <v-row dense justify="center" align="center" v-if="screen == 'shop'">
+            <shop
+              :activePlayer="activePlayer"
+              :colors="colors"
+              :tab="tab"
+            ></shop>
+          </v-row>
+          <v-row dense justify="center" align="center" v-if="screen == 'arena'">
+            <arena
+              :activePlayer="activePlayer"
+              :colors="colors"
+              :tab="tab"
+            ></arena>
+          </v-row>
+          <v-row
+            dense
+            justify="center"
+            align="center"
+            v-if="screen == 'capture'"
+          >
+            <poke-encounter
+              :activePlayer="activePlayer"
+              :colors="colors"
+              :tab="tab"
+            ></poke-encounter>
+          </v-row>
+        </v-tab-item>
+      </v-tabs-items>
+
+      <v-dialog v-model="addMenu">
+        <v-card class="pa-3">
+          <v-row dense>
+            <v-autocomplete
+              label="Nome"
+              :items="pokemons"
+              item-text="name"
+              item-value="name"
+              @change="closeAndAdd"
+            ></v-autocomplete>
+          </v-row>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
 
 <script>
-import Pokedex from "@/components/Pokedex.vue";
-import PokeEncounter from "@/components/PokeEncounter.vue";
-import EventCards from "@/components/EventCards.vue";
-import Enemy from "@/components/Enemy.vue";
-import DataSetup from "@/components/DataSetup.vue";
-import Arena from "@/components/Arena.vue";
-// import TypesCompare from "@/components/TypesCompare.vue";
-import Players from "@/components/Players.vue";
+import Http from "./plugins/http";
+import Box from "./components/Box";
+import Bag from "./components/Bag";
 import { mdiCalendarClockOutline } from "@mdi/js";
 import { mapActions, mapState } from "vuex";
+import PokeEncounter from "./components/PokeEncounter.vue";
+import Arena from "./components/Arena.vue";
+import Shop from "./components/Shop.vue";
 export default {
   name: "App",
   data: () => ({
     battlePokemon: {},
     diceModal: false,
+    addMenu: false,
+
     loadIcon: mdiCalendarClockOutline,
     drawer: true,
-    screen: "pokeEncounter",
+    screen: "home",
     fab: false,
     pokemons: [],
     loading: false,
@@ -100,6 +208,7 @@ export default {
         url: "https://pokeapi.co/api/v2/pokemon?limit=1118",
       },
     ],
+    tab: 0,
     selectedPokemon: {},
     selectedHabitat: "",
     diceValue: 1,
@@ -130,13 +239,10 @@ export default {
   }),
 
   components: {
-    Pokedex,
+    Box,
     PokeEncounter,
-    EventCards,
-    Enemy,
-    // TypesCompare,
-    Players,
-    DataSetup,
+    Shop,
+    Bag,
     Arena,
   },
 
@@ -149,17 +255,33 @@ export default {
   },
 
   computed: {
-    ...mapState(["diceBattle", "activePlayer", "activeFighter"]),
+    ...mapState(["diceBattle", "activePlayer", "activeFighter", "players"]),
     diceImg() {
       return require(`./assets/${this.diceType}.svg`);
     },
     loadingImg() {
       return require("./assets/loading.gif");
     },
+    activePlayer() {
+      return this.players[this.tab];
+    },
+    playerXp() {
+      return this.activePlayer.pokemons.reduce(
+        (acc, el) => (acc += el.base_experience + (el.wins || 0) * 20),
+        0
+      );
+    },
+    onTeam() {
+      return this.activePlayer.pokemons.filter((p) => p.onTeam);
+    },
   },
 
   created() {
     this.fecthHabitats();
+    this.setActivePlayer(0);
+    Http.get("pokemon?limit=1118").then(
+      (resp) => (this.pokemons = resp.data.results)
+    );
     // setInterval(() => {
     //   this.$refs.players.saveProgress(this.slot);
     // }, 10000);
@@ -169,7 +291,10 @@ export default {
     ...mapActions([
       "SET_DICE_BATTLE",
       "SET_SINGLE_DICE_BATTLE",
+      "ADD_POKE_TO_PLAYER",
+      "UPDATE_PLAYER",
       "SET_VALUE_DICE_BATTLE",
+      "SET_ACTIVE_PLAYER",
     ]),
     fecthHabitats() {
       this.btnLoading = true;
@@ -182,6 +307,20 @@ export default {
     },
     loadProgress(slot) {
       this.$refs.players.load(slot);
+    },
+    setActivePlayer(e) {
+      this.SET_ACTIVE_PLAYER(e);
+    },
+    toggleScreen(name) {
+      this.screen = name;
+    },
+    openAddModal() {
+      this.addMenu = !this.addMenu;
+    },
+    cureAll() {
+      this.activePlayer.pokemons.forEach((p) => {
+        this.changePokemonStatus(p, true);
+      });
     },
     changeHabitat(url) {
       this.btnLoading = true;
@@ -199,6 +338,13 @@ export default {
       if (confirm("desejar iniciar um novo jogo?")) {
         this.$refs.players.sortInitials();
       }
+    },
+    closeAndAdd(name) {
+      this.addMenu = false;
+      Http.get(`pokemon/${name}`).then((resp) => {
+        const poke = resp.data;
+        this.ADD_POKE_TO_PLAYER({ poke, playerIdx: this.tab });
+      });
     },
     async sortPokemon() {
       this.loading = true;
@@ -228,6 +374,95 @@ export default {
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
       // this.searchPokemon(selected.url);
+    },
+    upPokemon(pokemon) {
+      console.log(pokemon);
+      if (pokemon.isEvolving || pokemon.defeated) return;
+      pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1;
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
+      if (pokemon.wins == 10 || pokemon.wins == 20) {
+        console.log(pokemon);
+        this.evolvePokemon(pokemon);
+      }
+    },
+    setEvolveEffect(pokemon, evolving) {
+      pokemon["isEvolving"] = evolving;
+      this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
+    },
+    evolvePokemon(pokemon) {
+      if (pokemon.name === "eevee") return;
+
+      this.setEvolveEffect(pokemon, true);
+
+      try {
+        Http.get(`/pokemon-species/${pokemon.name}`)
+          .then((resp) => {
+            return resp.data.evolution_chain;
+          })
+          .then((data) => {
+            Http.get(data.url)
+              .then((resp) => {
+                console.log(resp.data);
+                return resp.data.chain;
+              })
+              .then((chain) => {
+                console.log(chain.evolution_details);
+                if (chain.evolves_to.length) {
+                  let evol = chain.evolves_to[0];
+
+                  if (
+                    evol.species.name === pokemon.name &&
+                    evol.evolves_to.length
+                  ) {
+                    evol = evol.evolves_to[0];
+                  }
+                  console.log("d", evol.evolution_details);
+                  Http.get(evol.species.url).then((resp) => {
+                    Http.get(`pokemon/${resp.data.name}`)
+                      .then((resp) => {
+                        this.replaceEvoluted(resp.data, pokemon);
+                      })
+                      .finally(() => (this.isEvolving = false));
+                  });
+                }
+              });
+          });
+      } catch (error) {
+        this.setEvolveEffect(pokemon, false);
+      }
+    },
+    sortPlayerTurn() {
+      const types = [
+        { event: this.sortEnemy },
+        { event: this.sortCard },
+        { event: this.sortEncounter },
+        { event: this.sortNothing },
+      ];
+      const t = types[Math.floor(Math.random() * types.length)];
+      t.event();
+    },
+    sortEnemy() {
+      alert("inimigo");
+    },
+    sortCard() {
+      alert("carta");
+    },
+    sortEncounter() {
+      alert("encontro");
+    },
+    sortNothing() {
+      alert("nada");
+    },
+    replaceEvoluted(pokemon, oldPokemon) {
+      pokemon["onTeam"] = oldPokemon.onTeam;
+      pokemon["wins"] = oldPokemon.wins;
+      pokemon["defeated"] = oldPokemon.defeated;
+      this.UPDATE_PLAYER({
+        pokemon,
+        name: this.activePlayer.name,
+        isEvolve: true,
+        oldPokemon,
+      });
     },
     setDiceDifficult() {
       this.simpleChance = true;
@@ -280,5 +515,35 @@ html {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.evolving {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  10% {
+    opacity: 0.8;
+  }
+
+  30% {
+    opacity: 0.7;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  90% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
 }
 </style>

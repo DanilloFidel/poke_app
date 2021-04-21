@@ -4,22 +4,34 @@ import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 import Player from "../models/player";
 
+const deleteUnused = (poke) => {
+  delete poke.abilities;
+  delete poke.forms;
+  delete poke.species;
+  delete poke.moves;
+  delete poke.game_indices;
+  delete poke.held_items;
+  delete poke.abilities;
+}
+
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     activeFighter: {},
     activePlayer: {},
     pokeballTypes: [
-      { name: "pokeball", captureBonus: 255, img: "poke_ball" },
-      { name: "greatball", captureBonus: 200, img: "great_ball" },
-      { name: "ultraball", captureBonus: 150, img: "ultra_ball" },
-      { name: "masterball", isMaster: true, img: "master_ball" }
+      { name: "pokeball", captureBonus: 255, img: "poke_ball", amount: 0, price: 100 },
+      { name: "greatball", captureBonus: 200, img: "great_ball", amount: 0, price: 150 },
+      { name: "ultraball", captureBonus: 150, img: "ultra_ball", amount: 0, price: 200 },
+      { name: "masterball", isMaster: true, img: "master_ball", amount: 0, price: 9999999 }
     ],
     types: [],
     savedPlayers: [],
     applyXp: {},
     players: [
-      new Player({ name: "Danillo" }),
+      new Player({
+        name: "Danillo"
+      }),
       new Player({ name: "Eduardo" }),
       new Player({ name: "Matheus" })
     ],
@@ -40,10 +52,7 @@ export default new Vuex.Store({
   mutations: {
     setActiveFighter(state, data) {
       data.pokemons.forEach(poke => {
-        delete poke.abilities;
-        delete poke.forms;
-        delete poke.species;
-        delete poke.moves;
+        deleteUnused(poke)
       })
       state.activeFighter = data
     },
@@ -53,7 +62,15 @@ export default new Vuex.Store({
     setPlayers(state, data) {
       state.players = data.map(p => new Player(p))
     },
-    updatePlayer(state, pokes) {
+    updatePlayerFull(state, { idx, player }) {
+      state.activePlayer = player;
+      Vue.set(state.players, idx, { ...state.players[idx], ...player })
+    },
+    updatePlayer(state, { idx, bag }) {
+      state.activePlayer.bag = bag;
+      Vue.set(state.players, idx, { ...state.players[idx], bag })
+    },
+    updatePlayerItem(state, pokes) {
       if (!pokes || !pokes.length) return
       state.activePlayer.pokemons = pokes;
     },
@@ -67,10 +84,7 @@ export default new Vuex.Store({
         state.savedPlayers.push(data)
     },
     updatePlayersPoke(state, { idx, poke, playerIdx }) {
-      delete poke.abilities;
-      delete poke.forms;
-      delete poke.species;
-      delete poke.moves;
+      deleteUnused(poke)
       Vue.set(state.players[playerIdx].pokemons, idx, poke)
     },
     updateFinishedBattle(state, { pks, playerIdx }) {
@@ -84,6 +98,7 @@ export default new Vuex.Store({
       Vue.delete(state.players[playerIdx].pokemons, idx)
     },
     addPlayersPoke(state, { poke, playerIdx }) {
+      deleteUnused(poke)
       state.players[playerIdx].pokemons.push(poke)
     },
     setDiceBattlePlayer(state, data) {
@@ -119,8 +134,25 @@ export default new Vuex.Store({
       }
       commit('updatePlayersPoke', { idx, poke: pokemon, playerIdx })
     },
+    SET_ACTIVE_PLAYER({ commit, state }, idx) {
+      commit("setActivePlayer", state.players[idx])
+    },
     ADD_POKE_TO_PLAYER({ commit }, { poke, playerIdx }) {
       commit('addPlayersPoke', { poke, playerIdx })
+    },
+    REMOVE_PLAYER_ITEM({ dispatch, state }, { pokeball, idx }) {
+      let p = state.players[idx];
+      const index = p.bag.findIndex(item => item.name === pokeball.name);
+      const item = p.bag[index]
+      item.amount -= 1
+      p.bag[index] = item;
+      dispatch('UPDATE_PLAYER_FULL_BAG', { idx, player: p })
+    },
+    UPDATE_PLAYER_FULL_BAG({ commit }, { player, idx }) {
+      commit('updatePlayer', { idx, bag: player.bag })
+    },
+    UPDATE_PLAYER_ATTR({ commit }, { player, idx }) {
+      commit('updatePlayerFull', { idx, player })
     },
     UPDATE_ON_END_BATTLE({ commit, state }, { name, pokemons }) {
       debugger
@@ -153,10 +185,7 @@ export default new Vuex.Store({
     SET_PLAYERS({ commit }, data) {
       data.forEach(p => {
         p.pokemons.forEach(poke => {
-          delete poke.abilities;
-          delete poke.forms;
-          delete poke.species;
-          delete poke.moves;
+          deleteUnused(poke)
         })
       })
       commit("setPlayers", data)
