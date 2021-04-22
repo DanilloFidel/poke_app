@@ -10,6 +10,7 @@ const deleteUnused = (poke) => {
   delete poke.species;
   delete poke.moves;
   delete poke.game_indices;
+  delete poke.past_types;
   delete poke.held_items;
   delete poke.abilities;
 }
@@ -51,7 +52,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setActiveFighter(state, data) {
-      data.pokemons.forEach(poke => {
+      data.name && data.pokemons.forEach(poke => {
         deleteUnused(poke)
       })
       state.activeFighter = data
@@ -119,10 +120,17 @@ export default new Vuex.Store({
     ADD_ACTIVE_FIGHTER({ commit }, data) {
       commit('setActiveFighter', data)
     },
-    CURE_ALL({ commit }, { pks }) {
-      commit('updateEnemy', pks);
+    CURE_ALL({ commit, state }) {
+      const player = {
+        pokemons: state.activePlayer.pokemons.map(p => {
+          return { ...p, isDefeated: false }
+        })
+      }
+      const idx = state.players.findIndex(p => p.name === state.activePlayer.name);
+      commit('updatePlayerFull', { idx, player });
     },
     UPDATE_PLAYER({ commit, state }, { name, pokemon, isEvolve, oldPokemon }) {
+      debugger
       const playerIdx = state.players.findIndex(p => p.name === name);
       let idx = -1;
       if (isEvolve) {

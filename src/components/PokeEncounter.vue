@@ -62,28 +62,11 @@
               width="130px"
               :src="getSprite('front_default')"
             />
-            <div class="hp-bar">
-              <div
-                class="hp-bar-filler"
-                :style="{
-                  backgroundColor:
-                    (selectedPokemon.hp / selectedPokemon.stats[0].base_stat) *
-                      100 >=
-                    60
-                      ? 'green'
-                      : (selectedPokemon.hp /
-                          selectedPokemon.stats[0].base_stat) *
-                          100 >=
-                        20
-                      ? 'yellow'
-                      : 'red',
-                  width: `${
-                    (selectedPokemon.hp / selectedPokemon.stats[0].base_stat) *
-                    100
-                  }%`,
-                }"
-              ></div>
-            </div>
+
+            <hp-bar
+              :hp="selectedPokemon.hp"
+              :originalHp="selectedPokemon.stats[0].base_stat"
+            ></hp-bar>
           </v-col>
 
           <v-col cols="6">
@@ -158,6 +141,7 @@
 </template>
 
 <script>
+import HpBar from "./HpBar";
 import Http from "../plugins/http";
 import { mdiAccountCheckOutline } from "@mdi/js";
 import { mapActions, mapState } from "vuex";
@@ -190,6 +174,9 @@ export default {
     genLoading: false,
     areas: [],
   }),
+  components: {
+    HpBar,
+  },
 
   computed: {
     ...mapState(["activePlayer", "pokeballTypes"]),
@@ -364,20 +351,6 @@ export default {
   position: absolute;
   top: 211px;
   left: 35%;
-}
-.hp-bar {
-  width: 150px;
-  height: 10px;
-  bottom: 110px;
-  position: absolute;
-  background-color: grey;
-  border-radius: 5px;
-}
-
-.hp-bar-filler {
-  height: 10px;
-  background-color: green;
-  border-radius: 5px;
 }
 
 html {

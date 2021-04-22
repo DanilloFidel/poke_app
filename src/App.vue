@@ -49,7 +49,7 @@
               <v-card
                 elevation="3"
                 style="height: 100px"
-                :color="pokemon.defeated ? '#ff00005c' : 'white'"
+                :color="pokemon.isDefeated ? '#ff00005c' : 'white'"
                 class="pa-2"
               >
                 <v-row dense justify="space-around" style="height: 100px">
@@ -124,6 +124,11 @@
             >
             <v-col cols="6" class="d-flex justify-center"
               ><v-btn width="120" color="red">Pokedex</v-btn></v-col
+            >
+            <v-col cols="6" class="d-flex justify-center"
+              ><v-btn width="120" color="#b482ff" @click="CURE_ALL"
+                >Curar Todos</v-btn
+              ></v-col
             >
           </v-row>
           <v-row dense justify="center" align="center" v-if="screen == 'box'">
@@ -282,6 +287,19 @@ export default {
     Http.get("pokemon?limit=1118").then(
       (resp) => (this.pokemons = resp.data.results)
     );
+    Http.get(`/type`)
+      .then((resp) => resp.data.results.map((r) => r))
+      .then((types) => {
+        const calls = types.map((type) => Http.get(`/type/${type.name}`));
+        Promise.all(calls)
+          .then((resp) => resp.map((r) => r.data))
+          .then((datas) => {
+            const types = datas.filter(
+              (t) => !["unknown", "shadow"].includes(t.name)
+            );
+            this.SET_TYPES(types);
+          });
+      });
     // setInterval(() => {
     //   this.$refs.players.saveProgress(this.slot);
     // }, 10000);
@@ -295,6 +313,8 @@ export default {
       "UPDATE_PLAYER",
       "SET_VALUE_DICE_BATTLE",
       "SET_ACTIVE_PLAYER",
+      "SET_TYPES",
+      "CURE_ALL",
     ]),
     fecthHabitats() {
       this.btnLoading = true;
