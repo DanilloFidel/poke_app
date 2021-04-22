@@ -7,6 +7,7 @@
         <v-tab v-for="(player, idx) in players" :key="`player${idx}`">
           {{ player.name }}
         </v-tab>
+        <v-btn x-small icon @click="newGame" color="red">x</v-btn>
       </v-tabs>
 
       <v-tabs-items v-model="tab">
@@ -311,6 +312,7 @@ export default {
       "SET_SINGLE_DICE_BATTLE",
       "ADD_POKE_TO_PLAYER",
       "UPDATE_PLAYER",
+      "SET_PLAYERS",
       "SET_VALUE_DICE_BATTLE",
       "SET_ACTIVE_PLAYER",
       "SET_TYPES",
@@ -354,9 +356,76 @@ export default {
         })
         .finally(() => (this.btnLoading = false));
     },
-    sortInitials() {
+    newGame() {
       if (confirm("desejar iniciar um novo jogo?")) {
-        this.$refs.players.sortInitials();
+        let starters = [
+          [
+            "charmander",
+            "cyndaquil",
+            "torchic",
+            "chimchar",
+            "fennekin",
+            "litten",
+            "scorbunny",
+            "tepig",
+          ],
+
+          [
+            "squirtle",
+            "totodile",
+            "mudkip",
+            "piplup",
+            "froakie",
+            "popplio",
+            "oshawott",
+            "sobble",
+          ],
+          [
+            "bulbasaur",
+            "chikorita",
+            "treecko",
+            "snivy",
+            "turtwig",
+            "chespin",
+            "rowlet",
+            "grookey",
+          ],
+        ];
+
+        this.players.forEach((p, idx, arr) => {
+          const p1 =
+            starters[0][Math.floor(Math.random() * starters[0].length)];
+          starters[0] = starters[0].filter((p) => p !== p1);
+          const p2 =
+            starters[1][Math.floor(Math.random() * starters[1].length)];
+          starters[1] = starters[1].filter((p) => p !== p2);
+          const p3 =
+            starters[2][Math.floor(Math.random() * starters[2].length)];
+
+          const sorted = [p1, p2, p3];
+          const promisses = [];
+          sorted.forEach((poke) => {
+            promisses.push(Http.get(`pokemon/${poke}`));
+          });
+
+          Promise.allSettled(promisses)
+            .then((resp) => {
+              return resp.map((r) => {
+                const pk = r.value.data;
+                pk["onTeam"] = true;
+                return pk;
+              });
+            })
+            .then((pokes) => {
+              p.pokemons = pokes;
+              return p;
+            })
+            .then(() => {
+              if (idx === arr.length - 1) {
+                this.SET_PLAYERS(arr);
+              }
+            });
+        });
       }
     },
     closeAndAdd(name) {
