@@ -49,6 +49,7 @@
             alt=""
             class="img"
           />
+          <div class="hit-bagde" :style="badge">{{ playerHit }}</div>
         </div>
         <div v-else>
           {{ giftPokemon.name }}
@@ -111,6 +112,7 @@
           v-ripple
           @click="enemyAttack"
         >
+          <div class="hit-bagde" :style="badge2">{{ enemyHit }}</div>
           <img
             :src="
               activePokemon.sprites.back_default ||
@@ -184,6 +186,8 @@ export default {
     playerTurn: true,
     loading: false,
     gymLeaders: [],
+    playerHit: 0,
+    enemyHit: "",
     enemies: [],
     activeEnemyPokemon: {},
   }),
@@ -194,6 +198,18 @@ export default {
     HpBar,
   },
   computed: {
+    badge() {
+      return {
+        opacity: !this.playerHit ? 0 : 1,
+        transform: `translateY(${!this.playerHit ? 0 : -80}px)`,
+      };
+    },
+    badge2() {
+      return {
+        opacity: !this.enemyHit ? 0 : 1,
+        transform: `translateY(${!this.enemyHit ? 0 : -80}px)`,
+      };
+    },
     activeFighter() {
       return cloneDeep(this.$store.state.activeFighter);
     },
@@ -261,10 +277,12 @@ export default {
       } else if (this[objName].bonus === -1) {
         console.log("desvantagem");
         return (opositeDef += opositeDef / 2);
-      }
+      } else return opositeDef;
     },
     playerAttack() {
       if (this.playerTurn) {
+        this.playerHit = 0;
+
         this.playerTurn = false;
         let atk = this.activePokemon.stats[1].base_stat / 1.3;
         const attackVal = Math.floor(Math.random() * atk);
@@ -277,19 +295,26 @@ export default {
         console.log("def: ", opositeDefVal);
         const hit = attackVal - opositeDefVal;
         if (hit > 0) {
+          this.playerHit = hit;
           this.activeEnemyPokemon = {
             ...this.activeEnemyPokemon,
             hp: (this.activeEnemyPokemon.hp -= hit),
           };
+          setTimeout(() => {
+            this.playerHit = 0;
+          }, 1500);
           if (this.activeEnemyPokemon.hp <= 0) {
             const pokemon = {
               ...this.activePokemon,
               wins: this.activePokemon.wins ? this.activePokemon.wins + 1 : 1,
             };
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
-            this.setNextEnemyPoke();
+            setTimeout(() => {
+              this.setNextEnemyPoke();
+            }, 2500);
           }
         } else {
+          this.playerHit = 0;
           console.log("defendeu");
         }
       }
@@ -310,6 +335,7 @@ export default {
     },
     enemyAttack() {
       if (!this.playerTurn) {
+        this.enemyHit = 0;
         this.playerTurn = true;
         let atk = this.activeEnemyPokemon.stats[1].base_stat / 1.3;
         const attackVal = Math.floor(Math.random() * atk);
@@ -321,10 +347,15 @@ export default {
         console.log("def: ", opositeDefVal);
         const hit = attackVal - opositeDefVal;
         if (hit > 0) {
+          this.enemyHit = hit;
+
           this.activePokemon = {
             ...this.activePokemon,
             hp: (this.activePokemon.hp -= hit),
           };
+          setTimeout(() => {
+            this.enemyHit = 0;
+          }, 1500);
           if (this.activePokemon.hp <= 0) {
             const pokemon = {
               ...this.activePokemon,
@@ -332,9 +363,13 @@ export default {
             };
             debugger;
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
-            this.activePokemon = {};
+            setTimeout(() => {
+              this.activePokemon = {};
+            }, 2500);
           }
         } else {
+          this.enemyHit = 0;
+
           console.log("defendeu");
         }
       }
@@ -461,6 +496,17 @@ export default {
   display: flex;
   align-items: center;
   height: 50%;
+}
+
+.hit-bagde {
+  position: absolute;
+  transition: transform 2s ease-in;
+  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bolder;
 }
 
 .hp-bar {

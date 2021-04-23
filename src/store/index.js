@@ -121,13 +121,13 @@ export default new Vuex.Store({
       commit('setActiveFighter', data)
     },
     CURE_ALL({ commit, state }) {
-      const player = {
-        pokemons: state.activePlayer.pokemons.map(p => {
-          return { ...p, isDefeated: false }
-        })
-      }
+
+      state.activePlayer.pokemons.forEach(p =>
+        p.isDefeated = false
+      )
+
       const idx = state.players.findIndex(p => p.name === state.activePlayer.name);
-      commit('updatePlayerFull', { idx, player });
+      commit('updatePlayerFull', { idx, player: state.activePlayer });
     },
     UPDATE_PLAYER({ commit, state }, { name, pokemon, isEvolve, oldPokemon }) {
       debugger
