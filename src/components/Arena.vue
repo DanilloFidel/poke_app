@@ -261,6 +261,7 @@ export default {
       if (this.activePlayer.name === "Danillo") name = "player_2_sprite.gif";
       if (this.activePlayer.name === "Eduardo") name = "player_sprite.gif";
       if (this.activePlayer.name === "Matheus") name = "player_3_sprite.gif";
+      if (this.activePlayer.name === "Rafael") name = "naturo_sprite.gif";
 
       return require(`../assets/sprites/${name}`);
     },
