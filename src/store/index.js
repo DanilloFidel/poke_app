@@ -34,7 +34,7 @@ export default new Vuex.Store({
         name: "Danillo"
       }),
       new Player({ name: "Eduardo" }),
-      new Player({ name: "Matheus" })
+      new Player({ name: "Rafael" })
     ],
     pokemonToTeam: {},
     diceBattle: {
