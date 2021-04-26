@@ -22,7 +22,8 @@
                 "shroomish",
                 "volbeat",
                 "ilumise",
-                "roselia"
+                "roselia",
+                "ursaring"
             ]
         },
         {
@@ -43,6 +44,7 @@
                 "slakoth",
                 "nincada",
                 "wishmur",
+                "noctowl",
                 "loudred",
                 "absol",
                 "wynaut",
@@ -62,7 +64,9 @@
                 "electrike",
                 "plusle",
                 "minun",
-                "cacnea"
+                "cacnea",
+                "flaaffy",
+                "donphan"
             ]
         },
         {
@@ -70,7 +74,8 @@
             "pokemons": [
                 "glalie",
                 "sealeo",
-                "relicanth"
+                "relicanth",
+                "piloswine"
             ]
         },
         {
@@ -84,7 +89,8 @@
             "nome": "Caverna",
             "pokemons": [
                 "kecleon",
-                "bagon"
+                "bagon",
+                "steelix"
             ]
         },
         {
@@ -92,7 +98,9 @@
             "pokemons": [
                 "numel",
                 "torkoal",
-                "spoink"
+                "spoink",
+                "magcargo",
+                "houndoom"
             ]
         },
         {
@@ -103,7 +111,9 @@
                 "whiscash",
                 "barboach",
                 "corphish",
-                "feebas"
+                "feebas",
+                "lanturn",
+                "quagsire"
             ]
         },
         {
@@ -121,7 +131,7 @@
                 "lotad",
                 "wingull",
                 "pelipper",
-                "azurill"
+                "azumarill"
             ]
         },
         {

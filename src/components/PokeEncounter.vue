@@ -204,8 +204,20 @@ export default {
     filterPokemons() {
       this.selectedArea = {};
       this.isCatching = false;
+      let a = [];
+      for (let index = 1; index <= this.generation; index++) {
+        a = require(`../data/geracao_${index}.json`).areas;
+        if (index > 1) {
+          a.forEach((area) => {
+            const same = this.areas.findIndex((x) => x.nome === area.nome);
+            if (same > -1) {
+              area.pokemons.push(...this.areas[same].pokemons);
+            }
+          });
+        }
+        this.areas = a;
+      }
 
-      this.areas = require(`../data/geracao_${this.generation}.json`).areas;
       this.areas = this.areas.filter((a) => a.pokemons.length);
       this.legendaries = require(`../data/geracao_${this.generation}.json`).legendaries;
     },
