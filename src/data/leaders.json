@@ -160,6 +160,7 @@
         {
             "name": "Brock",
             "dice": 6,
+            "money": 1800,
             "pokemons": [
                 95,
                 74
@@ -172,6 +173,7 @@
         {
             "name": "Misty",
             "dice": 8,
+            "money": 2800,
             "pokemons": [
                 120,
                 54
@@ -187,6 +189,7 @@
                 57,
                 62
             ],
+            "money": 3800,
             "dice": 8,
             "type": "fighting",
             "bagde": "da Tempestade",
@@ -199,6 +202,7 @@
                 147,
                 130
             ],
+            "money": 4800,
             "dice": 10,
             "type": "dragon",
             "bagde": "da Ascensão",
@@ -211,6 +215,7 @@
                 114,
                 70
             ],
+            "money": 4300,
             "dice": 12,
             "type": "grass",
             "bagde": "do Arco-Íris",
@@ -223,6 +228,7 @@
                 94,
                 32
             ],
+            "money": 5800,
             "dice": 12,
             "type": "ghost",
             "bagde": "da Névoa",
@@ -235,6 +241,7 @@
                 163,
                 85
             ],
+            "money": 5200,
             "dice": 10,
             "type": "flying",
             "bagde": "do Zéfiro",
@@ -247,6 +254,7 @@
                 "magcargo",
                 "torkoal"
             ],
+            "money": 3600,
             "dice": 10,
             "type": "fire",
             "bagde": "do Calor",
@@ -259,6 +267,7 @@
                 "persian",
                 "nidorino"
             ],
+            "money": 8000,
             "dice": 20,
             "type": "ground",
             "bagde": "da Terra",
@@ -271,6 +280,7 @@
                 "dewgong",
                 "piloswine"
             ],
+            "money": 6300,
             "dice": 20,
             "type": "ice",
             "bagde": "da Geleira",
@@ -283,6 +293,7 @@
                 "raichu",
                 "electrode"
             ],
+            "money": 7500,
             "dice": 20,
             "type": "electric",
             "bagde": "do Trovão",
@@ -295,6 +306,7 @@
                 "claydol",
                 "xatu"
             ],
+            "money": 5100,
             "dice": 12,
             "isAkatsuki": false,
             "type": "psychic",
@@ -313,7 +325,7 @@
                 "crobat",
                 "giratina-altered"
             ],
-            "money": 1600,
+            "money": 3600,
             "dice": 12,
             "type": "ground",
             "bagde": "da Areia",
@@ -330,7 +342,7 @@
                 "umbreon",
                 "darkrai"
             ],
-            "money": 2500,
+            "money": 3800,
             "dice": 12,
             "type": "dark",
             "bagde": "Tsukuyomi",
@@ -347,7 +359,7 @@
                 "mimikyu-disguised",
                 "lunala"
             ],
-            "money": 2000,
+            "money": 2700,
             "dice": 12,
             "type": "ghost",
             "bagde": "do Jachin",
@@ -364,7 +376,7 @@
                 "gigalith",
                 "reshiram"
             ],
-            "money": 2500,
+            "money": 4500,
             "dice": 12,
             "type": "rock",
             "bagde": "da Arte",
@@ -381,7 +393,7 @@
                 "suicune",
                 "kyogre"
             ],
-            "money": 1900,
+            "money": 4750,
             "dice": 12,
             "type": "water",
             "bagde": "do Origami",
@@ -398,7 +410,7 @@
                 "claydol",
                 "cosmoem"
             ],
-            "money": 3000,
+            "money": 5200,
             "dice": 12,
             "type": "psychic",
             "bagde": "da Ilusão",
@@ -432,7 +444,7 @@
                 "palkia",
                 "tapu-fini"
             ],
-            "money": 1300,
+            "money": 3950,
             "dice": 12,
             "type": "water",
             "bagde": "da Névoa",
@@ -442,7 +454,7 @@
             "name": "Nagato",
             "isAkatsuki": true,
             "pokemons": [
-                "",
+                "lucario",
                 "naganadel",
                 "necrozma",
                 "yveltal",
@@ -466,7 +478,7 @@
                 "guzzlord",
                 "malamar"
             ],
-            "money": 8000,
+            "money": 10000,
             "dice": 12,
             "type": "dark",
             "bagde": "do Dinheiro",

@@ -184,7 +184,9 @@ export default {
       return require(`../assets/${this.diceType}.svg`);
     },
     playerPokeballs() {
-      return this.activePlayer.bag.filter((item) => !!item.captureBonus);
+      return this.activePlayer.bag.filter(
+        (item) => !!item.captureBonus || item.isMaster
+      );
     },
   },
 

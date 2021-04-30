@@ -50,9 +50,11 @@
             class="img"
           />
           <div class="hit-bagde" :style="badge">{{ playerHit }}</div>
+          <div class="hit-bagde" :style="badgeDef">{{ playerDef }}</div>
         </div>
         <div v-else>
           {{ giftPokemon.name }}
+          $ {{ sortedMoney }}
         </div>
         <div
           class="info-box ml-5"
@@ -113,6 +115,7 @@
           @click="enemyAttack"
         >
           <div class="hit-bagde" :style="badge2">{{ enemyHit }}</div>
+          <div class="hit-bagde" :style="badgeDef2">{{ enemyDef }}</div>
           <img
             :src="
               activePokemon.sprites.back_default ||
@@ -187,9 +190,12 @@ export default {
     loading: false,
     gymLeaders: [],
     playerHit: 0,
-    enemyHit: "",
+    enemyHit: 0,
+    playerDef: 0,
+    enemyDef: 0,
     enemies: [],
     activeEnemyPokemon: {},
+    sortedMoney: 0,
   }),
   destroyed() {
     this.ADD_ACTIVE_FIGHTER({});
@@ -208,6 +214,20 @@ export default {
       return {
         opacity: !this.enemyHit ? 0 : 1,
         transform: `translateY(${!this.enemyHit ? 0 : -80}px)`,
+      };
+    },
+    badgeDef() {
+      return {
+        opacity: !this.playerDef ? 0 : 1,
+        transform: `translateY(${!this.playerDef ? 0 : -80}px)`,
+        color: "green",
+      };
+    },
+    badgeDef2() {
+      return {
+        opacity: !this.enemyDef ? 0 : 1,
+        transform: `translateY(${!this.enemyDef ? 0 : -80}px)`,
+        color: "green",
       };
     },
     activeFighter() {
@@ -239,6 +259,9 @@ export default {
           )[0];
           debugger;
           this.activeEnemyPokemon.hp = this.activeEnemyPokemon.stats[0].base_stat;
+          if (val.pokemons.every((p) => p.isDefeated)) {
+            this.sortedMoney = Math.floor(Math.random() * val.money);
+          }
         }
       },
       deep: true,
@@ -283,11 +306,14 @@ export default {
     playerAttack() {
       if (this.playerTurn) {
         this.playerHit = 0;
+        this.playerDef = 0;
 
         this.playerTurn = false;
-        let atk = this.activePokemon.stats[1].base_stat / 1.3;
+        let atk = this.activePokemon.stats[1].base_stat / 1.7;
         const attackVal = Math.floor(Math.random() * atk);
-        let opositeDef = this.activeEnemyPokemon.stats[2].base_stat;
+        let opositeDef =
+          this.activeEnemyPokemon.stats[2].base_stat +
+          this.activeEnemyPokemon.stats[5].base_stat / 100;
         console.log("antes da v: ", opositeDef);
         opositeDef = this.defineAdvantage(opositeDef);
         console.log("dps da v: ", opositeDef);
@@ -310,12 +336,15 @@ export default {
               wins: this.activePokemon.wins ? this.activePokemon.wins + 1 : 1,
             };
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
-            setTimeout(() => {
-              this.setNextEnemyPoke();
-            }, 2500);
+            this.setNextEnemyPoke();
           }
         } else {
           this.playerHit = 0;
+          debugger;
+          this.playerDef = opositeDefVal - attackVal;
+          setTimeout(() => {
+            this.playerDef = 0;
+          }, 1500);
           console.log("defendeu");
         }
       }
@@ -337,10 +366,13 @@ export default {
     enemyAttack() {
       if (!this.playerTurn) {
         this.enemyHit = 0;
+        this.enemyDef = 0;
         this.playerTurn = true;
-        let atk = this.activeEnemyPokemon.stats[1].base_stat / 1.3;
+        let atk = this.activeEnemyPokemon.stats[1].base_stat / 1.7;
         const attackVal = Math.floor(Math.random() * atk);
-        let opositeDef = this.activePokemon.stats[2].base_stat;
+        let opositeDef =
+          this.activePokemon.stats[2].base_stat +
+          this.activePokemon.stats[5].base_stat / 100;
         opositeDef = this.defineAdvantage(opositeDef, false);
 
         const opositeDefVal = Math.floor(Math.random() * opositeDef);
@@ -364,13 +396,14 @@ export default {
             };
             debugger;
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
-            setTimeout(() => {
-              this.activePokemon = {};
-            }, 2500);
+            this.activePokemon = {};
           }
         } else {
           this.enemyHit = 0;
-
+          this.enemyDef = opositeDefVal - attackVal;
+          setTimeout(() => {
+            this.enemyHit = 0;
+          }, 1500);
           console.log("defendeu");
         }
       }
