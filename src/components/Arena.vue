@@ -336,6 +336,7 @@ export default {
             this.playerHit = 0;
           }, 1500);
           if (this.activeEnemyPokemon.hp <= 0) {
+            debugger;
             const pokemon = {
               ...this.activePokemon,
               wins: this.activePokemon.wins ? this.activePokemon.wins + 1 : 1,

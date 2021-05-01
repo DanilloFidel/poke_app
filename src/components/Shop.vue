@@ -48,6 +48,7 @@ export default {
     items: [
       { name: "Bicicleta comum", price: 8000, amount: 0 },
       { name: "Escape Hope", price: 350, amount: 0 },
+      { name: "Curar Todos", price: 0, amount: 0 },
     ],
   }),
   created() {

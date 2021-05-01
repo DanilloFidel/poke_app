@@ -1,0 +1,147 @@
+{
+    "cards": [
+        {
+            "isLucky": true,
+            "descr": "Você dormiu bem e está com muita energia, role o dado novamente",
+            "type": "Normal"
+        },
+        {
+            "isLucky": true,
+            "descr": "Você encontrou um Pokemon selvagem",
+            "type": "Normal"
+        },
+        {
+            "isLucky": true,
+            "descr": "Você encontrou uma pokebola",
+            "type": "Normal",
+            "item": {
+                "name": "pokeball",
+                "captureBonus": 255,
+                "img": "poke_ball",
+                "amount": 0,
+                "price": 100
+            }
+        },
+        {
+            "isLucky": true,
+            "descr": "Você encontrou uma ultraball",
+            "type": "Rara",
+            "item": {
+                "name": "ultraball",
+                "captureBonus": 150,
+                "img": "ultra_ball",
+                "amount": 0,
+                "price": 200
+            }
+        },
+        {
+            "isLucky": true,
+            "descr": "Você encontrou uma greatball",
+            "type": "Normal",
+            "item": {
+                "name": "greatball",
+                "captureBonus": 200,
+                "img": "great_ball",
+                "amount": 0,
+                "price": 150
+            }
+        },
+        {
+            "isLucky": true,
+            "descr": "Você encontrou uma masterball",
+            "type": "Ultra Rara",
+            "item": {
+                "name": "masterball",
+                "isMaster": true,
+                "img": "master_ball",
+                "amount": 0,
+                "price": 9999999
+            }
+        },
+        {
+            "isLucky": true,
+            "descr": "Hora da batalha, sorteie um adversário",
+            "type": "Normal"
+        },
+        {
+            "isLucky": true,
+            "descr": "Ao encontrar um amigo ele te deu uma poção de reviver todos",
+            "type": "Ultra Rara",
+            "item": {
+                "name": "Curar Todos",
+                "price": 0,
+                "amount": 0
+            }
+        },
+        {
+            "isLucky": true,
+            "descr": "Você ganhou 'Item' de Fuga, para escapar de uma batalha",
+            "type": "Rara",
+            "item": {
+                "name": "Escape Hope",
+                "price": 350,
+                "amount": 0
+            }
+        },
+        {
+            "isLucky": false,
+            "descr": "Entregue um Pokemon do seu time para os cuidados de um adversário (da box)",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Acesse sua box a partir desta casa",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Pegue um pokemon do seu amigo",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um pokemon p/ subir 2 níveis",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um pokemon p/ subir 3 níveis",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um pokemon p/ subir 1 nível",
+            "type": "Nommal"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um pokemon p/ subir 4 níveis",
+            "type": "Ultra Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um pokemon p/ subir 5 níveis",
+            "type": "Ultra Rara"
+        },
+        {
+            "isLucky": false,
+            "descr": "Seu Pokemon fugiu!",
+            "type": "Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um Pokemon para evoluir (Time)",
+            "type": "Ultra Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um Pokemon para evoluir (Box)",
+            "type": "Ultra Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um Pokemon de um adversário para juntar-se ao seu time",
+            "type": "Ultra Rara"
+        }
+    ]
+}

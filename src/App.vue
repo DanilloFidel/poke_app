@@ -317,6 +317,7 @@ export default {
       "SET_ACTIVE_PLAYER",
       "SET_TYPES",
       "CURE_ALL",
+      "UPDATE_PLAYER_ATTR",
     ]),
     fecthHabitats() {
       this.btnLoading = true;
@@ -534,7 +535,45 @@ export default {
       alert("inimigo");
     },
     sortCard() {
-      alert("carta");
+      const cards = require("./data/cards.json").cards;
+      const normal = cards.filter((c) => c.type === "Normal");
+      const rare = cards.filter((c) => c.type === "Rara");
+      const xRare = cards.filter((c) => c.type === "Ultra Rara");
+
+      const chances = {
+        normal: 100,
+        rare: 40,
+        xRare: 10,
+      };
+
+      const n = Math.floor(Math.random() * 100) + 1;
+      let c = null;
+      let x = 0;
+
+      if (n <= chances.xRare) {
+        x = Math.floor(Math.random() * xRare.length);
+        c = xRare[x];
+      }
+      if (n >= 11 && n <= chances.rare) {
+        x = Math.floor(Math.random() * rare.length);
+        c = rare[x];
+      }
+      if (n >= 41 && n <= chances.normal) {
+        x = Math.floor(Math.random() * normal.length);
+        c = normal[x];
+      }
+
+      if (confirm(c.descr) && c.item) {
+        const player = { ...this.activePlayer };
+        const idx = player.bag.findIndex((x) => x.name === c.item.name);
+        if (idx < 0) {
+          player.bag.push(c.item);
+        } else {
+          let itemOn = player.bag[idx];
+          itemOn.amount += c.item.amount;
+        }
+        this.UPDATE_PLAYER_ATTR({ player, idx: this.tab });
+      }
     },
     sortEncounter() {
       alert("encontro");
