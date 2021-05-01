@@ -19,18 +19,30 @@
       </div>
     </div>
     <div class="bar" v-else>
-      <v-select
-        label="Líder"
-        :items="gymLeaders"
-        color="#6cb7f2"
-        item-text="name"
-        :loading="loading"
-        :value="activeFighter"
-        return-object
-        x-small
-        @change="setEnemy($event, true)"
-      >
-      </v-select>
+      <v-row class="mx-2">
+        <v-col cols="6"
+          ><v-select
+            label="Líder"
+            :items="gymLeaders"
+            color="#6cb7f2"
+            item-text="name"
+            :loading="loading"
+            :value="activeFighter"
+            return-object
+            x-small
+            @change="setEnemy($event, true)"
+          >
+            <template v-slot:item="data">
+              <span :style="{ color: data.item.isAkatsuki ? 'red' : 'blue' }">{{
+                data.item.name
+              }}</span>
+            </template>
+          </v-select></v-col
+        >
+        <v-col class="mt-2" cols="6"
+          ><v-btn @click="sortEnemy">inimigo</v-btn></v-col
+        >
+      </v-row>
     </div>
 
     <div class="arena" v-if="filteredEnemyPokes() && activeFighter.name">
@@ -257,7 +269,6 @@ export default {
           this.activeEnemyPokemon = val.pokemons.filter(
             (p) => !p.isDefeated
           )[0];
-          debugger;
           this.activeEnemyPokemon.hp = this.activeEnemyPokemon.stats[0].base_stat;
           if (val.pokemons.every((p) => p.isDefeated)) {
             this.sortedMoney = Math.floor(Math.random() * val.money);
@@ -296,10 +307,8 @@ export default {
     defineAdvantage(opositeDef, isPlayer = true) {
       const objName = isPlayer ? "activePokemon" : "activeEnemyPokemon";
       if (this[objName].bonus === 2) {
-        console.log("vantagem");
         return (opositeDef -= opositeDef / 2);
       } else if (this[objName].bonus === -1) {
-        console.log("desvantagem");
         return (opositeDef += opositeDef / 2);
       } else return opositeDef;
     },
@@ -314,12 +323,8 @@ export default {
         let opositeDef =
           this.activeEnemyPokemon.stats[2].base_stat +
           this.activeEnemyPokemon.stats[5].base_stat / 100;
-        console.log("antes da v: ", opositeDef);
         opositeDef = this.defineAdvantage(opositeDef);
-        console.log("dps da v: ", opositeDef);
         const opositeDefVal = Math.floor(Math.random() * opositeDef);
-        console.log("atk: ", attackVal);
-        console.log("def: ", opositeDefVal);
         const hit = attackVal - opositeDefVal;
         if (hit > 0) {
           this.playerHit = hit;
@@ -340,12 +345,10 @@ export default {
           }
         } else {
           this.playerHit = 0;
-          debugger;
           this.playerDef = opositeDefVal - attackVal;
           setTimeout(() => {
             this.playerDef = 0;
           }, 1500);
-          console.log("defendeu");
         }
       }
     },
@@ -361,6 +364,11 @@ export default {
           (p) => !p.isDefeated
         )[0];
         this.activeEnemyPokemon = { ...next, hp: next.stats[0].base_stat };
+      } else {
+        this.UPDATE_PLAYER({
+          name: this.activePlayer.name,
+          money: (this.activePlayer.money += this.sortedMoney),
+        });
       }
     },
     enemyAttack() {
@@ -376,8 +384,6 @@ export default {
         opositeDef = this.defineAdvantage(opositeDef, false);
 
         const opositeDefVal = Math.floor(Math.random() * opositeDef);
-        console.log("atk: ", attackVal);
-        console.log("def: ", opositeDefVal);
         const hit = attackVal - opositeDefVal;
         if (hit > 0) {
           this.enemyHit = hit;
@@ -394,7 +400,6 @@ export default {
               ...this.activePokemon,
               isDefeated: true,
             };
-            debugger;
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
             this.activePokemon = {};
           }
@@ -404,24 +409,23 @@ export default {
           setTimeout(() => {
             this.enemyHit = 0;
           }, 1500);
-          console.log("defendeu");
         }
       }
     },
     setEnemy(val, isLeader) {
-      console.log(val);
-      console.log(isLeader);
       const lasts = 6 - val.pokemons.length;
       let calls2 = [];
       this.loading = true;
-
-      Http.get(`type/${val.type}`)
-        .then((resp) => resp.data.pokemon)
+      const avaliablesFetch = isLeader
+        ? Http.get(`type/${val.type}`)
+        : Http.get(`pokemon?limit=1118`);
+      avaliablesFetch
+        .then((resp) => resp.data.pokemon || resp.data.results)
         .then((pokemonsByType) => {
           for (let index = 0; index < lasts; index++) {
             const p =
               pokemonsByType[Math.floor(Math.random() * pokemonsByType.length)];
-            calls2.push(Http.get(p.pokemon.url));
+            calls2.push(Http.get(p.url || p.pokemon.url));
           }
           let calls = [];
           val.pokemons.forEach((p) => {
@@ -504,6 +508,11 @@ export default {
         this[pokeName].bonus = -1;
         return "L";
       }
+    },
+    sortEnemy() {
+      const idx = Math.floor(Math.random() * this.enemies.length);
+      const en = cloneDeep(this.enemies[idx]);
+      this.setEnemy(en, false);
     },
   },
 };
