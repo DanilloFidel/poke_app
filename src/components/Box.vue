@@ -1,54 +1,42 @@
 <template>
-  <v-simple-table fixed-header style="max-height: 84vh; overflow-y: auto">
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">Nome</th>
-          <th class="text-left">Tipo</th>
-          <th class="text-left">HP</th>
-          <th class="text-left">Ataque</th>
-          <th class="text-left">Defesa</th>
-          <th class="text-left"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, i) in activePlayer.pokemons" :key="`${item} - ${i}`">
-          <td
-            @click="movePokemon(item)"
-            style="text-transform: capitalize; font-weight: bold"
-            :style="{ backgroundColor: item.onTeam ? '#ff00004a' : null }"
-          >
-            {{ item.name }}
-          </td>
-          <td>
-            <span
-              class="mr-1 overline"
-              v-for="(item_2, idx) in item.types"
-              :key="idx"
-              :style="{
-                color: `${colors[item_2.type.name]}`,
-              }"
-              >{{ item_2.type.name }}</span
-            >
-          </td>
-          <td @click="movePokemon(item)">
-            {{ item.stats[0].base_stat }}
-          </td>
-          <td>
-            {{ item.stats[1].base_stat }}
-          </td>
-          <td>
-            {{ item.stats[2].base_stat }}
-          </td>
-          <td>
-            <v-btn x-small icon @click="removePokemon(item)"
-              ><v-icon>{{ closeIcon }}</v-icon></v-btn
-            >
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-expansion-panels>
+    <v-expansion-panel
+      v-for="(item, i) in activePlayer.pokemons"
+      :key="`${item} - ${i}`"
+    >
+      <v-expansion-panel-header>
+        <span
+          style="text-transform: capitalize; font-weight: bold"
+          :style="{ color: item.onTeam ? 'red' : null }"
+          >{{ item.name }}</span
+        >
+
+        <span
+          class="mr-1 overline"
+          v-for="(item_2, idx) in item.types"
+          :key="idx"
+          :style="{
+            color: `${colors[item_2.type.name]}`,
+          }"
+          >{{ item_2.type.name }}</span
+        ></v-expansion-panel-header
+      >
+      <v-expansion-panel-content>
+        <span class="mr-1"> HP: {{ item.stats[0].base_stat }} </span>
+        <span class="mr-1">
+          ATK:
+          {{ item.stats[1].base_stat }}
+        </span>
+        <span class="mr-1"> DEF: {{ item.stats[2].base_stat }} </span>
+
+        <v-btn x-small icon @click="removePokemon(item)"
+          ><v-icon>{{ closeIcon }}</v-icon></v-btn
+        >
+        <v-btn x-small class="mx-2" @click="movePokemon(item)">party</v-btn>
+        <img :src="item.sprites.front_default" width="100px" height="100px" />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script>

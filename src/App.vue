@@ -132,7 +132,13 @@
               ></v-col
             >
           </v-row>
-          <v-row dense justify="center" align="center" v-if="screen == 'box'">
+          <v-row
+            dense
+            justify="center"
+            align="center"
+            v-if="screen == 'box'"
+            style="overflow-y: scroll; height: calc(100vh - 95px)"
+          >
             <box :activePlayer="activePlayer" :colors="colors" :tab="tab"></box>
           </v-row>
           <v-row dense justify="center" align="center" v-if="screen == 'bag'">
