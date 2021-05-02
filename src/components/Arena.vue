@@ -402,7 +402,7 @@ export default {
             this.enemyHit = 0;
           }, 1500);
           if (this.activePokemon.hp <= 0) {
-            const idx = this.activePokemon.pokemons.findIndex(
+            const idx = this.activePlayer.pokemons.findIndex(
               (p) => p.name === this.activePokemon.name
             );
             const pokemon = this.activePlayer.pokemons[idx];
