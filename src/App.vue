@@ -473,7 +473,6 @@ export default {
     },
     upPokemon(pokemon) {
       console.log(pokemon);
-      if (pokemon.isEvolving || pokemon.defeated) return;
       pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1;
       this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
       if (pokemon.wins == 10 || pokemon.wins == 20) {
