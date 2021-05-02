@@ -402,10 +402,12 @@ export default {
             this.enemyHit = 0;
           }, 1500);
           if (this.activePokemon.hp <= 0) {
-            const pokemon = {
-              ...this.activePokemon,
-              isDefeated: true,
-            };
+            const idx = this.activePokemon.pokemons.findIndex(
+              (p) => p.name === this.activePokemon.name
+            );
+            const pokemon = this.activePlayer.pokemons[idx];
+            pokemon["isDefeated"] = true;
+
             this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
             this.activePokemon = {};
           }
