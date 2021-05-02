@@ -525,6 +525,8 @@ export default {
       const types = [
         { event: this.sortEnemy },
         { event: this.sortCard },
+        { event: this.sortCard },
+        { event: this.sortEncounter },
         { event: this.sortEncounter },
         { event: this.sortNothing },
       ];
@@ -563,16 +565,21 @@ export default {
         c = normal[x];
       }
 
-      if (confirm(c.descr) && c.item) {
-        const player = { ...this.activePlayer };
-        const idx = player.bag.findIndex((x) => x.name === c.item.name);
-        if (idx < 0) {
-          player.bag.push(c.item);
-        } else {
-          let itemOn = player.bag[idx];
-          itemOn.amount += c.item.amount;
+      if (c.item) {
+        if (confirm(c.descr)) {
+          debugger;
+          const player = { ...this.activePlayer };
+          const idx = player.bag.findIndex((x) => x.name === c.item.name);
+          if (idx < 0) {
+            player.bag.push(c.item);
+          } else {
+            let itemOn = player.bag[idx];
+            itemOn.amount += 1;
+          }
+          this.UPDATE_PLAYER_ATTR({ player, idx: this.tab });
         }
-        this.UPDATE_PLAYER_ATTR({ player, idx: this.tab });
+      } else {
+        alert(c.descr);
       }
     },
     sortEncounter() {

@@ -53,18 +53,12 @@
           v-ripple
           @click="playerAttack"
         >
-          <img
-            :src="
-              filteredEnemyPokes().filter((p) => !p.isDefeated)[0].sprites
-                .front_default
-            "
-            alt=""
-            class="img"
-          />
+          <img v-if="enemyPokeImg" :src="enemyPokeImg" alt="" class="img" />
+          <span v-else>sem imagem</span>
           <div class="hit-bagde" :style="badge">{{ playerHit }}</div>
           <div class="hit-bagde" :style="badgeDef">{{ playerDef }}</div>
         </div>
-        <div v-else>
+        <div v-else @click.once="addMoneyAndPoke(sortedMoney, giftPokemon)">
           {{ giftPokemon.name }}
           $ {{ sortedMoney }}
         </div>
@@ -207,7 +201,6 @@ export default {
     enemyDef: 0,
     enemies: [],
     activeEnemyPokemon: {},
-    sortedMoney: 0,
   }),
   destroyed() {
     this.ADD_ACTIVE_FIGHTER({});
@@ -242,6 +235,9 @@ export default {
         color: "green",
       };
     },
+    enemyPokeImg() {
+      return this.activeEnemyPokemon.sprites.front_default || null;
+    },
     activeFighter() {
       return cloneDeep(this.$store.state.activeFighter);
     },
@@ -250,6 +246,9 @@ export default {
       return this.$store.state.activeFighter.pokemons[
         Math.floor(Math.random() * this.activeFighter.pokemons.length)
       ];
+    },
+    sortedMoney() {
+      return Math.floor(Math.random() * this.activeFighter.money);
     },
     getEnemySprite() {
       return this.activeFighter.sprite.length
@@ -270,21 +269,19 @@ export default {
             (p) => !p.isDefeated
           )[0];
           this.activeEnemyPokemon.hp = this.activeEnemyPokemon.stats[0].base_stat;
-          if (val.pokemons.every((p) => p.isDefeated)) {
-            this.sortedMoney = Math.floor(Math.random() * val.money);
-          }
         }
       },
       deep: true,
       immediate: true,
     },
   },
-  props: ["colors", "screen", "activePlayer"],
+  props: ["colors", "screen", "activePlayer", "tab"],
   methods: {
     ...mapActions([
       "UPDATE_ENEMY",
       "UPDATE_PLAYER",
       "CURE_ALL",
+      "UPDATE_PLAYER_ATTR",
       "UPDATE_ON_END_BATTLE",
       "SET_TYPES",
       "ADD_ACTIVE_FIGHTER",
@@ -312,6 +309,14 @@ export default {
         return (opositeDef += opositeDef / 2);
       } else return opositeDef;
     },
+    addMoneyAndPoke(money, poke) {
+      const player = {
+        ...this.activePlayer,
+        money: (this.activePlayer.money += money),
+      };
+      player.pokemons.push(poke);
+      this.UPDATE_PLAYER_ATTR({ idx: this.tab, player });
+    },
     playerAttack() {
       if (this.playerTurn) {
         this.playerHit = 0;
@@ -336,12 +341,17 @@ export default {
             this.playerHit = 0;
           }, 1500);
           if (this.activeEnemyPokemon.hp <= 0) {
-            debugger;
-            const pokemon = {
-              ...this.activePokemon,
-              wins: this.activePokemon.wins ? this.activePokemon.wins + 1 : 1,
-            };
-            this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
+            const pkIdx = this.activePlayer.pokemons.findIndex(
+              (p) => p.name === this.activePokemon.name && p.onTeam
+            );
+            if (pkIdx >= 0) {
+              const pokemon = cloneDeep(this.activePlayer.pokemons[pkIdx]);
+
+              pokemon.wins = pokemon.wins ? pokemon.wins + 1 : 1;
+              this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon });
+            } else {
+              alert("falha ao subir lvl");
+            }
             this.setNextEnemyPoke();
           }
         } else {
@@ -365,11 +375,6 @@ export default {
           (p) => !p.isDefeated
         )[0];
         this.activeEnemyPokemon = { ...next, hp: next.stats[0].base_stat };
-      } else {
-        this.UPDATE_PLAYER({
-          name: this.activePlayer.name,
-          money: (this.activePlayer.money += this.sortedMoney),
-        });
       }
     },
     enemyAttack() {

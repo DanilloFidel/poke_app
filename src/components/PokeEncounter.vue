@@ -277,7 +277,6 @@ export default {
       this.selectedPokemon = { ...this.selectedPokemon, hp };
     },
     removePokeball(pokeball) {
-      debugger;
       this.REMOVE_PLAYER_ITEM({ pokeball, idx: this.tab });
     },
     catchPokemon(pokeball) {
@@ -347,7 +346,6 @@ export default {
       delete this.selectedPokemon.species;
       delete this.selectedPokemon.stats;
       delete this.selectedPokemon.moves;
-      debugger;
       this.JOIN_TEAM(this.selectedPokemon);
       setTimeout(() => {
         this.captured = false;

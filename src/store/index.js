@@ -130,7 +130,6 @@ export default new Vuex.Store({
       commit('updatePlayerFull', { idx, player: state.activePlayer });
     },
     UPDATE_PLAYER({ commit, state }, { name, pokemon, isEvolve, oldPokemon }) {
-      debugger
       const playerIdx = state.players.findIndex(p => p.name === name);
       let idx = -1;
       if (isEvolve) {
@@ -163,7 +162,6 @@ export default new Vuex.Store({
       commit('updatePlayerFull', { idx, player })
     },
     UPDATE_ON_END_BATTLE({ commit, state }, { name, pokemons }) {
-      debugger
       const playerIdx = state.players.findIndex(p => p.name === name);
       commit('updateFinishedBattle', { poke: pokemons, playerIdx })
     },

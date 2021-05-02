@@ -6,7 +6,8 @@
             "pokemons": [],
             "xp": 200,
             "img": "james.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 700
         },
         {
             "name": "Jessie",
@@ -14,7 +15,8 @@
             "pokemons": [],
             "xp": 300,
             "img": "jessie.png",
-            "sprite": "jesse_sprite.png"
+            "sprite": "jesse_sprite.png",
+            "money": 500
         },
         {
             "name": "Jiraya",
@@ -26,7 +28,8 @@
                 "poliwrath"
             ],
             "xp": 300,
-            "sprite": "jiraya_sprite.png"
+            "sprite": "jiraya_sprite.png",
+            "money": 800
         },
         {
             "name": "Serena",
@@ -34,7 +37,8 @@
             "pokemons": [],
             "xp": 150,
             "img": "serena.png",
-            "sprite": "serena_sprite.png"
+            "sprite": "serena_sprite.png",
+            "money": 1000
         },
         {
             "name": "Tracey",
@@ -42,7 +46,8 @@
             "pokemons": [],
             "xp": 230,
             "img": "tracey.png",
-            "sprite": "tracey_sprite.png"
+            "sprite": "tracey_sprite.png",
+            "money": 350
         },
         {
             "name": "Bonnie",
@@ -50,7 +55,8 @@
             "pokemons": [],
             "xp": 320,
             "img": "bonnie.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 800
         },
         {
             "name": "Avery",
@@ -58,7 +64,8 @@
             "pokemons": [],
             "xp": 400,
             "img": "avery.png",
-            "sprite": "avery_sprite.png"
+            "sprite": "avery_sprite.png",
+            "money": 800
         },
         {
             "name": "Klara",
@@ -66,7 +73,8 @@
             "pokemons": [],
             "xp": 340,
             "img": "klara.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 440
         },
         {
             "name": "Peony",
@@ -74,7 +82,8 @@
             "pokemons": [],
             "xp": 310,
             "img": "peony.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 800
         },
         {
             "name": "Clemont",
@@ -82,7 +91,8 @@
             "pokemons": [],
             "xp": 300,
             "img": "clemont.png",
-            "sprite": "clemont_sprite.png"
+            "sprite": "clemont_sprite.png",
+            "money": 350
         },
         {
             "name": "Gary",
@@ -90,7 +100,8 @@
             "pokemons": [],
             "xp": 350,
             "img": "gary.png",
-            "sprite": "gary_sprite.gif"
+            "sprite": "gary_sprite.gif",
+            "money": 800
         },
         {
             "name": "May",
@@ -98,7 +109,8 @@
             "pokemons": [],
             "xp": 270,
             "img": "may.png",
-            "sprite": "may_sprite.png"
+            "sprite": "may_sprite.png",
+            "money": 800
         },
         {
             "name": "Alan",
@@ -106,7 +118,8 @@
             "pokemons": [],
             "xp": 180,
             "img": "zoey.png",
-            "sprite": "alan_sprite.png"
+            "sprite": "alan_sprite.png",
+            "money": 700
         },
         {
             "name": "Íris",
@@ -114,7 +127,8 @@
             "pokemons": [],
             "xp": 330,
             "img": "iris.png",
-            "sprite": "iris_sprite.png"
+            "sprite": "iris_sprite.png",
+            "money": 800
         },
         {
             "name": "Sanpei",
@@ -122,7 +136,8 @@
             "pokemons": [],
             "xp": 180,
             "img": "sanpei.jpg",
-            "sprite": ""
+            "sprite": "",
+            "money": 800
         },
         {
             "name": "Harriet",
@@ -130,7 +145,8 @@
             "pokemons": [],
             "xp": 170,
             "img": "harriet.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 690
         },
         {
             "name": "Callahan",
@@ -138,7 +154,8 @@
             "pokemons": [],
             "xp": 190,
             "img": "callahan.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 800
         },
         {
             "name": "Toren",
@@ -153,7 +170,8 @@
             "pokemons": [],
             "xp": 340,
             "img": "sophocles.png",
-            "sprite": ""
+            "sprite": "",
+            "money": 1200
         }
     ],
     "leaders": [

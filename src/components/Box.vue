@@ -80,7 +80,7 @@ export default {
       const canAdd = teamLength < 6;
       let poke = {};
       if (!add) {
-        poke = { ...pk, onTeam: false };
+        poke = { ...pk, onTeam: false, isEvolve: false };
       } else {
         poke = { ...pk, onTeam: canAdd ? !pk["onTeam"] : false };
       }
