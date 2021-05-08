@@ -562,13 +562,13 @@
                 "dusknoir",
                 "gengar",
                 "chandelure",
-                "mimikyu"
+                "mimikyu-disguised"
             ],
             "money": 8000,
             "dice": 12,
             "type": "ghost",
             "bagde": "",
-            "sprite": "Luigi_sprite.gif"
+            "sprite": "luigi_sprite.gif"
         },
         {
             "name": "Toad",

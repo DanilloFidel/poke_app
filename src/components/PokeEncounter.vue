@@ -6,7 +6,7 @@
         <v-radio-group
           v-model="generation"
           row
-          @change="toggleTypes(false), (selectedPokemon = {}), filterPokemons"
+          @change="toggleTypes(false), (selectedPokemon = {}), filterPokemons()"
         >
           <v-radio class="mb-1" label="`1 ª" value="1"></v-radio>
           <v-radio class="mb-1" label="`2 ª" value="2"></v-radio>
@@ -248,6 +248,7 @@ export default {
       let pokemon = "";
 
       this.avaliables = this.selectedArea.pokemons;
+      console.log(this.avaliables)
       idx = Math.floor(Math.random() * this.avaliables.length);
       pokemon = this.avaliables[idx];
       if (!pokemon) return;
