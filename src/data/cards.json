@@ -49,7 +49,7 @@
         {
             "isLucky": true,
             "descr": "Você encontrou uma masterball",
-            "type": "Ultra Rara",
+            "type": "Rara",
             "item": {
                 "name": "masterball",
                 "isMaster": true,
@@ -85,17 +85,17 @@
         },
         {
             "isLucky": false,
-            "descr": "Entregue um Pokemon do seu time para os cuidados de um adversário (da box)",
+            "descr": "Entregue um Pokemon do seu Time para os cuidados de um adversário",
+            "type": "Rara"
+        },
+        {
+            "isLucky": false,
+            "descr": "Entregue um Pokemon da sua BOX para os cuidados de um adversário",
             "type": "Rara"
         },
         {
             "isLucky": true,
-            "descr": "Acesse sua box a partir desta casa",
-            "type": "Rara"
-        },
-        {
-            "isLucky": true,
-            "descr": "Pegue um pokemon do seu amigo",
+            "descr": "Pegue um pokemon do seu amigo (BOX)",
             "type": "Rara"
         },
         {
@@ -125,7 +125,7 @@
         },
         {
             "isLucky": false,
-            "descr": "Seu Pokemon fugiu!",
+            "descr": "Seu Pokemon fugiu (TIME)",
             "type": "Rara"
         },
         {
@@ -140,7 +140,12 @@
         },
         {
             "isLucky": true,
-            "descr": "Escolha um Pokemon de um adversário para juntar-se ao seu time",
+            "descr": "Escolha um Pokemon de um adversário para juntar-se ao seu  (TIME)",
+            "type": "Ultra Rara"
+        },
+        {
+            "isLucky": true,
+            "descr": "Escolha um Pokemon de um adversário para juntar-se ao seu  (BOX)",
             "type": "Ultra Rara"
         }
     ]

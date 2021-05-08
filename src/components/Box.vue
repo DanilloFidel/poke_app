@@ -1,16 +1,32 @@
 <template>
-  <v-expansion-panels>
-    <v-expansion-panel
+  <div class="box elevation-5">
+    <img
       v-for="(item, i) in activePlayer.pokemons"
       :key="`${item} - ${i}`"
+      :src="item.sprites.front_default"
+      @click="setMouse($event, item)"
+      :alt="item.name"
+      width="100px"
+      height="100px"
+      style="
+        -webkit-filter: drop-shadow(3px 3px 3px #222);
+        filter: drop-shadow(3px 3px 3px #222);
+      "
+    />
+    <v-menu
+    v-if="item.name"
+      v-model="menu"
+      :close-on-content-click="false"
+      :position-x="100"
+      :position-y="y"
     >
-      <v-expansion-panel-header>
+      <v-card class="pa-3">
         <span
           style="text-transform: capitalize; font-weight: bold"
           :style="{ color: item.onTeam ? 'red' : null }"
           >{{ item.name }}</span
         >
-
+        <br>
         <span
           class="mr-1 overline"
           v-for="(item_2, idx) in item.types"
@@ -19,24 +35,40 @@
             color: `${colors[item_2.type.name]}`,
           }"
           >{{ item_2.type.name }}</span
-        ></v-expansion-panel-header
-      >
-      <v-expansion-panel-content>
+        >
+        <br>
         <span class="mr-1"> HP: {{ item.stats[0].base_stat }} </span>
         <span class="mr-1">
           ATK:
           {{ item.stats[1].base_stat }}
         </span>
         <span class="mr-1"> DEF: {{ item.stats[2].base_stat }} </span>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-        <v-btn x-small icon @click="removePokemon(item)"
-          ><v-icon>{{ closeIcon }}</v-icon></v-btn
-        >
-        <v-btn x-small class="mx-2" @click="movePokemon(item)">party</v-btn>
-        <img :src="item.sprites.front_default" width="100px" height="100px" />
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-  </v-expansion-panels>
+          <v-btn
+            text
+            @click="
+              removePokemon(item);
+              menu = false;
+            "
+          >
+            Excluir
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="
+              movePokemon(item);
+        
+            "
+          >
+            Party
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-menu>
+  </div>
 </template>
 
 <script>
@@ -45,6 +77,10 @@ import { mapActions } from "vuex";
 export default {
   data: () => ({
     closeIcon: mdiClose,
+    menu: false,
+    x: 0,
+    y: 0,
+    item: {},
   }),
   props: ["activePlayer", "colors", "tab"],
   methods: {
@@ -74,9 +110,23 @@ export default {
       }
       this.UPDATE_PLAYER({ name: this.activePlayer.name, pokemon: poke });
     },
+    setMouse(e, item) {
+      this.x = e.clientX;
+      this.y = e.clientY;
+      this.item = item
+      this.menu = true;
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.box {
+  overflow: auto;
+  height: calc(100vh - 120px);
+  width: 100vw;
+  background-color: #ecf3f5;
+  margin: 3% 5%;
+  border: 2px solid;
+}
 </style>

@@ -248,7 +248,7 @@ export default {
       ];
     },
     sortedMoney() {
-      return Math.floor(Math.random() * this.activeFighter.money);
+      return Math.floor(Math.random() * this.activeFighter.money / 2);
     },
     getEnemySprite() {
       return this.activeFighter.sprite.length
@@ -448,6 +448,7 @@ export default {
               return resp.map((p) => p.value.data);
             })
             .then((pokemons) => {
+              console.log(pokemons)
               this.ADD_ACTIVE_FIGHTER({ ...val, pokemons });
             })
             .finally(() => (this.loading = false));

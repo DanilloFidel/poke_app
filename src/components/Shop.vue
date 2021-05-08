@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <span>Carrinho: $${{ cartValue }}</span>
+    <span>Carrinho: R${{ cartValue }}</span>
     <v-btn small class="ml-5" @click="buy">Comprar</v-btn>
     <v-simple-table fixed-header style="max-height: 84vh; overflow-y: auto">
       <template v-slot:default>
@@ -48,7 +48,7 @@ export default {
     items: [
       { name: "Bicicleta comum", price: 8000, amount: 0 },
       { name: "Escape Hope", price: 350, amount: 0 },
-      { name: "Curar Todos", price: 0, amount: 0 },
+      { name: "Curar Todos", price: 800, amount: 0 },
     ],
   }),
   created() {
@@ -62,7 +62,7 @@ export default {
     },
     cartValue() {
       return this.cartItems.reduce(
-        (acc, el) => (acc += el.price) * el.amount,
+        (acc, el) => (acc += el.price * el.amount),
         0
       );
     },
