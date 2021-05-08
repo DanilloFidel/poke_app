@@ -28,7 +28,7 @@
                 "poliwrath"
             ],
             "xp": 300,
-            "sprite": "jiraya_sprite.png",
+            "sprite": "jiraya_sprite.gif",
             "money": 800
         },
         {
@@ -435,6 +435,40 @@
             "sprite": "tobi_sprite.gif"
         },
         {
+            "name": "Zetsu",
+            "isAkatsuki": true,
+            "pokemons": [
+                "mawile",
+                "shiftry",
+                "venusaur",
+                "zygarde",
+                "virizion",
+                "serperior"
+            ],
+            "money": 3000,
+            "dice": 12,
+            "type": "grass",
+            "bagde": "do Clone",
+            "sprite": "zetsu_sprite.png"
+        },
+        {
+            "name": "Kaguya",
+            "isAkatsuki": true,
+            "pokemons": [
+                "lunala",
+                "cresselia",
+                "lugia",
+                "mewtwo",
+                "arceus",
+                "shaymin"
+            ],
+            "money": 5000,
+            "dice": 12,
+            "type": "psychic",
+            "bagde": "da Lua",
+            "sprite": "kaguya_sprite.png"
+        },
+        {
             "name": "Orochimaru",
             "isAkatsuki": true,
             "pokemons": [
@@ -501,6 +535,74 @@
             "type": "dark",
             "bagde": "do Dinheiro",
             "sprite": "kakuzu_sprite.gif"
+        },
+        {
+            "name": "Mario",
+            "eliteFour": true,
+            "pokemons": [
+                "blastoise",
+                "lapras",
+                "dragonite",
+                "mew",
+                "vanilluxe",
+                "kyruem"
+            ],
+            "money": 10000,
+            "dice": 12,
+            "type": "normal",
+            "bagde": "",
+            "sprite": "mario_sprite.gif"
+        },
+        {
+            "name": "Luigi",
+            "eliteFour": true,
+            "pokemons": [
+                "marshadow",
+                "giratina-altered",
+                "dusknoir",
+                "gengar",
+                "chandelure",
+                "mimikyu"
+            ],
+            "money": 8000,
+            "dice": 12,
+            "type": "ghost",
+            "bagde": "",
+            "sprite": "Luigi_sprite.gif"
+        },
+        {
+            "name": "Toad",
+            "eliteFour": true,
+            "pokemons": [
+                "togekiss",
+                "magearna",
+                "mewtwo",
+                "vileplume",
+                "tapu-fini",
+                "comfey"
+            ],
+            "money": 6500,
+            "dice": 12,
+            "type": "fairy",
+            "bagde": "",
+            "sprite": "toad_sprite.gif"
+        },
+        {
+            "name": "Yoshi",
+            "eliteFour": true,
+            "pokemons": [
+                "buzzwole",
+                "vikavolt",
+                "hydreigon",
+                "venusaur",
+                "abomasnow",
+                "victreebel"
+            ],
+            "money": 7000,
+            "dice": 12,
+            "type": "grass",
+            "bagde": "",
+            "sprite": "yoshi_sprite.gif"
         }
     ]
 }
