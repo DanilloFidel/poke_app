@@ -401,47 +401,48 @@ export default {
           ],
         ];
 
-        (this.players = [
+        this.SET_PLAYERS([
           new Player({
             name: "Danillo",
           }),
           new Player({ name: "Eduardo" }),
           new Player({ name: "Rafael" }),
-        ]),
-          this.players.forEach((p, idx, arr) => {
-            const p1 =
-              starters[0][Math.floor(Math.random() * starters[0].length)];
-            starters[0] = starters[0].filter((p) => p !== p1);
-            const p2 =
-              starters[1][Math.floor(Math.random() * starters[1].length)];
-            starters[1] = starters[1].filter((p) => p !== p2);
-            const p3 =
-              starters[2][Math.floor(Math.random() * starters[2].length)];
+        ]);
 
-            const sorted = [p1, p2, p3];
-            const promisses = [];
-            sorted.forEach((poke) => {
-              promisses.push(Http.get(`pokemon/${poke}`));
-            });
+        this.players.forEach((p, idx, arr) => {
+          const p1 =
+            starters[0][Math.floor(Math.random() * starters[0].length)];
+          starters[0] = starters[0].filter((p) => p !== p1);
+          const p2 =
+            starters[1][Math.floor(Math.random() * starters[1].length)];
+          starters[1] = starters[1].filter((p) => p !== p2);
+          const p3 =
+            starters[2][Math.floor(Math.random() * starters[2].length)];
 
-            Promise.allSettled(promisses)
-              .then((resp) => {
-                return resp.map((r) => {
-                  const pk = r.value.data;
-                  pk["onTeam"] = true;
-                  return pk;
-                });
-              })
-              .then((pokes) => {
-                p.pokemons = pokes;
-                return p;
-              })
-              .then(() => {
-                if (idx === arr.length - 1) {
-                  this.SET_PLAYERS(arr);
-                }
-              });
+          const sorted = [p1, p2, p3];
+          const promisses = [];
+          sorted.forEach((poke) => {
+            promisses.push(Http.get(`pokemon/${poke}`));
           });
+
+          Promise.allSettled(promisses)
+            .then((resp) => {
+              return resp.map((r) => {
+                const pk = r.value.data;
+                pk["onTeam"] = true;
+                return pk;
+              });
+            })
+            .then((pokes) => {
+              p.pokemons = pokes;
+              return p;
+            })
+            .then(() => {
+              if (idx === arr.length - 1) {
+                this.SET_PLAYERS(arr);
+              }
+            });
+        });
       }
     },
     closeAndAdd(name) {

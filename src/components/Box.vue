@@ -1,6 +1,7 @@
 <template>
   <div class="box elevation-5">
     <img
+    :style="{ border: item.onTeam ? '1px solid #eaeaf7' : null }"
       v-for="(item, i) in activePlayer.pokemons"
       :key="`${item} - ${i}`"
       :src="item.sprites.front_default"
