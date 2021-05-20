@@ -53,7 +53,6 @@
         <v-row
           dense
           justify="center"
-          @click="hitPokemon"
           v-if="selectedPokemon.name && !isCatching && !captured"
         >
           <v-col cols="6" class="d-flex justify-center">
@@ -62,19 +61,14 @@
               width="130px"
               :src="getSprite('front_default')"
             />
-
-            <hp-bar
-              :hp="selectedPokemon.hp"
-              :originalHp="selectedPokemon.stats[0].base_stat"
-            ></hp-bar>
           </v-col>
 
           <v-col cols="6">
             <h3 class="overline text-center text-capitalize">
               <b>{{ selectedPokemon.name }}</b>
               <br />
-              SPEED
-              {{ selectedPokemon.stats[5].base_stat }}
+              Dado
+              {{ getDiceType(selectedPokemon.base_experience) }}
               <br />
               ATTACK
               {{ selectedPokemon.stats[1].base_stat }}
@@ -141,7 +135,6 @@
 </template>
 
 <script>
-import HpBar from "./HpBar";
 import Http from "../plugins/http";
 import { mdiAccountCheckOutline } from "@mdi/js";
 import { mapActions, mapState } from "vuex";
@@ -174,9 +167,7 @@ export default {
     genLoading: false,
     areas: [],
   }),
-  components: {
-    HpBar,
-  },
+  components: {},
 
   computed: {
     ...mapState(["activePlayer", "pokeballTypes"]),
@@ -248,7 +239,7 @@ export default {
       let pokemon = "";
 
       this.avaliables = this.selectedArea.pokemons;
-      console.log(this.avaliables)
+      console.log(this.avaliables);
       idx = Math.floor(Math.random() * this.avaliables.length);
       pokemon = this.avaliables[idx];
       if (!pokemon) return;
@@ -283,41 +274,8 @@ export default {
     catchPokemon(pokeball) {
       if (!this.selectedPokemon.name) return;
       this.removePokeball(pokeball);
+    },
 
-      this.isCatching = true;
-      setTimeout(() => {
-        this.isCatching = false;
-        if (this.selectedPokemon.capture_rate == 255 || pokeball.isMaster) {
-          this.captured = true;
-          this.joinTeam();
-        } else {
-          const ballN = Math.floor(Math.random() * pokeball.captureBonus);
-          if (ballN < this.selectedPokemon.capture_rate) {
-            this.restartOrScape();
-          } else {
-            const m = Math.floor(Math.random() * 255);
-            const f =
-              (this.selectedPokemon.stats[0].base_stat * 255 * 4) /
-              (this.selectedPokemon.hp * pokeball.captureBonus);
-            if (f >= m) {
-              this.captured = true;
-              this.joinTeam();
-            } else {
-              this.restartOrScape();
-            }
-          }
-        }
-      }, 3000);
-    },
-    restartOrScape() {
-      this.damageValue = 0;
-      const speed = this.selectedPokemon.stats[5].base_stat;
-      const final = Math.floor(Math.random() * 200) + 1;
-      if (speed >= final.toFixed(0)) {
-        alert(`${this.selectedPokemon.name} fugiu!`);
-        this.selectedPokemon = {};
-      }
-    },
     async sortPokemon(pokemon) {
       this.damageValue = 0;
       // this.loading = true;
@@ -339,6 +297,12 @@ export default {
         this.loading = false;
         alert("Ocorreu um erro ao carregar o Pokemon");
       }
+    },
+    getDiceType(xp) {
+      if (xp <= 80) return "d6";
+      if (xp > 80 && xp <= 150) return "d8";
+      if (xp > 150 && xp <= 259) return "d12";
+      if (xp >= 260) return "d20";
     },
     joinTeam() {
       console.log("juntou ao time");
