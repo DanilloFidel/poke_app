@@ -67,13 +67,16 @@
             <h3 class="overline text-center text-capitalize">
               <b>{{ selectedPokemon.name }}</b>
               <br />
-              Dado
+              Dado:
               {{ getDiceType(selectedPokemon.base_experience) }}
               <br />
-              ATTACK
+              Valor: 
+              {{ getDiceValue(selectedPokemon.base_experience) }}
+              <br />
+              ATTACK:
               {{ selectedPokemon.stats[1].base_stat }}
               <br />
-              HP
+              HP:
               {{ selectedPokemon.stats[0].base_stat }}
             </h3>
           </v-col>
@@ -123,8 +126,8 @@
               :src="getImg(pokeball.img)"
               eager
               contain
-              height="30px"
-              width="30px"
+              height="40px"
+              width="40px"
             />
             <span class="ml-2">{{ pokeball.amount }}</span>
           </v-col>
@@ -299,10 +302,18 @@ export default {
       }
     },
     getDiceType(xp) {
-      if (xp <= 80) return "d6";
-      if (xp > 80 && xp <= 150) return "d8";
-      if (xp > 150 && xp <= 259) return "d12";
-      if (xp >= 260) return "d20";
+      if (xp <= 80) return "Pokeball";
+      if (xp > 80 && xp <= 150) return "Great Ball";
+      if (xp > 150 && xp <= 259) return "Ultraball";
+      if (xp >= 260) return "Premier Ball";
+    },
+    getDiceValue(xp) {
+      let max = 0
+      if (xp <= 80) max = 6
+      if (xp > 80 && xp <= 150) max  = 8
+      if (xp > 150 && xp <= 259) max = 12
+      if (xp >= 260) return max = 20
+      return Math.floor(Math.random() * max);
     },
     joinTeam() {
       console.log("juntou ao time");

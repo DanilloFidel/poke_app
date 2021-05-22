@@ -23,8 +23,9 @@ export default new Vuex.Store({
     pokeballTypes: [
       { name: "pokeball", captureBonus: 255, img: "poke_ball", amount: 0, price: 100 },
       { name: "greatball", captureBonus: 200, img: "great_ball", amount: 0, price: 150 },
+      { name: "premierball", captureBonus: 300, img: "premier_ball", amount: 0, price: 400 },
       { name: "ultraball", captureBonus: 150, img: "ultra_ball", amount: 0, price: 200 },
-      { name: "masterball", isMaster: true, img: "master_ball", amount: 0, price: 9999999 }
+      { name: "masterball", isMaster: true, img: "master_ball", amount: 0, price: 9999999 },
     ],
     types: [],
     savedPlayers: [],
