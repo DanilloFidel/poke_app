@@ -70,8 +70,8 @@
               Dado:
               {{ getDiceType(selectedPokemon.base_experience) }}
               <br />
-              Valor: 
-              {{ getDiceValue(selectedPokemon.base_experience) }}
+              Valor:
+              {{ getDiceValue }}
               <br />
               ATTACK:
               {{ selectedPokemon.stats[1].base_stat }}
@@ -126,8 +126,8 @@
               :src="getImg(pokeball.img)"
               eager
               contain
-              height="40px"
-              width="40px"
+              height="24px"
+              width="24px"
             />
             <span class="ml-2">{{ pokeball.amount }}</span>
           </v-col>
@@ -181,6 +181,15 @@ export default {
       return this.activePlayer.bag.filter(
         (item) => !!item.captureBonus || item.isMaster
       );
+    },
+    getDiceValue() {
+      const xp = this.selectedPokemon.base_experience;
+      let max = 0;
+      if (xp <= 80) max = 6;
+      if (xp > 80 && xp <= 150) max = 8;
+      if (xp > 150 && xp <= 259) max = 12;
+      if (xp >= 260) return (max = 20);
+      return Math.floor(Math.random() * max);
     },
   },
 
@@ -307,14 +316,7 @@ export default {
       if (xp > 150 && xp <= 259) return "Ultraball";
       if (xp >= 260) return "Premier Ball";
     },
-    getDiceValue(xp) {
-      let max = 0
-      if (xp <= 80) max = 6
-      if (xp > 80 && xp <= 150) max  = 8
-      if (xp > 150 && xp <= 259) max = 12
-      if (xp >= 260) return max = 20
-      return Math.floor(Math.random() * max);
-    },
+
     joinTeam() {
       console.log("juntou ao time");
       delete this.selectedPokemon.abilities;
